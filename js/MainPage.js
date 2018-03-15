@@ -1,0 +1,3 @@
+function importLayer () {
+    alert("ぼよん");
+}

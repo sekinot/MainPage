@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>Web HuTime</title>
   <link href="main.css" rel="stylesheet" type="text/css" />
+  <!--script type="text/javascript" src="http://web.hutime.org/js/HuTime.min.js"></script-->
+  <!script type="text/javascript" src="/js/MainPage.js"></script-->
+  <script type="text/javascript" src="../../debug.js"></script>
+  <script type="text/javascript" src="../js/MainPage.js"></script>
 </head>
 <body>
 
@@ -26,7 +30,62 @@
 
   <div id="hutime">
     <div id="menuBar">
-      menu bar
+      <ul class="menu">
+        <li><a href="#">File</a><ul>
+            <li><a href="#">New</a></li>
+            <li><a href="#">Import &raquo;</a>
+              <ul>
+                <li onclick="importLayer()"><a href="#">Json</a></li>
+                <li><a href="#">Text (CSV, TSV)</a></li>
+                <li><a href="#">gtm</a></li>
+                <li><a href="#">gtm</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Export &raquo;</a>
+              <ul>
+                <li><a href="#">Json</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Print</a></li>
+            <li><a href="#">Save Image</a></li>
+            <li><a href="#">Preferences</a></li>
+          </ul>
+        </li>
+
+        <li><a href="#">Database</a></li>
+
+        <li><a href="#">Analysis</a>
+          <ul>
+            <li><a href="#">Search &raquo;</a>
+              <ul>
+                <li><a href="#">Text</a></li>
+                <li><a href="#">Value</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Record Extraction &raquo;</a>
+              <ul>
+                <li><a href="#">Other</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Mask</a></li>
+          </ul>
+        </li>
+        <li><a href="#">About</a>
+        </li>
+      </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
 
     <div id="layerTree">
@@ -48,7 +107,7 @@
         <td>News</td>
         <td>Samples</td>
         <td>API</td>
-        <td>Project Home</td>
+        <td>HuTime Project</td>
       </tr>
     </table>
   </div>
