@@ -1,0 +1,108 @@
+@charset "utf-8";
+
+div {
+    margin: 0;
+    padding: 0;
+}
+
+body  {
+    font: 100% Verdana, Arial, Helvetica, sans-serif;
+    background: #FFFFFF;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #000000;
+}
+
+#container {
+    /*width: 900px;*/
+    background: #FFFFFF;
+    margin: 0 auto;
+    padding: 10px 15px;
+    text-align: left;
+}
+
+/**** Header ****/
+#header {
+    margin: 0 auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#header img {
+    margin: 0;
+    padding: 0;
+    border-style: none;
+}
+
+/**** HuTime body ****/
+#hutime {
+    margin: 0 auto;
+    padding: 10px 0;
+    clear: both;
+}
+
+#menuBar {
+    background: #0066FF;
+    margin: 0 auto;
+    padding: 10px 15px;
+    height: 20px;
+    clear: both;
+
+    text-align: left;
+}
+
+#layerTree {
+    background: #993300;
+    margin: 0 auto;
+    padding: 0;
+    width: 150px;
+    height: 150px;
+    float: left;
+
+    text-align: left;
+}
+
+#mainPanels {
+    background: beige;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 150px;
+    margin-right: 0;
+    padding: 0;
+    height: 300px;
+    text-align: left;
+}
+
+#statusBar {
+    background: cadetblue;
+    margin: 0 auto;
+    padding: 10px 15px;
+    height: 20px;
+    clear: both;
+    text-align: left;
+}
+
+/**** Information ****/
+#information {
+    margin: 0 auto;
+    padding: 10px 0;
+    clear: both;
+}
+
+#information td {
+    text-align: center;
+    font-size: 12px;
+}
+
+
+#footer {
+    margin: 0 auto;
+    padding: 0 10px;
+    /*border-top: #cccccc 1px solid;*/
+
+    text-align: left;
+    font-size: 10px;
+}
