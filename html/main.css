@@ -66,6 +66,7 @@ ul.menu li {
     display: inline-block;
     list-style-type: none;
     position: relative;
+    z-index: 100;
 }
 ul.menu a {
     background-color: #ffff99;
@@ -122,7 +123,7 @@ ul.menu ul ul {
 
 
 #layerTree {
-    background: #993300;
+    background: #ccccff;
     margin: 0 auto;
     padding: 0;
     width: 150px;
@@ -133,7 +134,7 @@ ul.menu ul ul {
 }
 
 #mainPanels {
-    background: beige;
+    /*background: beige;*/
     margin-top: 0;
     margin-bottom: 0;
     margin-left: 150px;
@@ -144,7 +145,7 @@ ul.menu ul ul {
 }
 
 #statusBar {
-    background: cadetblue;
+    background: #ffccff;
     margin: 0 auto;
     padding: 10px 15px;
     height: 20px;
