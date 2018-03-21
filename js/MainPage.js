@@ -21,11 +21,11 @@ function expandBranch (element) {
         if (targetElements[i].tagName.toLowerCase() == "ul") {
             if (targetElements[i].style.display == "block") {
                 targetElements[i].style.display = "none";
-                element.textContent = "+";
+                element.childNodes[0].src = "expand.png";
             }
             else {
                 targetElements[i].style.display = "block";
-                element.textContent = "-";
+                element.childNodes[0].src = "collapse.png";
             }
         }
     }
