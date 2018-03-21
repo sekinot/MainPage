@@ -13,3 +13,38 @@ function initialize () {
 function importLayer () {
     alert("ぼよん");
 }
+
+function expandBranch (element) {
+    var targetElements = element.parentNode.children;
+
+    for (var i = 0; i < targetElements.length; ++i) {
+        if (targetElements[i].tagName.toLowerCase() == "ul") {
+            if (targetElements[i].style.display == "block") {
+                targetElements[i].style.display = "none";
+                element.textContent = "+";
+            }
+            else {
+                targetElements[i].style.display = "block";
+                element.textContent = "-";
+            }
+        }
+    }
+}
+
+var selectedBranch = null;
+function clickBranch (element) {
+    var targetElements = element.parentNode;
+
+    if  (targetElements === selectedBranch) {
+        selectedBranch.style.backgroundColor = "";
+        selectedBranch = null;
+        return;
+    }
+    if (selectedBranch)
+        selectedBranch.style.backgroundColor = "";
+
+    targetElements.style.backgroundColor = "aqua";
+    selectedBranch = targetElements;
+
+    return;
+}

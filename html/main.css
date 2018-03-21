@@ -44,6 +44,7 @@ body  {
     clear: both;
 }
 
+/**** Menu Bar ****/
 #menuBar {
     margin: 0 auto;
     padding-top: 0;
@@ -81,11 +82,9 @@ ul.menu a:hover {
     background-color: #ffcccc;
     color: #cc0000;
 }
-
 ul.menu li:hover > ul {
     display: block;
 }
-
 ul.menu ul {
     margin: 0;
     padding: 0;
@@ -120,10 +119,8 @@ ul.menu ul ul {
 
 
 
-
-
+/**** layer expandBranch ****/
 #layerTree {
-    background: #ccccff;
     margin: 0 auto;
     padding: 0;
     width: 150px;
@@ -133,6 +130,116 @@ ul.menu ul ul {
     text-align: left;
 }
 
+.treeAllButton {
+    margin: 5px 5px;
+    padding: 5px;
+    background: #cccccc;
+    text-align: center;
+    font-size: 10px;
+    position: relative;
+    float: left;
+}
+
+ul.tree {
+    margin: 0;
+    padding: 0;
+    clear: both;
+}
+ul.tree li {
+    list-style-type: none;
+    position: relative;
+
+    text-align: left;
+    text-decoration: none;
+    font-size: 12px;
+}
+ul.tree a {
+    color: #333300;
+    line-height: 22px;
+    text-align: left;
+    text-decoration: none;
+    font-size: 12px;
+    /*display: block;*/
+}
+ul.tree a:hover {
+    color: #cc0000;
+}
+/*
+ul.tree li:hover > ul {
+    display: block;
+}
+*/
+
+
+ul.tree ul {
+    display: block;
+    margin: 0 0 0 20px;
+    padding: 0;
+    display: none;
+    position: relative;
+}
+
+/*
+ul.tree a {
+    background-color: #ffff99;
+    color: #333300;
+    line-height: 22px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    display: block;
+}
+ul.tree a:hover {
+    background-color: #ffcccc;
+    color: #cc0000;
+}
+
+ul.tree li:hover > ul {
+    display: block;
+}
+
+ul.tree ul {
+    margin: 0;
+    padding: 0;
+    display: none;
+    position: absolute;
+}
+*/
+
+ul.tree ul li {
+    display: block;
+    list-style-type: none;
+    position: relative;
+
+    text-align: left;
+    text-decoration: none;
+    font-size: 12px;
+}
+/*
+ul.tree ul li a {
+    line-height: 22px;
+    text-align: left;
+    padding-left: 5px;
+    font-weight: normal;
+}
+ul.tree ul li a:hover {
+    background-color: #ffcccc;
+    color: #cc0000;
+}
+*/
+/*
+ul.tree ul ul {
+    margin: 0;
+    padding: 0;
+    display: none;
+    position: absolute;
+    left: 100%;
+}
+*/
+
+
+
+/**** Main Panels ****/
 #mainPanels {
     /*background: beige;*/
     margin-top: 0;

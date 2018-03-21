@@ -20,7 +20,7 @@
     </div>
 
     <div style="height:20px; padding-top: 5px; float:right;">
-      <select name="language" style="width: 100pt;">
+      <select title="language" name="language" style="width: 100pt;">
         <option>English</option>
         <option>Japanese</option>
       </select>
@@ -73,22 +73,35 @@
         <li><a href="#">About</a>
         </li>
       </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
     </div>
 
     <div id="layerTree">
+      <div class="treeAllButton" style="margin-left: 0;">Opne All</div><div class="treeAllButton">Close All</div>
+
+      <ul class="tree">
+        <li><a href="#" onclick="expandBranch(this)">+</a> <a href="#" onclick="clickBranch(this)">root</a>
+          <ul>
+            <li><a href="#" onclick="expandBranch(this)">+</a> <a href="#" onclick="clickBranch(this)">panel1</a>
+              <ul>
+                <li><a href="#" onclick="expandBranch(this)">+</a> <a href="#" onclick="clickBranch(this)">layer</a></li>
+              </ul>
+            </li>
+            <li><a href="#" onclick="expandBranch(this)">+</a> <a href="#" onclick="clickBranch(this)">panel2</a></li>
+            <li><a href="#" onclick="expandBranch(this)">+</a> <a href="#" onclick="clickBranch(this)">panel</a></li>
+            <li><a href="#" onclick="expandBranch(this)">+</a> <a href="#" onclick="clickBranch(this)">panel</a>
+              <ul>
+                <li><a href="#" onclick="expandBranch(this)">+</a> <a href="#" onclick="clickBranch(this)">layer</a>
+                  <ul>
+                    <li><a href="#" onclick="clickBranch(this)">dataset</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+
     </div>
 
     <div id="mainPanels">
