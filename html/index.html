@@ -90,7 +90,7 @@
             <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">panel</a></li>
             <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">panel</a>
               <ul>
-                <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">layer</a>
+                <li><a href="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">layer</a>
                   <ul>
                     <li><a href="#" onclick="clickBranch(this)">dataset</a></li>
                   </ul>
@@ -123,7 +123,18 @@
     </table>
   </div>
 
-  <div id="footer">
+
+  <!-- START for Debug -->
+  <div id="debug">
+    <p><a href="#" onclick="createSample()">createSample</a></p>
+    <p><a href="#" onclick="displaySample()">displaySample</a></p>
+    <p id="sample"></p>
+  </div>
+  <!-- END for Debug -->
+
+
+
+  <div id="footer" onclick="expandBranch(this)">
     <p>Copyright &copy; 2012-2018 Tatsuki Sekino. All rights reserved.</p>
   </div>
 
