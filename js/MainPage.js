@@ -67,7 +67,7 @@ function importContainer (element) {
     closeMenuItem(element);
 
     var a =
-        HuTime.JSON.load("http://localhost:63342/WebHuTimeIDE/MainPage/html/sample/LineChartPanel.json",
+        HuTime.JSON.load("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json",
             function () {
                 mainPanelCollection.appendPanel(a.parsedObject);
                 hutime.redraw(2457200.5, 2457238.5);
