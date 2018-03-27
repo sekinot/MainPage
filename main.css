@@ -64,26 +64,22 @@ ul.menu {
 }
 ul.menu li {
     width: 90px;
-    display: inline-block;
+    background-color: #ffff99;
     list-style-type: none;
     position: relative;
     z-index: 100;
-}
-ul.menu a {
-    background-color: #ffff99;
     color: #333300;
     line-height: 22px;
     text-align: center;
     text-decoration: none;
     font-size: 12px;
-    display: block;
+    display: inline-block;
+    cursor: default;
 }
-ul.menu a:hover {
+ul.menu li:hover {
     background-color: #ffcccc;
     color: #cc0000;
-}
-ul.menu li:hover > ul {
-    display: block;
+
 }
 ul.menu ul {
     margin: 0;
@@ -96,25 +92,14 @@ ul.menu ul li {
     width: 135px;
     border-top: 1px solid pink;
 }
-ul.menu ul li a {
-    line-height: 22px;
-    text-align: left;
-    padding-left: 5px;
-    font-weight: normal;
-}
-ul.menu ul li a:hover {
-    background-color: #ffcccc;
-    color: #cc0000;
-}
-
 ul.menu ul ul {
-    margin: 0;         /* ★サブメニュー外側の余白(ゼロ) */
-    padding: 0;        /* ★サブメニュー内側の余白(ゼロ) */
-    display: none;       /* ★標準では非表示にする */
-    position: absolute;  /* ★絶対配置にする */
-    top: -1px;           /* 1pxだけ上方向にずらす(※上に1pxの枠線を引いている場合) */
-    left: 100%;          /* ★基準位置からの距離を親ボックスの幅100％にする */
-    border-left: 1px solid pink; /* 左側に引く枠線(ピンク色で1pxの実線) */
+    margin: 0;
+    padding: 0;
+    display: none;
+    position: absolute;
+    top: -1px;
+    left: 100%;
+    border-left: 1px solid pink;
 }
 
 
@@ -172,7 +157,7 @@ ul.tree li:hover > ul {
 
 
 ul.tree ul {
-    display: block;
+    /*display: block;*/
     margin: 0 0 0 20px;
     padding: 0;
     display: none;

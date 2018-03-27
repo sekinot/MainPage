@@ -5,11 +5,10 @@
   <title>Web HuTime</title>
   <link href="main.css" rel="stylesheet" type="text/css" />
   <!--script type="text/javascript" src="http://web.hutime.org/js/HuTime.min.js"></script-->
-  <!script type="text/javascript" src="/js/MainPage.js"></script-->
   <script type="text/javascript" src="../debug.js"></script>
   <script type="text/javascript" src="js/MainPage.js"></script>
 </head>
-<body onload="initialize()">
+<body id="body" onload="initialize()">
 
 <div id="container">
 
@@ -31,46 +30,46 @@
   <div id="hutime">
     <div id="menuBar">
       <ul class="menu">
-        <li><a href="#">File</a><ul>
-            <li><a href="#">New</a></li>
-            <li><a href="#">Import &raquo;</a>
-              <ul>
-                <li onclick="importContainer(this)"><a href="#">Json</a></li>
-                <li><a href="#">Text (CSV, TSV)</a></li>
-                <li><a href="#">gtm</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Export &raquo;</a>
-              <ul>
-                <li><a href="#">Json</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Print</a></li>
-            <li><a href="#">Save Image</a></li>
-            <li><a href="#">Preferences</a></li>
-          </ul>
-        </li>
-
-        <li><a href="#">Database</a></li>
-
-        <li><a href="#">Analysis</a>
+        <li id="menuFile">File
           <ul>
-            <li><a href="#">Search &raquo;</a>
+            <li>New</li>
+            <li id="menuFileImport">Import &raquo;
               <ul>
-                <li><a href="#">Text</a></li>
-                <li><a href="#">Value</a></li>
+                <li id="menuFileImportJson">Json</li>
+                <li>Text (CSV, TSV)</li>
+                <li>gtm</li>
               </ul>
             </li>
-            <li><a href="#">Record Extraction &raquo;</a>
+            <li>Export &raquo;
               <ul>
-                <li><a href="#">Other</a></li>
+                <li>Json</li>
               </ul>
             </li>
-            <li><a href="#">Mask</a></li>
+            <li>Print</li>
+            <li>Save Image</li>
+            <li>Preferences</li>
           </ul>
         </li>
-        <li><a href="#">About</a>
+
+        <li>Database</li>
+
+        <li>Analysis
+          <ul>
+            <li>Search &raquo;
+              <ul>
+                <li>Text</li>
+                <li>Value</li>
+              </ul>
+            </li>
+            <li>Record Extraction &raquo;
+              <ul>
+                <li>Other</li>
+              </ul>
+            </li>
+            <li>Mask</li>
+          </ul>
         </li>
+        <li>About</li>
       </ul>
     </div>
 
@@ -89,7 +88,7 @@
             <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">panel</a></li>
             <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">panel</a>
               <ul>
-                <li><a href="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">layer</a>
+                <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">layer</a>
                   <ul>
                     <li><a href="#" onclick="clickBranch(this)">dataset</a></li>
                   </ul>
