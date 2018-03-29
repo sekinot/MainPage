@@ -8,7 +8,7 @@
   <script type="text/javascript" src="../debug.js"></script>
   <script type="text/javascript" src="js/MainPage.js"></script>
 </head>
-<body id="body" onload="initialize()">
+<body id="body" onload="initialize()" onclick="closeMenuItem()">
 
 <div id="container">
 
@@ -30,17 +30,17 @@
   <div id="hutime">
     <div id="menuBar">
       <ul class="menu">
-        <li id="menuFile">File
+        <li onclick="openMenuItem(event)">File
           <ul>
             <li>New</li>
-            <li id="menuFileImport">Import &raquo;
+            <li onclick="openMenuItem(event)">Import &raquo;
               <ul>
-                <li id="menuFileImportJson">Json</li>
+                <li onclick="importContainer(event)">Json</li>
                 <li>Text (CSV, TSV)</li>
                 <li>gtm</li>
               </ul>
             </li>
-            <li>Export &raquo;
+            <li onclick="openMenuItem(event)">Export &raquo;
               <ul>
                 <li>Json</li>
               </ul>
@@ -50,18 +50,16 @@
             <li>Preferences</li>
           </ul>
         </li>
-
         <li>Database</li>
-
-        <li>Analysis
+        <li onclick="openMenuItem(event)">Analysis
           <ul>
-            <li>Search &raquo;
+            <li onclick="openMenuItem(event)">Search &raquo;
               <ul>
                 <li>Text</li>
                 <li>Value</li>
               </ul>
             </li>
-            <li>Record Extraction &raquo;
+            <li onclick="openMenuItem(event)">Record Extraction &raquo;
               <ul>
                 <li>Other</li>
               </ul>
@@ -77,18 +75,18 @@
       <div class="treeAllButton" style="margin-left: 0;">Opne All</div><div class="treeAllButton">Close All</div>
 
       <ul class="tree">
-        <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">root</a>
+        <li id="treeRoot"><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">root</a>
           <ul>
-            <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">panel1</a>
+            <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">panel1</a>
               <ul>
-                <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">layer</a></li>
+                <li onclick="operateBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">layer</a></li>
               </ul>
             </li>
-            <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">panel2</a></li>
-            <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">panel</a></li>
-            <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">panel</a>
+            <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">panel2</a></li>
+            <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">panel</a></li>
+            <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">panel</a>
               <ul>
-                <li><a href="#" onclick="expandBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" /></a><a href="#" onclick="clickBranch(this)">layer</a>
+                <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">layer</a>
                   <ul>
                     <li><a href="#" onclick="clickBranch(this)">dataset</a></li>
                   </ul>
@@ -98,9 +96,7 @@
           </ul>
         </li>
       </ul>
-
-
-    </div>
+   </div>
 
     <div id="mainPanels">
     </div>
@@ -121,7 +117,7 @@
     </table>
   </div>
 
-  <div id="footer" onclick="expandBranch(this)">
+  <div id="footer" onclick="operateBranch(this)">
     <p>Copyright &copy; 2012-2018 Tatsuki Sekino. All rights reserved.</p>
   </div>
 

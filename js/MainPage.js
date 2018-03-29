@@ -12,58 +12,47 @@ function initialize () {
     mainPanelCollection.style.backgroundColor = "#cccccc";
     hutime.appendPanelCollection(mainPanelCollection);
     hutime.redraw();
-
-    // set event handlers
-    document.getElementById("body").addEventListener("click", closeMenuItem, false);
-    document.getElementById("menuFile").addEventListener("click", openMenuItem, false);
-    document.getElementById("menuFileImport").addEventListener("click", openMenuItem, false);
-    document.getElementById("menuFileImportJson").addEventListener("click", importContainer, false);
 }
 
 // **** Menu Operations ****
-var openItemElements = [];
-function openMenuItem (ev) {
-    if (ev.inCloseProcess)
-        return;
-
+var openItemElements = [];      // Elements of menu item opened by a user
+function openMenuItem (ev) {    // Open a menu item clicked by a user
     var element = ev.target;
     for (var i = 0; i < element.childNodes.length; ++i) {
-        if (element.childNodes[i].tagName && element.childNodes[i].tagName.toLowerCase() == "ul") {
+        if (element.childNodes[i].nodeName == "UL") {
             element.childNodes[i].style.display = "block";
             openItemElements.push(element.childNodes[i]);
-            ev.inOpenProcess = true;
+            ev.stopPropagation();
             return;
         }
     }
 }
-
-function closeMenuItem (ev) {
-    if (ev.inOpenProcess)
-        return;
-
-    for (var i = 0; i < openItemElements.length; ++i) {
-        openItemElements[i].style.display = "none";
-    }
+function closeMenuItem (ev) {   // Close all menu items opened
+    openItemElements.forEach(function (itemElement) {
+        itemElement.style.display = "none";
+    });
     openItemElements = [];
-    ev.inCloseProcess = true;
+    ev.stopPropagation();
 }
 
 // **** Tree Menu Operations ****
-function expandBranch (element) {
-    var targetElements = element.parentNode.children;
-
+function operateBranch (ev) {   // Expand and collapse tree branch
+    var targetElements = ev.target.parentNode.childNodes;
     for (var i = 0; i < targetElements.length; ++i) {
-        if (targetElements[i].tagName.toLowerCase() == "ul") {
+        if (targetElements[i].nodeName == "UL") {
             if (targetElements[i].style.display == "block") {
                 targetElements[i].style.display = "none";
-                element.childNodes[0].src = "expand.png";
+                ev.target.src = "expand.png";
+                return;
             }
             else {
                 targetElements[i].style.display = "block";
-                element.childNodes[0].src = "collapse.png";
+                ev.target.src = "collapse.png";
+                return;
             }
         }
     }
+    ev.stopPropagation();
 }
 
 var selectedBranch = null;
