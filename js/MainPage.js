@@ -54,10 +54,46 @@ function operateBranch (ev) {   // Expand and collapse tree branch
     }
     ev.stopPropagation();
 }
+function addBranch (element, label) {   // Add tree branch
+    // element: li element to add added branch
+    // label: label displayed on the tree
+    var li = document.createElement("li");
+
+    var knobImg = document.createElement("img");
+    knobImg.src = "expand.png";
+    knobImg.className = "knob";
+    knobImg.alt = "knob";
+
+    li.appendChild(knobImg);
+    li.appendChild(document.createTextNode(label));
+    li.appendChild(document.createElement("ul"));
+
+    var ul;
+    for (var i = 0; element.childNodes.length; ++i) {
+        if (element.childNodes[i].nodeName == "UL") {
+            ul = element.childNodes[i];
+            break;
+        }
+    }
+    ul.appendChild(li);
+}
 
 var selectedBranch = null;
-function clickBranch (element) {
-    var targetElements = element.parentNode;
+function clickBranch (ev) {
+    if (ev.target.getAttribute("class") == "knob") {
+        operateBranch (ev);
+        ev.stopPropagation();
+        return;
+    }
+
+
+    // /* test for addBranch
+    addBranch(ev.target, "ぼよん");
+    ev.stopPropagation();
+    return;
+    // */
+
+    var targetElements = ev.parentNode;
 
     if  (targetElements === selectedBranch) {
         selectedBranch.style.backgroundColor = "";
@@ -70,6 +106,7 @@ function clickBranch (element) {
     targetElements.style.backgroundColor = "aqua";
     selectedBranch = targetElements;
 
+    ev.stopPropagation();
     return;
 }
 

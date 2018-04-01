@@ -75,25 +75,8 @@
       <div class="treeAllButton" style="margin-left: 0;">Opne All</div><div class="treeAllButton">Close All</div>
 
       <ul class="tree">
-        <li id="treeRoot"><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">root</a>
-          <ul>
-            <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">panel1</a>
-              <ul>
-                <li onclick="operateBranch(this)"><img src="expand.png" alt="knob" style="margin-right:6px;" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">layer</a></li>
-              </ul>
-            </li>
-            <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">panel2</a></li>
-            <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">panel</a></li>
-            <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">panel</a>
-              <ul>
-                <li><img src="expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><a href="#" onclick="clickBranch(this)">layer</a>
-                  <ul>
-                    <li><a href="#" onclick="clickBranch(this)">dataset</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
+        <li id="treeRoot" onclick="clickBranch(event)"><img src="expand.png" alt="knob" class="knob" />root
+          <ul></ul>
         </li>
       </ul>
    </div>
