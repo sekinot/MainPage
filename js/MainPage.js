@@ -42,36 +42,55 @@ function operateBranch (ev) {   // Expand and collapse tree branch
         if (targetElements[i].nodeName == "UL") {
             if (targetElements[i].style.display == "block") {
                 targetElements[i].style.display = "none";
-                ev.target.src = "expand.png";
+                ev.target.src = "img/expand.png";
                 return;
             }
             else {
                 targetElements[i].style.display = "block";
-                ev.target.src = "collapse.png";
+                ev.target.src = "img/collapse.png";
                 return;
             }
         }
     }
     ev.stopPropagation();
 }
-function addBranch (element, label) {   // Add tree branch
-    // element: li element to add added branch
-    // label: label displayed on the tree
+function addBranch (target, hutimeObj) {   // Add tree branch
+    // target: li element to add added branch
+    // hutimeObj: Object of HuTime (PanelCollection, Panel, Layer, Recordset)
+
     var li = document.createElement("li");
+    li.hutime = {};
+    li.hutimeObj = hutimeObj;
+
+    var i;
 
     var knobImg = document.createElement("img");
-    knobImg.src = "expand.png";
+    knobImg.src = "img/expand.png";
     knobImg.className = "knob";
     knobImg.alt = "knob";
+    if (hutimeObj)
+
 
     li.appendChild(knobImg);
-    li.appendChild(document.createTextNode(label));
+
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "treeCheckBox";
+    li.appendChild(checkbox);
+
+    var icon = document.createElement("img");
+    icon.src = "img/tilePanel.png";
+    icon.className = "treeIcon";
+    icon.alt = "Panel Collection";
+    li.appendChild(icon);
+
+    li.appendChild(document.createTextNode(hutimeObj.name));
     li.appendChild(document.createElement("ul"));
 
     var ul;
-    for (var i = 0; element.childNodes.length; ++i) {
-        if (element.childNodes[i].nodeName == "UL") {
-            ul = element.childNodes[i];
+    for (i = 0; target.childNodes.length; ++i) {
+        if (target.childNodes[i].nodeName == "UL") {
+            ul = target.childNodes[i];
             break;
         }
     }

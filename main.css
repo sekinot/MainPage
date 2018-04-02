@@ -105,10 +105,13 @@ ul.menu ul ul {
 #layerTree {
     margin: 0 auto;
     padding: 0;
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 300px;
     float: left;
 
+    overflow-x: hidden;
+    overflow-y: auto;
+    white-space: nowrap;
     text-align: left;
 }
 
@@ -122,7 +125,15 @@ ul.menu ul ul {
     float: left;
 }
 .knob {
+    margin-right: 4px;
+    vertical-align: middle;
+}
+.treeCheckBox {
+    vertical-align: middle;
+}
+.treeIcon {
     margin-right: 6px;
+    vertical-align: middle;
 }
 
 ul.tree {
@@ -139,23 +150,12 @@ ul.tree li {
     text-decoration: none;
     font-size: 12px;
 }
-/*
-ul.tree a {
-    color: #333300;
-    line-height: 22px;
-    text-align: left;
-    text-decoration: none;
-    font-size: 12px;
-}
-ul.tree a:hover {
-    color: #cc0000;
-}
-//*/
 ul.tree ul {
-    margin: 0 0 0 20px;
+    margin: 0 0 0 15px;
     padding: 0;
     display: none;
     position: relative;
+
 }
 ul.tree ul li {
     display: block;
@@ -171,7 +171,7 @@ ul.tree ul li {
 #mainPanels {
     margin-top: 0;
     margin-bottom: 0;
-    margin-left: 150px;
+    margin-left: 200px;
     margin-right: 0;
     padding: 0;
     height: 300px;

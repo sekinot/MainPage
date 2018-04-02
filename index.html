@@ -72,10 +72,11 @@
     </div>
 
     <div id="layerTree">
-      <div class="treeAllButton" style="margin-left: 0;">Opne All</div><div class="treeAllButton">Close All</div>
+      <div class="treeAllButton" style="margin-left: 0;">Open All</div><div class="treeAllButton">Close All</div>
 
       <ul class="tree">
-        <li id="treeRoot" onclick="clickBranch(event)"><img src="expand.png" alt="knob" class="knob" />root
+        <li id="treeRoot" onclick="clickBranch(event)">
+          <img src="img/expand.png" alt="knob" class="knob" /><input type="checkbox" class="treeCheckBox" /><img src="img/panelCollection.png" alt="Panel Collection" class="treeIcon" />root
           <ul></ul>
         </li>
       </ul>
