@@ -53,6 +53,7 @@ body  {
 
     height: 20px;
     clear: both;
+    white-space: nowrap;
 
     text-align: left;
 }
@@ -85,6 +86,7 @@ ul.menu ul {
     padding: 0;
     display: none;
     position: absolute;
+    white-space: normal;
 }
 
 ul.menu ul li {
@@ -127,6 +129,7 @@ ul.menu ul ul {
 .knob {
     margin-right: 4px;
     vertical-align: middle;
+    width:8px;
 }
 .treeCheckBox {
     vertical-align: middle;
