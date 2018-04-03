@@ -13,6 +13,9 @@ function initialize () {
     hutime.appendPanelCollection(mainPanelCollection);
     hutime.redraw();
     document.getElementById("treeRoot").hutimeObj = mainPanelCollection;
+
+    initDialog("dialogImportRemote");
+
 }
 
 // **** Menu Operations ****
@@ -202,6 +205,10 @@ function clickBranch (ev) {
 // **** Operations ****
 function importContainer (ev) {
     closeMenuItem(ev);
+
+    showDialog("dialogImportRemote");
+    //return;
+
     var a =
         HuTime.JSON.load("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json",
             function () {
@@ -211,5 +218,51 @@ function importContainer (ev) {
                 addBranch(document.getElementById("treeRoot"), a.parsedObject)
 
             });
+}
+
+
+// **** Dialog ****
+function initDialog (dialogId) {
+    var dialogElement = document.getElementById(dialogId);
+    var titleElement;
+    for (var i = 0; i < dialogElement.childNodes.length; ++i) {
+        if (dialogElement.childNodes[i].className == "dialogTitle") {
+            titleElement = dialogElement.childNodes[i];
+            break;
+        }
+    }
+    dialogElement.dialogDragging = false;
+    titleElement.addEventListener("mousedown", function (ev) {
+        dialogElement.dialogDragging = true;
+        dialogElement.originX = ev.pageX;
+        dialogElement.originY = ev.pageY;
+        var body = document.getElementById("body");
+        body.addEventListener("mousemove", function (ev) {
+            if (dialogElement.dialogDragging) {
+                dialogElement.style.left =
+                    (parseInt(dialogElement.style.left) - dialogElement.originX + ev.pageX) + "px";
+                dialogElement.style.top =
+                    (parseInt(dialogElement.style.top) - dialogElement.originY + ev.pageY) + "px";
+                dialogElement.originX = ev.pageX;
+                dialogElement.originY = ev.pageY;
+            }
+        });
+    });
+    titleElement.addEventListener("mouseup", function (ev) {
+        dialogElement.dialogDragging = false;
+        var body = document.getElementById("body");
+        body.romoveEventListener("mousemove");
+    });
+}
+function showDialog (dialogId) {
+    var element = document.getElementById(dialogId);
+    element.style.left = ((window.innerWidth - element.clientWidth) / 2).toString() + "px";
+    element.style.top = ((window.innerHeight - element.clientHeight)/ 2).toString() + "px";
+    element.style.visibility = "visible"
+}
+function closeDialog (dialogId) {
+    var element = document.getElementById(dialogId);
+    element.style.visibility = "hidden";
+    element.dialogDragging = false;
 }
 
