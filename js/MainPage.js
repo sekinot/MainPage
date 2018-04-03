@@ -75,7 +75,6 @@ function addBranch (targetElement, hutimeObj) {   // Add tree branch
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.className = "treeCheckBox";
-    checkbox.checked = hutimeObj.visible;
     li.appendChild(checkbox);
 
     var icon = document.createElement("img");
@@ -84,10 +83,18 @@ function addBranch (targetElement, hutimeObj) {   // Add tree branch
 
     var i;
     var childObj = [];
+
+
+
     if (hutimeObj instanceof HuTime.RecordsetBase) {
         icon.src = "img/recordset.png";
         icon.alt = "Recordset";
-        knobImg.style.visibility = "hidden";
+        if (hutimeObj instanceof HuTime.ChartRecordset)
+            childObj = hutimeObj._valueItems;
+        else if (hutimeObj instanceof HuTime.TLineRecordset)
+            childObj = [ hutimeObj.labelItem ];
+        checkbox.checked = hutimeObj.visible;
+        li.appendChild(document.createTextNode(hutimeObj.name));
     }
     else if (hutimeObj instanceof HuTime.RecordLayerBase) {
         if (hutimeObj instanceof HuTime.TLineLayer) {
@@ -99,6 +106,8 @@ function addBranch (targetElement, hutimeObj) {   // Add tree branch
             icon.alt = "Chart Layer";
         }
         childObj = hutimeObj.recordsets;
+        checkbox.checked = hutimeObj.visible;
+        li.appendChild(document.createTextNode(hutimeObj.name));
     }
     else if (hutimeObj instanceof HuTime.Layer) {
         if (hutimeObj instanceof HuTime.TickScaleLayer) {
@@ -109,6 +118,8 @@ function addBranch (targetElement, hutimeObj) {   // Add tree branch
             icon.src = "img/chartLayer.png";
             icon.alt = "General Layer";
         }
+        checkbox.checked = hutimeObj.visible;
+        li.appendChild(document.createTextNode(hutimeObj.name));
     }
     else if (hutimeObj instanceof HuTime.ContainerBase) {
         if (hutimeObj instanceof HuTime.PanelCollection) {
@@ -124,8 +135,23 @@ function addBranch (targetElement, hutimeObj) {   // Add tree branch
             icon.alt = "Other";
         }
         childObj = hutimeObj.contents;
+        checkbox.checked = hutimeObj.visible;
+        li.appendChild(document.createTextNode(hutimeObj.name));
     }
-    li.appendChild(document.createTextNode(hutimeObj.name));
+    else if (targetElement.hutimeObj instanceof HuTime.RecordsetBase) {
+        // in case of item for chart or label for TLine
+        icon.src = "img/recorditem.png";
+        icon.alt = "Recordset";
+        checkbox.checked = true;    // TENTATIVE
+        if (targetElement.hutimeObj instanceof HuTime.ChartRecordset)
+            li.appendChild(document.createTextNode(hutimeObj.name));
+        else if (hutimeObj instanceof HuTime.TLineRecordset)
+            li.appendChild(document.createTextNode(hutimeObj));
+        knobImg.style.visibility = "hidden";
+    }
+    else
+        return;
+
     li.appendChild(document.createElement("ul"));
     for (i = 0; i < childObj.length; ++i) {
         addBranch(li, childObj[i])
