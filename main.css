@@ -213,11 +213,13 @@ ul.tree ul li {
 }
 .dialogBody {
     clear: both;
+    text-align: left;
+    padding: 10px;
+    font-size: 12px;
 }
 
 #dialogImportRemote {
     width: 400px;
-    height: 200px;
 }
 
 

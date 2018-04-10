@@ -5,6 +5,7 @@
 
 var hutime;
 var mainPanelCollection;
+var bodyElement;
 
 function initialize () {
     hutime = new HuTime("mainPanels");
@@ -13,9 +14,9 @@ function initialize () {
     hutime.appendPanelCollection(mainPanelCollection);
     hutime.redraw();
     document.getElementById("treeRoot").hutimeObj = mainPanelCollection;
+    bodyElement = document.getElementById("body");
 
     initDialog("dialogImportRemote");
-
 }
 
 // **** Menu Operations ****
@@ -203,29 +204,33 @@ function clickBranch (ev) {
 }
 
 // **** Operations ****
-function importContainer (ev) {
-    closeMenuItem(ev);
-
-    showDialog("dialogImportRemote");
-    //return;
-
+function importRemoteJsonContainer (url) {
     var a =
-        HuTime.JSON.load("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json",
+        //HuTime.JSON.load("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json",
+        HuTime.JSON.load(url,
             function () {
                 mainPanelCollection.appendPanel(a.parsedObject);
                 hutime.redraw(2457200.5, 2457238.5);
 
                 addBranch(document.getElementById("treeRoot"), a.parsedObject)
-
             });
 }
 
+// **** Operations for specific dialogs ****
+function dialogImportRemote_Import (ev) {
+    closeMenuItem(ev);
+    closeDialog("dialogImportRemote");
+    importRemoteJsonContainer (document.forms.dialogImportRemoteForm.url.value);
+}
 
-// **** Dialog ****
+// **** Dialog Common ****
+var dialogs = {};       // element of dialogs
 function initDialog (dialogId) {
     var dialogElement = document.getElementById(dialogId);
+    dialogs[dialogId] = dialogElement;
     var titleElement;
-    for (var i = 0; i < dialogElement.childNodes.length; ++i) {
+    var i;
+    for (i = 0; i < dialogElement.childNodes.length; ++i) {
         if (dialogElement.childNodes[i].className == "dialogTitle") {
             titleElement = dialogElement.childNodes[i];
             break;
@@ -236,33 +241,34 @@ function initDialog (dialogId) {
         dialogElement.dialogDragging = true;
         dialogElement.originX = ev.pageX;
         dialogElement.originY = ev.pageY;
-        var body = document.getElementById("body");
-        body.addEventListener("mousemove", function (ev) {
-            if (dialogElement.dialogDragging) {
-                dialogElement.style.left =
-                    (parseInt(dialogElement.style.left) - dialogElement.originX + ev.pageX) + "px";
-                dialogElement.style.top =
-                    (parseInt(dialogElement.style.top) - dialogElement.originY + ev.pageY) + "px";
-                dialogElement.originX = ev.pageX;
-                dialogElement.originY = ev.pageY;
-            }
-        });
+        bodyElement.dialogElement = dialogElement;
+        bodyElement.addEventListener("mousemove", moveDialog);
     });
     titleElement.addEventListener("mouseup", function (ev) {
         dialogElement.dialogDragging = false;
-        var body = document.getElementById("body");
-        body.romoveEventListener("mousemove");
+        bodyElement.removeEventListener("mousemove", moveDialog);
+        bodyElement.dialogElement = null;
     });
 }
 function showDialog (dialogId) {
-    var element = document.getElementById(dialogId);
+    var element = dialogs[dialogId];
     element.style.left = ((window.innerWidth - element.clientWidth) / 2).toString() + "px";
-    element.style.top = ((window.innerHeight - element.clientHeight)/ 2).toString() + "px";
+    element.style.top = ((window.innerHeight - element.clientHeight) / 2).toString() + "px";
     element.style.visibility = "visible"
 }
 function closeDialog (dialogId) {
-    var element = document.getElementById(dialogId);
-    element.style.visibility = "hidden";
-    element.dialogDragging = false;
+    dialogs[dialogId].style.visibility = "hidden";
+    dialogs[dialogId].dialogDragging = false;
 }
+function moveDialog (ev) {
+    if (!bodyElement.dialogElement)
+        return;
 
+    var dialogElement = bodyElement.dialogElement;
+    dialogElement.style.left =
+        (parseInt(dialogElement.style.left) - dialogElement.originX + ev.pageX) + "px";
+    dialogElement.style.top =
+        (parseInt(dialogElement.style.top) - dialogElement.originY + ev.pageY) + "px";
+    dialogElement.originX = ev.pageX;
+    dialogElement.originY = ev.pageY;
+}

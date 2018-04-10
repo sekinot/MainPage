@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8">
   <title>Web HuTime</title>
@@ -8,7 +8,7 @@
   <script type="text/javascript" src="../debug.js"></script>
   <script type="text/javascript" src="js/MainPage.js"></script>
 </head>
-<body id="body" onload="initialize()" onclick="closeMenuItem()">
+<body id="body" onload="initialize()" onclick="closeMenuItem(event)">
 
 <div id="container">
 
@@ -35,9 +35,8 @@
             <li>New</li>
             <li onclick="openMenuItem(event)">Import &raquo;
               <ul>
-                <li onclick="importContainer(event)">Json</li>
-                <li>Text (CSV, TSV)</li>
-                <li>gtm</li>
+                <li onclick="showDialog('dialogImportRemote')">Remote</li>
+                <li>Local</li>
               </ul>
             </li>
             <li onclick="openMenuItem(event)">Export &raquo;
@@ -112,11 +111,16 @@
     Import Remorte
     <img src="img/close.png" alt="close" onclick="closeDialog('dialogImportRemote')" class="dialogCloseButton" />
   </div>
-
-
-
   <div class="dialogBody">
-
+    <form name="dialogImportRemoteForm">
+      URL <input type="text" name="url" style="width: 330px;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
+      <div style="padding: 10px 0;">
+        <input type="radio" name="fileType" checked="checked" /> JSON
+        <input type="radio" name="fileType" /> GTS/GTM
+        <input type="button" name="import" value="import" onclick="dialogImportRemote_Import(event)" style="float:right;" />
+        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportRemote')" style="float:right; margin-right: 10px;" />
+      </div>
+    </form>
   </div>
 </div>
 
