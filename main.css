@@ -217,6 +217,25 @@ ul.tree ul li {
     padding: 10px;
     font-size: 12px;
 }
+.dialogSizeKnob {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 15px;
+    height: 15px;
+
+    background-image: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0) 50%,
+        #aaa 52%, #aaa 60%,
+        #ddd 62%, #ddd 70%,
+        #aaa 72%, #aaa 80%,
+        #ddd 82%, #ddd 90%,
+        #aaa 92%, #aaa 100%
+    );
+    background-size: 15px 15px;
+    cursor: se-resize;
+}
 
 #dialogImportRemote {
     width: 400px;

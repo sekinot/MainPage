@@ -228,26 +228,62 @@ var dialogs = {};       // element of dialogs
 function initDialog (dialogId) {
     var dialogElement = document.getElementById(dialogId);
     dialogs[dialogId] = dialogElement;
-    var titleElement;
+    var dialogTitleElement, dialogBodyElement, dialogSizeKnob;
     var i;
     for (i = 0; i < dialogElement.childNodes.length; ++i) {
         if (dialogElement.childNodes[i].className == "dialogTitle") {
-            titleElement = dialogElement.childNodes[i];
+            dialogTitleElement = dialogElement.childNodes[i];
             break;
         }
     }
+    for (i = 0; i < dialogElement.childNodes.length; ++i) {
+        if (dialogElement.childNodes[i].className == "dialogBody") {
+            dialogBodyElement = dialogElement.childNodes[i];
+            break;
+        }
+    }
+    for (i = 0; i < dialogElement.childNodes.length; ++i) {
+        if (dialogElement.childNodes[i].className == "dialogSizeKnob") {
+            dialogSizeKnob = dialogElement.childNodes[i];
+            break;
+        }
+    }
+
     dialogElement.dialogDragging = false;
-    titleElement.addEventListener("mousedown", function (ev) {
+
+    // moving the dialog
+    dialogTitleElement.addEventListener("mousedown", function (ev) {
         dialogElement.dialogDragging = true;
         dialogElement.originX = ev.pageX;
         dialogElement.originY = ev.pageY;
-        bodyElement.dialogElement = dialogElement;
-        bodyElement.addEventListener("mousemove", moveDialog);
+        document.dialogElement = dialogElement;
+        document.addEventListener("mousemove", moveDialog, true);
+        document.addEventListener("mouseup", stopMoveDialog, true);
+        ev.preventDefault();
+        ev.stopPropagation();
+        return false;
     });
-    titleElement.addEventListener("mouseup", function (ev) {
-        dialogElement.dialogDragging = false;
-        bodyElement.removeEventListener("mousemove", moveDialog);
-        bodyElement.dialogElement = null;
+
+    // changing size of the dialog
+    if (!dialogElement.style.width)
+        dialogElement.style.width = dialogElement.clientWidth + "px";
+    if (!dialogElement.style.height)
+        dialogElement.style.height = dialogElement.clientHeight + "px";
+    dialogElement.minWidth = dialogElement.clientWidth;
+    dialogElement.minHeight = dialogElement.clientHeight;
+
+
+    dialogSizeKnob.addEventListener("mousedown", function (ev) {
+        dialogElement.dialogDragging = true;
+        dialogElement.originX = ev.pageX;
+        dialogElement.originY = ev.pageY;
+        document.dialogElement = dialogElement;
+        document.addEventListener("mousemove", sizeChangeDialog);
+        document.addEventListener("mouseup", stopSizeChangeDialog);
+        ev.preventDefault();
+        ev.stopPropagation();
+        document.style.cursor = "se-resize";
+        return false;
     });
 }
 function showDialog (dialogId) {
@@ -261,14 +297,59 @@ function closeDialog (dialogId) {
     dialogs[dialogId].dialogDragging = false;
 }
 function moveDialog (ev) {
-    if (!bodyElement.dialogElement)
+    if (!document.dialogElement)
         return;
+    var dialogElement = document.dialogElement;
 
-    var dialogElement = bodyElement.dialogElement;
     dialogElement.style.left =
         (parseInt(dialogElement.style.left) - dialogElement.originX + ev.pageX) + "px";
     dialogElement.style.top =
         (parseInt(dialogElement.style.top) - dialogElement.originY + ev.pageY) + "px";
+
     dialogElement.originX = ev.pageX;
     dialogElement.originY = ev.pageY;
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
 }
+function stopMoveDialog (ev) {
+    document.dialogElement.dialogDragging = false;
+    document.removeEventListener("mousemove", moveDialog, true);
+    document.removeEventListener("mouseup", stopMoveDialog, true);
+    document.dialogElement = null;
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+}
+
+
+function sizeChangeDialog (ev) {
+    if (!document.dialogElement)
+        return;
+
+    var dialogElement = document.dialogElement;
+    let newWidth = parseInt(dialogElement.style.width) - dialogElement.originX + ev.pageX;
+    let newHeight = parseInt(dialogElement.style.height) - dialogElement.originY + ev.pageY;
+    if (newWidth > dialogElement.minWidth)
+        dialogElement.style.width = newWidth + "px";
+    else
+        ev.pageX = dialogElement.originX;
+    if (newHeight > dialogElement.minHeight)
+        dialogElement.style.height = newHeight + "px";
+    dialogElement.originX = ev.pageX;
+    dialogElement.originY = ev.pageY;
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+}
+function stopSizeChangeDialog (ev) {
+    document.dialogElement.dialogDragging = false;
+    document.removeEventListener("mousemove", sizeChangeDialog);
+    document.removeEventListener("mouseup", sizeChangeDialog);
+    document.dialogElement = null;
+    document.style.cursor = "auto";
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+}
+
