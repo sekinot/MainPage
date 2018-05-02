@@ -8,7 +8,7 @@
   <script type="text/javascript" src="../debug.js"></script>
   <script type="text/javascript" src="js/MainPage.js"></script>
 </head>
-<body id="body" onload="initialize()" onclick="closeMenuItem(event)">
+<body onload="initialize()" onclick="closeMenuItem(event)">
 
 <div id="container">
 
@@ -72,10 +72,9 @@
 
     <div id="layerTree">
       <div class="treeAllButton" style="margin-left: 0;">Expand All</div><div class="treeAllButton">Collapse All</div>
-
       <ul class="tree">
-        <li id="treeRoot" onclick="clickBranch(event)">
-          <img src="img/expand.png" alt="knob" class="knob" /><input type="checkbox" class="treeCheckBox" checked="true" /><img src="img/panelCollection.png" alt="Panel Collection" class="treeIcon" />root
+        <li id="treeRoot">
+          <span class="branchSpan"><img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><input type="checkbox" class="branchCheckBox" checked="checked" /><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" class="branchIcon" /><span class="branchLabelSpan">root</span></span></span>
           <ul></ul>
         </li>
       </ul>
@@ -109,13 +108,18 @@
 
 <div id="dialogImportRemote" class="dialog">
   <div class="dialogTitle">
-    Import Remorte
+    Import Remote
     <img src="img/close.png" alt="close" onclick="closeDialog('dialogImportRemote')" class="dialogCloseButton" />
   </div>
   <div class="dialogBody">
     <form name="dialogImportRemoteForm">
+      <!--
       URL <input type="text" name="url" style="width: 330px;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
+      -->
+      URL <input type="text" name="url" style="width: 90%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
+
       <div style="padding: 10px 0;">
+        <!--input type="file" />AAAA-->
         <input type="radio" name="fileType" checked="checked" /> JSON
         <input type="radio" name="fileType" /> GTS/GTM
         <input type="button" name="import" value="import" onclick="dialogImportRemote_Import(event)" style="float:right;" />

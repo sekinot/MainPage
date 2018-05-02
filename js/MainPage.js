@@ -3,9 +3,12 @@
 // Copyright (c) Tatsuki Sekino 2018. All rights reserved.
 // ****************
 
+// **** 各種設定 ****
+const selectedBranchColor = "aqua";     // 選択中のツリー項目の色
+
+
 var hutime;
 var mainPanelCollection;
-var bodyElement;
 
 function initialize () {
     hutime = new HuTime("mainPanels");
@@ -14,7 +17,6 @@ function initialize () {
     hutime.appendPanelCollection(mainPanelCollection);
     hutime.redraw();
     document.getElementById("treeRoot").hutimeObj = mainPanelCollection;
-    bodyElement = document.getElementById("body");
 
     initDialog("dialogImportRemote");
 }
@@ -40,12 +42,14 @@ function closeMenuItem (ev) {   // Close all menu items opened
     ev.stopPropagation();
 }
 
-// **** Tree Menu Operations ****
-function operateBranch (ev) {   // Expand and collapse tree branch
-    var targetElements = ev.target.parentNode.childNodes;
-    for (var i = 0; i < targetElements.length; ++i) {
-        if (targetElements[i].nodeName == "UL") {
-            if (targetElements[i].style.display == "block") {
+// **** ツリーメニューの操作 ****
+
+// ツリーの開閉
+function operateBranch (ev) {
+    let targetElements = ev.target.parentNode.parentNode.childNodes;
+    for (let i = 0; i < targetElements.length; ++i) {
+        if (targetElements[i].nodeName === "UL") {
+            if (targetElements[i].style.display === "block") {
                 targetElements[i].style.display = "none";
                 ev.target.src = "img/expand.png";
                 return;
@@ -59,37 +63,60 @@ function operateBranch (ev) {   // Expand and collapse tree branch
     }
     ev.stopPropagation();
 }
-function addBranch (targetElement, hutimeObj) {   // Add tree branch
-    // targetElement: li element to add added branch
-    // hutimeObj: Object of HuTime (PanelCollection, Panel, Layer, Recordset)
 
-    if (hutimeObj instanceof HuTime.PanelBorder)
+// ツリーの項目を追加
+function addBranch (targetElement, hutimeObj) {
+    // targetElement: 追加する先のli要素
+    // hutimeObj: HuTimeオブジェクト (PanelCollection, Panel, Layer, Recordset)
+
+    if (hutimeObj instanceof HuTime.PanelBorder)    // パネル境界は対象にしない
         return;
 
-    var li = document.createElement("li");
-    li.hutime = {};
-    li.hutimeObj = hutimeObj;
+    // li要素の追加
+    let li = document.createElement("li");
+    li.hutimeObject = hutimeObj;
+    let ul;
+    for (let i = 0; i < targetElement.childNodes.length; ++i) {
+        if (targetElement.childNodes[i].nodeName === "UL") {
+            ul = targetElement.childNodes[i];
+            ul.appendChild(li);
+            break;
+        }
+    }
 
-    var knobImg = document.createElement("img");
+    // ブランチを示すspan要素
+    let branchSpan = document.createElement("span");
+    branchSpan.className = "branchSpan";
+    li.appendChild(branchSpan);
+
+    // 開閉ノブの追加
+    let knobImg = document.createElement("img");
     knobImg.src = "img/expand.png";
     knobImg.className = "knob";
     knobImg.alt = "knob";
-    li.appendChild(knobImg);
+    knobImg.addEventListener("click", operateBranch);
+    branchSpan.appendChild(knobImg);
+    if (targetElement.hutimeObject instanceof HuTime.RecordsetBase)
+        knobImg.style.visibility = "hidden";
 
-    var checkbox = document.createElement("input");
+    // チェックボックスの追加
+    let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.className = "treeCheckBox";
-    li.appendChild(checkbox);
+    checkbox.checked = "checked";
+    branchSpan.appendChild(checkbox);
 
-    var icon = document.createElement("img");
-    icon.className = "treeIcon";
-    li.appendChild(icon);
+    // 選択範囲用のspan要素の追加
+    let selectSpan = branchSpan.appendChild(document.createElement("span"));
+    selectSpan.addEventListener("mouseover", fixTreeCursor);
+    selectSpan.addEventListener("mousemove", fixTreeCursor);
+    selectSpan.addEventListener("mousedown", fixTreeCursor);
+    selectSpan.addEventListener("click", selectBranch);
 
-    var i;
-    var childObj = [];
-
-
-
+    // アイコンのul要素の追加
+    let icon = document.createElement("img");
+    icon.className = "branchIcon";
+    let childObj = [];
     if (hutimeObj instanceof HuTime.RecordsetBase) {
         icon.src = "img/recordset.png";
         icon.alt = "Recordset";
@@ -97,8 +124,6 @@ function addBranch (targetElement, hutimeObj) {   // Add tree branch
             childObj = hutimeObj._valueItems;
         else if (hutimeObj instanceof HuTime.TLineRecordset)
             childObj = [ hutimeObj.labelItem ];
-        checkbox.checked = hutimeObj.visible;
-        li.appendChild(document.createTextNode(hutimeObj.name));
     }
     else if (hutimeObj instanceof HuTime.RecordLayerBase) {
         if (hutimeObj instanceof HuTime.TLineLayer) {
@@ -110,8 +135,6 @@ function addBranch (targetElement, hutimeObj) {   // Add tree branch
             icon.alt = "Chart Layer";
         }
         childObj = hutimeObj.recordsets;
-        checkbox.checked = hutimeObj.visible;
-        li.appendChild(document.createTextNode(hutimeObj.name));
     }
     else if (hutimeObj instanceof HuTime.Layer) {
         if (hutimeObj instanceof HuTime.TickScaleLayer) {
@@ -122,8 +145,6 @@ function addBranch (targetElement, hutimeObj) {   // Add tree branch
             icon.src = "img/chartLayer.png";
             icon.alt = "General Layer";
         }
-        checkbox.checked = hutimeObj.visible;
-        li.appendChild(document.createTextNode(hutimeObj.name));
     }
     else if (hutimeObj instanceof HuTime.ContainerBase) {
         if (hutimeObj instanceof HuTime.PanelCollection) {
@@ -139,54 +160,59 @@ function addBranch (targetElement, hutimeObj) {   // Add tree branch
             icon.alt = "Other";
         }
         childObj = hutimeObj.contents;
-        checkbox.checked = hutimeObj.visible;
-        li.appendChild(document.createTextNode(hutimeObj.name));
     }
     else if (targetElement.hutimeObj instanceof HuTime.RecordsetBase) {
-        // in case of item for chart or label for TLine
         icon.src = "img/recorditem.png";
         icon.alt = "Recordset";
-        checkbox.checked = true;    // TENTATIVE
-        if (targetElement.hutimeObj instanceof HuTime.ChartRecordset)
-            li.appendChild(document.createTextNode(hutimeObj.name));
-        else if (hutimeObj instanceof HuTime.TLineRecordset)
-            li.appendChild(document.createTextNode(hutimeObj));
-        knobImg.style.visibility = "hidden";
+        childObj = [];
     }
-    else
-        return;
+    else {
+        icon.src = "img/otheritem.png";    // その他
+        icon.alt = "Other";
+        childObj = [];
+        knobImg.style.visibility = "hidden";    // ツリーの末端とする
+    }
+    selectSpan.appendChild(icon);
 
+    // ラベルの追加（span要素を含む）
+    let labelSpan = branchSpan.appendChild(document.createElement("span"));
+    labelSpan.className = "branchLabelSpan";
+    if (!hutimeObj.name) {
+        labelSpan.style.fontStyle = "italic";
+        labelSpan.appendChild(document.createTextNode("untitled"));
+    }
+    else {
+        labelSpan.appendChild(document.createTextNode(hutimeObj.name));
+    }
+    selectSpan.appendChild(labelSpan);
+
+    // 子要素用のul要素の追加
+    if (knobImg.style.visibility === "hidden")
+        return;     // treeの末尾の場合は子要素は無し
     li.appendChild(document.createElement("ul"));
-    for (i = 0; i < childObj.length; ++i) {
+    for (let i = 0; i < childObj.length; ++i) {
         addBranch(li, childObj[i])
-    }
-
-    var ul;
-    for (i = 0; i < targetElement.childNodes.length; ++i) {
-        if (targetElement.childNodes[i].nodeName == "UL") {
-            ul = targetElement.childNodes[i];
-            ul.appendChild(li);
-            break;
-        }
     }
 }
 
-var selectedBranch = null;
-function clickBranch (ev) {
-    if (ev.target.getAttribute("class") == "knob") {
-        operateBranch (ev);
-        ev.stopPropagation();
-        return;
+// ツリー上でのカーソル制御
+function fixTreeCursor (ev) {
+    document.body.style.cursor = "default";
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+}
+
+// ツリー上のアイテムの選択
+let selectedObject = null;      // 選択中の HuTimeオブジェクト
+let selectedBranch = null;      // 選択中の枝（span）
+function selectBranch (ev) {
+    let targetElements = ev.target;
+    while (targetElements.nodeName !== "UL") {
+        if (targetElements.className === "branchSpan")
+            break;
+        targetElements = targetElements.parentNode;
     }
-
-
-    // /* test for addBranch
-    //addBranch(ev.target, "ぼよん");
-    //ev.stopPropagation();
-    return;
-    // */
-
-    var targetElements = ev.parentNode;
 
     if  (targetElements === selectedBranch) {
         selectedBranch.style.backgroundColor = "";
@@ -196,12 +222,19 @@ function clickBranch (ev) {
     if (selectedBranch)
         selectedBranch.style.backgroundColor = "";
 
-    targetElements.style.backgroundColor = "aqua";
+    targetElements.style.backgroundColor = selectedBranchColor;
     selectedBranch = targetElements;
-
+    while (targetElements.nodeName !== "UL") {
+        if (targetElements.nodeName === "LI")
+            break;
+        targetElements = targetElements.parentNode;
+    }
+    selectedObject = targetElements.hutimeObject;
+    ev.preventDefault();
     ev.stopPropagation();
-    return;
+    return false;
 }
+
 
 // **** Operations ****
 function importRemoteJsonContainer (url) {
@@ -223,27 +256,30 @@ function dialogImportRemote_Import (ev) {
     importRemoteJsonContainer (document.forms.dialogImportRemoteForm.url.value);
 }
 
-// **** Dialog Common ****
-var dialogs = {};       // element of dialogs
+
+
+// **** ダイアログ関係（共通） ****
+let dialogs = {};       // ダイアログのDOM要素を収容する連想配列（dialogIdがキー）
+
+// ダイアログの初期化
 function initDialog (dialogId) {
-    var dialogElement = document.getElementById(dialogId);
+    let dialogElement = document.getElementById(dialogId);
     dialogs[dialogId] = dialogElement;
-    var dialogTitleElement, dialogBodyElement, dialogSizeKnob;
-    var i;
-    for (i = 0; i < dialogElement.childNodes.length; ++i) {
-        if (dialogElement.childNodes[i].className == "dialogTitle") {
+    let dialogTitleElement, dialogBodyElement, dialogSizeKnob;
+    for (let i = 0; i < dialogElement.childNodes.length; ++i) {
+        if (dialogElement.childNodes[i].className === "dialogTitle") {
             dialogTitleElement = dialogElement.childNodes[i];
             break;
         }
     }
-    for (i = 0; i < dialogElement.childNodes.length; ++i) {
-        if (dialogElement.childNodes[i].className == "dialogBody") {
+    for (let i = 0; i < dialogElement.childNodes.length; ++i) {
+        if (dialogElement.childNodes[i].className === "dialogBody") {
             dialogBodyElement = dialogElement.childNodes[i];
             break;
         }
     }
-    for (i = 0; i < dialogElement.childNodes.length; ++i) {
-        if (dialogElement.childNodes[i].className == "dialogSizeKnob") {
+    for (let i = 0; i < dialogElement.childNodes.length; ++i) {
+        if (dialogElement.childNodes[i].className === "dialogSizeKnob") {
             dialogSizeKnob = dialogElement.childNodes[i];
             break;
         }
@@ -272,22 +308,23 @@ function initDialog (dialogId) {
     dialogElement.minWidth = dialogElement.clientWidth;
     dialogElement.minHeight = dialogElement.clientHeight;
 
-
     dialogSizeKnob.addEventListener("mousedown", function (ev) {
         dialogElement.dialogDragging = true;
         dialogElement.originX = ev.pageX;
         dialogElement.originY = ev.pageY;
         document.dialogElement = dialogElement;
-        document.addEventListener("mousemove", sizeChangeDialog);
-        document.addEventListener("mouseup", stopSizeChangeDialog);
+        document.addEventListener("mousemove", changeDialogSize);
+        document.addEventListener("mouseup", stopChangeDialogSize);
         ev.preventDefault();
         ev.stopPropagation();
-        document.style.cursor = "se-resize";
+        document.body.style.cursor = "se-resize";
         return false;
     });
 }
+
+// ダイアログを開く・閉じる
 function showDialog (dialogId) {
-    var element = dialogs[dialogId];
+    let element = dialogs[dialogId];
     element.style.left = ((window.innerWidth - element.clientWidth) / 2).toString() + "px";
     element.style.top = ((window.innerHeight - element.clientHeight) / 2).toString() + "px";
     element.style.visibility = "visible"
@@ -296,10 +333,12 @@ function closeDialog (dialogId) {
     dialogs[dialogId].style.visibility = "hidden";
     dialogs[dialogId].dialogDragging = false;
 }
+
+// ダイアログの移動
 function moveDialog (ev) {
     if (!document.dialogElement)
         return;
-    var dialogElement = document.dialogElement;
+    let dialogElement = document.dialogElement;
 
     dialogElement.style.left =
         (parseInt(dialogElement.style.left) - dialogElement.originX + ev.pageX) + "px";
@@ -322,18 +361,16 @@ function stopMoveDialog (ev) {
     return false;
 }
 
-
-function sizeChangeDialog (ev) {
+// ダイアログのサイズ変更
+function changeDialogSize (ev) {
     if (!document.dialogElement)
         return;
 
-    var dialogElement = document.dialogElement;
+    let dialogElement = document.dialogElement;
     let newWidth = parseInt(dialogElement.style.width) - dialogElement.originX + ev.pageX;
     let newHeight = parseInt(dialogElement.style.height) - dialogElement.originY + ev.pageY;
     if (newWidth > dialogElement.minWidth)
         dialogElement.style.width = newWidth + "px";
-    else
-        ev.pageX = dialogElement.originX;
     if (newHeight > dialogElement.minHeight)
         dialogElement.style.height = newHeight + "px";
     dialogElement.originX = ev.pageX;
@@ -342,12 +379,12 @@ function sizeChangeDialog (ev) {
     ev.stopPropagation();
     return false;
 }
-function stopSizeChangeDialog (ev) {
+function stopChangeDialogSize (ev) {
     document.dialogElement.dialogDragging = false;
-    document.removeEventListener("mousemove", sizeChangeDialog);
-    document.removeEventListener("mouseup", sizeChangeDialog);
+    document.removeEventListener("mousemove", changeDialogSize);
+    document.removeEventListener("mouseup", changeDialogSize);
     document.dialogElement = null;
-    document.style.cursor = "auto";
+    document.body.style.cursor = "auto";
     ev.preventDefault();
     ev.stopPropagation();
     return false;

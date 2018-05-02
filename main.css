@@ -126,19 +126,26 @@ ul.menu ul ul {
     position: relative;
     float: left;
 }
+.branchSpan {
+    font-size:18px;
+    padding: 0 5px 0 2px;
+}
 .knob {
     margin-right: 4px;
     vertical-align: middle;
     width:8px;
 }
-.treeCheckBox {
+.branchCheckBox {
+}
+.branchIcon {
+    margin-right: 3px;
+    margin-bottom: 4px;
     vertical-align: middle;
 }
-.treeIcon {
-    margin-right: 6px;
+.branchLabelSpan {
+    font-size:12px;
     vertical-align: middle;
 }
-
 ul.tree {
     margin: 0;
     padding: 0;
@@ -219,8 +226,8 @@ ul.tree ul li {
 }
 .dialogSizeKnob {
     position: absolute;
-    right: 0;
-    bottom: 0;
+    right: 1px;
+    bottom: 1px;
     width: 15px;
     height: 15px;
 
