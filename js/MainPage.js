@@ -161,16 +161,10 @@ function addBranch (targetElement, hutimeObj) {
         }
         childObj = hutimeObj.contents;
     }
-    else if (targetElement.hutimeObj instanceof HuTime.RecordsetBase) {
-        icon.src = "img/recorditem.png";
-        icon.alt = "Recordset";
-        childObj = [];
-    }
     else {
-        icon.src = "img/otheritem.png";    // その他
-        icon.alt = "Other";
+        icon.src = "img/recorditem.png";    // レコード項目
+        icon.alt = "Record Item";
         childObj = [];
-        knobImg.style.visibility = "hidden";    // ツリーの末端とする
     }
     selectSpan.appendChild(icon);
 
@@ -205,47 +199,70 @@ function fixTreeCursor (ev) {
 
 // ツリー上のアイテムの選択
 let selectedObject = null;      // 選択中の HuTimeオブジェクト
-let selectedBranch = null;      // 選択中の枝（span）
+let selectedBranch = null;      // 選択中の枝（li）
+let selectedBranchSpan = null;  // 選択中の枝（span）
 function selectBranch (ev) {
-    let targetElements = ev.target;
-    while (targetElements.nodeName !== "UL") {
-        if (targetElements.className === "branchSpan")
+    let branchSpanElement = ev.target;
+    while (branchSpanElement.nodeName !== "UL") {
+        if (branchSpanElement.className === "branchSpan")
             break;
-        targetElements = targetElements.parentNode;
+        branchSpanElement = branchSpanElement.parentNode;
+    }
+    let branchLiElement = branchSpanElement;
+    while (branchLiElement.nodeName !== "UL") {
+        if (branchLiElement.nodeName === "LI")
+            break;
+        branchLiElement = branchLiElement.parentNode;
     }
 
-    if  (targetElements === selectedBranch) {
-        selectedBranch.style.backgroundColor = "";
+    if  (branchLiElement === selectedBranch) {      // 選択中の枝－＞選択解除
+        selectedBranchSpan.style.backgroundColor = "";
         selectedBranch = null;
+        selectedBranchSpan = null;
+        selectedObject = null;
         return;
     }
-    if (selectedBranch)
-        selectedBranch.style.backgroundColor = "";
-
-    targetElements.style.backgroundColor = selectedBranchColor;
-    selectedBranch = targetElements;
-    while (targetElements.nodeName !== "UL") {
-        if (targetElements.nodeName === "LI")
-            break;
-        targetElements = targetElements.parentNode;
+    if  (selectedBranch) {     // 他を選択中－＞選択範囲を変更（前の選択を解除）
+        selectedBranchSpan.style.backgroundColor = "";
+        selectedBranch = null;
+        selectedBranchSpan = null;
+        selectedObject = null;
     }
-    selectedObject = targetElements.hutimeObject;
+    branchSpanElement.style.backgroundColor = selectedBranchColor;
+    selectedObject = branchLiElement.hutimeObject;
+    selectedBranch = branchLiElement;
+    selectedBranchSpan = branchSpanElement;
+
     ev.preventDefault();
     ev.stopPropagation();
     return false;
 }
 
-
 // **** Operations ****
 function importRemoteJsonContainer (url) {
-    var a =
-        //HuTime.JSON.load("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json",
+    let loadJson =
         HuTime.JSON.load(url,
             function () {
-                mainPanelCollection.appendPanel(a.parsedObject);
+                if (loadJson.parsedObject instanceof HuTime.PanelBase) {
+                    mainPanelCollection.appendPanel(loadJson.parsedObject);
+                    addBranch(document.getElementById("treeRoot"), loadJson.parsedObject);
+                }
+                // レイヤの追加
+                else if (loadJson.parsedObject instanceof HuTime.Layer) {
+                    if (selectedObject instanceof HuTime.PanelBase) {   // パネルが指定された場合
+                        selectedObject.appendLayer(loadJson.parsedObject);
+                        addBranch(selectedBranch, loadJson.parsedObject);
+                    }
+                    else {                                              // パネル以外が指定された場合
+                        let panel = new HuTime.TilePanel();             // 仮のパネルを追加
+                        if (loadJson.parsedObject.vBreadth)
+                            panel.vBreadth = loadJson.parsedObject.vBreadth;
+                        panel.appendLayer(loadJson.parsedObject);
+                        mainPanelCollection.appendPanel(panel);
+                        addBranch(document.getElementById("treeRoot"), panel);
+                    }
+                }
                 hutime.redraw(2457200.5, 2457238.5);
-
-                addBranch(document.getElementById("treeRoot"), a.parsedObject)
             });
 }
 
@@ -255,8 +272,6 @@ function dialogImportRemote_Import (ev) {
     closeDialog("dialogImportRemote");
     importRemoteJsonContainer (document.forms.dialogImportRemoteForm.url.value);
 }
-
-
 
 // **** ダイアログ関係（共通） ****
 let dialogs = {};       // ダイアログのDOM要素を収容する連想配列（dialogIdがキー）
