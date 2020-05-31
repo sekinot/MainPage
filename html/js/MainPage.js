@@ -18,33 +18,104 @@ function initialize () {
     hutime.redraw();
     document.getElementById("treeRoot").hutimeObj = mainPanelCollection;
 
+
+    initMenu();
     initDialog("dialogImportRemote");
     initDialog("dialogImportLocal");
 }
 
-// **** Menu Operations ****
-var openItemElements = [];      // Elements of menu item opened by a user
-function openMenuItem (ev) {    // Open a menu item clicked by a user
-    let element = ev.target;
-    for (let i = 0; i < element.childNodes.length; ++i) {
-        if (element.childNodes[i].nodeName === "UL") {
-            element.childNodes[i].style.display = "block";
-            openItemElements.push(element.childNodes[i]);
-            ev.stopPropagation();
-            return;
+// **** メニュー操作 ****
+let openedMenus = [];       // ユーザによって開かれたメニュー
+let isMenuActive = false;   // メニュー操作中のフラグ
+
+// メニュー初期化
+function initMenu () {
+    let top = document.getElementById("menuTop");
+    openedMenus.push(top);
+
+    let initMenuItem = function initMenuItem (element) {
+        for (let i = 0; i < element.childNodes.length; ++i) {
+            if (element.childNodes[i].nodeName === "LI") {
+                element.childNodes[i].addEventListener("mouseover", operateMenu);
+                element.childNodes[i].addEventListener("click", clickMenu);
+
+                for (let j = 0; j < element.childNodes[i].childNodes.length; ++j) {
+                    if (element.childNodes[i].childNodes[j].nodeName === "UL") {
+                        initMenuItem(element.childNodes[i].childNodes[j]);  // 再帰による子メニューの初期化
+                        break;
+                    }
+                }
+            }
         }
-    }
+    }(top);
 }
-function closeMenuItem (ev) {   // Close all menu items opened
-    openItemElements.forEach(function (itemElement) {
-        itemElement.style.display = "none";
-    });
-    openItemElements = [];
+
+// clickでの動作
+let clickMenu = function clickMenu (ev) {
     ev.stopPropagation();
-}
+
+    if (!isMenuActive) {
+        isMenuActive = true;
+        document.getElementById("body").addEventListener("click", clickMenu);
+        operateMenu(ev);
+        return;
+    }
+
+    let parentElement = ev.target.parentNode;
+    while (parentElement.id !== "body") {
+        if (parentElement.nodeName === "UL" && parentElement.id !== "menuTop") {
+            let targetElement = ev.target;
+            for (let i = 0; i < targetElement.childNodes.length; ++i) {
+                if (targetElement.childNodes[i].nodeName === "UL")
+                    return;     // 子メニューのある項目のクリック
+            }
+        }
+        parentElement = parentElement.parentNode;
+    }
+
+    // inactivate menu (トップメニュー、body、または、子メニューの無い項目のクリック)
+    for (let i = openedMenus.length - 1; i > 0; --i) {
+        openedMenus.pop().style.display = "none";
+    }
+    document.getElementById("body").removeEventListener("click", clickMenu);
+    isMenuActive = false;
+};
+
+// mouseOverでの動作
+let operateMenu = function operateMenu (ev) {
+    ev.stopPropagation();
+    if (!isMenuActive)
+        return;
+
+    let targetMenu = ev.target.parentNode;
+    for (let i = openedMenus.length - 1; i >= 0; --i) {
+        let openedMenu = openedMenus[i];
+        while (openedMenu.id !== "menuBar") {
+            if (targetMenu.nodeName === "UL" && openedMenus[i] === targetMenu) {
+                for (let j = 0; j < ev.target.childNodes.length; ++j) {
+                    if (ev.target.childNodes[j].nodeName === "UL") {
+                        ev.target.childNodes[j].style.display = "block";
+                        openedMenus.push(ev.target.childNodes[j]);
+                        return;
+                    }
+                }
+                return;     // 下位メニューがない場合
+            }
+            while (true) {
+                openedMenu = openedMenu.parentNode;
+                if (openedMenu.nodeName === "UL" || openedMenu.id === "menuBar")
+                    break;
+            }
+        }
+        if (openedMenus.length > 1)     // Top Menuでなければ閉じる
+            openedMenus.pop().style.display = "none";
+    }
+};
+
+
+
 
 // **** ツリーメニューの操作 ****
-
 // ツリーの開閉
 function operateBranch (ev) {
     let targetElements = ev.target.parentNode.parentNode.childNodes;
@@ -128,6 +199,7 @@ function addBranch (targetElement, hutimeObj) {
     if (hutimeObj instanceof HuTime.RecordsetBase) {
         icon.src = "img/recordset.png";
         icon.alt = "Recordset";
+        icon.title = "Recordset";
         if (hutimeObj instanceof HuTime.ChartRecordset)
             childObj = hutimeObj._valueItems;
         else if (hutimeObj instanceof HuTime.TLineRecordset)
@@ -137,10 +209,12 @@ function addBranch (targetElement, hutimeObj) {
         if (hutimeObj instanceof HuTime.TLineLayer) {
             icon.src = "img/tlineLayer.png";
             icon.alt = "TLine Layer";
+            icon.title = "TLine Layer";
         }
         else {
             icon.src = "img/chartLayer.png";
             icon.alt = "Chart Layer";
+            icon.title = "Chart Layer";
         }
         childObj = hutimeObj.recordsets;
     }
@@ -148,30 +222,36 @@ function addBranch (targetElement, hutimeObj) {
         if (hutimeObj instanceof HuTime.TickScaleLayer) {
             icon.src = "img/scaleLayer.png";
             icon.alt = "Tick Scale Layer";
+            icon.title = "Tick Scale Layer";
         }
         else {
             icon.src = "img/chartLayer.png";
             icon.alt = "General Layer";
+            icon.title = "General Layer";
         }
     }
     else if (hutimeObj instanceof HuTime.ContainerBase) {
         if (hutimeObj instanceof HuTime.PanelCollection) {
             icon.src = "img/panelCollection.png";
             icon.alt = "Panel Collection";
+            icon.title = "Panel Collection";
         }
         else if (hutimeObj instanceof HuTime.TilePanel) {
             icon.src = "img/tilePanel.png";
             icon.alt = "Tile Panel";
+            icon.title = "Tile Panel";
         }
         else {
             icon.src = "img/tilePanel.png";
             icon.alt = "Other";
+            icon.title = "Tile Panel";
         }
         childObj = hutimeObj.contents;
     }
     else {
         icon.src = "img/recorditem.png";    // レコード項目
         icon.alt = "Record Item";
+        icon.title = "Record Item";
         childObj = [];
     }
     selectSpan.appendChild(icon);
@@ -291,12 +371,10 @@ function importObject (obj) {
 
 // **** 個別のダイアログ操作 ****
 function dialogImportRemote_Import (ev) {   // リモートインポート
-    closeMenuItem(ev);
     closeDialog("dialogImportRemote");
     importRemoteJsonContainer (document.forms.dialogImportRemoteForm.url.value);
 }
 function dialogImportLocal_Import (ev) {    // ローカルインポート
-    closeMenuItem(ev);
     closeDialog("dialogImportLocal");
     importLocalJsonContainer (document.forms.dialogImportLocalForm.file);
 }

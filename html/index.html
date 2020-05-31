@@ -8,7 +8,7 @@
   <script type="text/javascript" src="../../debug.js"></script>
   <script type="text/javascript" src="js/MainPage.js"></script>
 </head>
-<body onload="initialize()" onclick="closeMenuItem(event)">
+<body id="body" onload="initialize()">
 
 <div id="container">
 
@@ -28,20 +28,23 @@
     </div>
   </div>
 
-
   <div id="hutime">
+
+<!-- **** Menu Bar **** -->
     <div id="menuBar">
-      <ul class="menu">
-        <li onclick="openMenuItem(event)">File
+      <ul class="menu" id="menuTop">
+
+        <!-- ** File Menu ** -->
+        <li>File
           <ul>
             <li>New</li>
-            <li onclick="openMenuItem(event)">Import &raquo;
+            <li>Import &raquo;
               <ul>
                 <li onclick="showDialog('dialogImportRemote')">Remote</li>
                 <li onclick="showDialog('dialogImportLocal')">Local</li>
               </ul>
             </li>
-            <li onclick="openMenuItem(event)">Export &raquo;
+            <li>Export &raquo;
               <ul>
                 <li>Json</li>
               </ul>
@@ -51,16 +54,20 @@
             <li>Preferences</li>
           </ul>
         </li>
-        <li>Database</li>
-        <li onclick="openMenuItem(event)">Analysis
+
+        <!-- ** Database Menu ** -->
+        <!--li>Database</li-->
+
+        <!-- ** Analysis Menu ** -->
+        <li title="Analysis Menu">Analysis
           <ul>
-            <li onclick="openMenuItem(event)">Search &raquo;
+            <li>Search &raquo;
               <ul>
                 <li>Text</li>
                 <li>Value</li>
               </ul>
             </li>
-            <li onclick="openMenuItem(event)">Record Extraction &raquo;
+            <li>Record Extraction &raquo;
               <ul>
                 <li>Other</li>
               </ul>
@@ -68,17 +75,25 @@
             <li>Mask</li>
           </ul>
         </li>
-        <li>About</li>
+
+        <!-- ** About Menu ** -->
+        <li>Help
+          <ul>
+            <li>About</li>
+          </ul>
+        </li>
+
       </ul>
     </div>
 
+<!-- **** Layer Tree **** -->
     <div id="layerTree">
       <!--div class="treeAllButton" style="margin-left: 0;">Expand All</div><div class="treeAllButton">Collapse All</div-->
 
       <ul class="tree">
         <li id="treeRoot">
           <span class="branchSpan">
-            <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img src="img/check.png" alt="knob" class="branchCheckBox" onclick="selectBranch(event)" /><!--input type="checkbox" class="branchCheckBox" checked="checked" /--><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" class="branchIcon" /><span class="branchLabelSpan">HuTime root</span>
+            <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img src="img/check.png" alt="knob" class="branchCheckBox" onclick="selectBranch(event)" /><!--input type="checkbox" class="branchCheckBox" checked="checked" /--><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan">HuTime root</span>
             </span>
           </span>
           <ul></ul>

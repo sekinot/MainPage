@@ -45,16 +45,16 @@ body  {
 
 /**** Menu Bar ****/
 #menuBar {
-    margin: 0 auto;
-    padding-top: 0;
-    padding-bottom: 10px;
-    padding-left: 0;
-    padding-right: 0;
-
-    height: 20px;
+    margin: 0 auto 10px;
+    /*
+    padding: 0 0 10px 0;
+    */
+    padding: 0;
+    height: 23px;
     clear: both;
     white-space: nowrap;
 
+    background-color: #0066cc;
     text-align: left;
 }
 
@@ -69,7 +69,7 @@ ul.menu li {
     z-index: 100;
     background-color: #0066cc;
     color: #ffffff;
-    line-height: 22px;
+    line-height: 23px;
     text-align: center;
     text-decoration: none;
     font-size: 12px;
@@ -80,8 +80,8 @@ ul.menu li {
 ul.menu li:hover {
     background-color: #ffff99;
     color: #cc0000;
-
 }
+
 ul.menu ul {
     margin: 0;
     padding: 0;
@@ -94,6 +94,7 @@ ul.menu ul li {
     width: 140px;
     border-top: 1px solid #9999ff;
 }
+
 ul.menu ul ul {
     margin: 0;
     padding: 0;
@@ -243,9 +244,13 @@ ul.tree ul li {
     z-index: 200;
 }
 .dialogTitle {
-    height: 20px;
-    background-color: #ccccff;
+    height: 23px;
+    /*background-color: #ccccff;*/
+    background-color: #0066cc;
+    color: #ffffff;
     font-size: 12px;
+    font-weight: bold;
+    line-height: 23px;
     cursor: default;
 }
 .dialogCloseButton {
