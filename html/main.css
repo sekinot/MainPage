@@ -25,15 +25,27 @@ body  {
 /**** Header ****/
 #header {
     margin: 0 auto;
-    padding-top: 5px;
-    padding-bottom: 0;
-    padding-left: 0;
-    padding-right: 0;
+    padding: 5px 0 0 0;
+    height: 30px;
 }
 #header img {
     margin: 0;
     padding: 0;
     border-style: none;
+}
+
+#language {
+    height:25px;
+    padding-top: 5px;
+}
+
+#selectLanguage {
+    margin: 5px 0 0 0;
+    padding: 0;
+    width: 100pt;
+    height: 20px;
+    float:right;
+    vertical-align: bottom;
 }
 
 /**** HuTime body ****/
@@ -109,7 +121,7 @@ ul.menu ul ul {
 #layerTree {
     margin: 0 auto;
     padding: 0;
-    width: 200px;
+    width: 190px;
     height: 300px;
     float: left;
 
@@ -117,8 +129,11 @@ ul.menu ul ul {
     overflow-y: auto;
     white-space: nowrap;
     text-align: left;
+
+    user-select: none;
 }
 
+/*
 .treeAllButton {
     margin: 5px 5px;
     padding: 5px;
@@ -128,6 +143,8 @@ ul.menu ul ul {
     position: relative;
     float: left;
 }
+*/
+
 .branchSpan {
     font-size:18px;
     padding: 0 5px 0 2px;
@@ -212,25 +229,42 @@ ul.tree ul li {
     font-size: 12px;
 }
 
+
+/**** Border between Layer Tree and Main Panel ****/
+#borderTree {
+    margin: 0 2px;
+    padding: 0 3px;
+    height: 300px;
+    float: left;
+    cursor: ew-resize;
+}
+
 /**** Main Panels ****/
 #mainPanels {
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 200px;
-    margin-right: 0;
+    margin: 0 0 0 200px;
     padding: 0;
     height: 300px;
     text-align: left;
 }
 
+/**** Border between Layer Tree and Main Panel ****/
+#borderStatusBar {
+    margin: 5px auto 0;
+    padding: 3px 10px;
+    clear: both;
+    cursor: ns-resize;
+}
+
 /**** Status Bar ****/
 #statusBar {
-    background: #ffccff;
+    background: #eeeeee;
     margin: 0 auto;
-    padding: 10px 15px;
-    height: 20px;
+    padding: 0 10px;
+    height: 23px;
     clear: both;
     text-align: left;
+    font-size: 12px;
+    line-height: 23px;
 }
 
 /**** Dialog ****/

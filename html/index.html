@@ -18,9 +18,9 @@
         <img src="http://www.hutime.org/common/img/toplogo.gif" alt="HuTime" height="30px" /></a>
     </div>
 
-    <div style="height:20px; padding-top: 5px;">
-      <label for="pageLanguage">
-        <select id="pageLanguage" title="language" name="language" style="width: 100pt; float:right;">
+    <div id="language">
+      <label for="selectLanguage">
+        <select id="selectLanguage" title="language" name="language">
           <option>English</option>
           <option>Japanese</option>
         </select>
@@ -88,12 +88,10 @@
 
 <!-- **** Layer Tree **** -->
     <div id="layerTree">
-      <!--div class="treeAllButton" style="margin-left: 0;">Expand All</div><div class="treeAllButton">Collapse All</div-->
-
       <ul class="tree">
         <li id="treeRoot">
           <span class="branchSpan">
-            <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img src="img/check.png" alt="knob" class="branchCheckBox" onclick="selectBranch(event)" /><!--input type="checkbox" class="branchCheckBox" checked="checked" /--><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan">HuTime root</span>
+            <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img src="img/check.png" alt="knob" class="branchCheckBox" onclick="selectBranch(event)" /><!--input type="checkbox" class="branchCheckBox" checked="checked" /--><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan" title="HuTime root">HuTime root</span>
             </span>
           </span>
           <ul></ul>
@@ -101,12 +99,21 @@
       </ul>
    </div>
 
+<!-- **** Border between Layer Tree and Main Panel **** -->
+    <div id="borderTree"></div>
+
+<!-- **** Main Panel **** -->
     <div id="mainPanels">
     </div>
 
+<!-- **** Border for Satus Bar **** -->
+    <div id="borderStatusBar"></div>
+
+<!-- **** Statuds Bar **** -->
     <div id="statusBar">
       status bar
     </div>
+
   </div>
 
   <div id="information">
