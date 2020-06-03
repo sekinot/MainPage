@@ -4,20 +4,24 @@
 // ****************
 
 // **** 各種設定 ****
+let hutime;
+let mainPanelCollection;
+
+let mouseXOrigin = -1;          // マウス操作用の汎用変数（操作開始時の座標）
+let mouseYOrigin = -1;
+
 const selectedBranchColor = "aqua";     // 選択中のツリー項目の色
-
-
-var hutime;
-var mainPanelCollection;
+const minLayerTreeWidth = 100;  // ツリーの最小幅
+const minHuTimeMainWidth = 150; // メインパネルの最小幅
+const minHuTimeMainheight = 50; // メインパネルの最小幅
 
 function initialize () {
-    hutime = new HuTime("mainPanels");
-    mainPanelCollection = new HuTime.PanelCollection(document.getElementById("mainPanels").clientHeight);
+    hutime = new HuTime("hutimeMain");
+    mainPanelCollection = new HuTime.PanelCollection(document.getElementById("hutimeMain").clientHeight);
     mainPanelCollection.style.backgroundColor = "#cccccc";
     hutime.appendPanelCollection(mainPanelCollection);
     hutime.redraw();
     document.getElementById("treeRoot").hutimeObj = mainPanelCollection;
-
 
     initMenu();
     initDialog("dialogImportRemote");
@@ -111,8 +115,6 @@ let operateMenu = function operateMenu (ev) {
             openedMenus.pop().style.display = "none";
     }
 };
-
-
 
 
 // **** ツリーメニューの操作 ****
@@ -326,6 +328,75 @@ function selectBranch (ev) {
     return false;
 }
 
+// **** ツリー境界の操作 ****
+let layerTreeWidthOrigin = -1;
+let hutimeMainWidthOrigin = -1;
+function borderTreeMouseDown (ev) {
+    ev.stopPropagation();
+    let hutimeElement = document.getElementById("hutime");
+    hutimeElement.addEventListener("mousemove", borderTreeMouseMove);
+    hutimeElement.addEventListener("mouseup", borderTreeMouseUp);
+    hutimeElement.addEventListener("mouseleave", borderTreeMouseUp);
+    hutimeElement.style.cursor = "ew-resize";
+
+    mouseXOrigin = ev.clientX;
+    layerTreeWidthOrigin = document.getElementById("layerTree").offsetWidth;
+    hutimeMainWidthOrigin = document.getElementById("mainPanel").offsetWidth
+        - layerTreeWidthOrigin - document.getElementById("borderTree").offsetWidth;
+}
+function borderTreeMouseMove (ev) {
+    ev.stopPropagation();
+    let dMouseX = ev.clientX - mouseXOrigin;
+    if (layerTreeWidthOrigin + dMouseX < minLayerTreeWidth
+        || hutimeMainWidthOrigin - dMouseX < minHuTimeMainWidth)
+        return;
+    document.getElementById("layerTree").style.width = layerTreeWidthOrigin + dMouseX + "px";
+}
+function borderTreeMouseUp (ev) {
+    ev.stopPropagation();
+    let hutimeElement = document.getElementById("hutime");
+    hutimeElement.style.cursor = "default";
+    hutimeElement.removeEventListener("mouseleave", borderTreeMouseUp);
+    hutimeElement.removeEventListener("mouseup", borderTreeMouseUp);
+    hutimeElement.removeEventListener("mousemove", borderTreeMouseMove);
+
+    hutime.redraw();
+}
+
+// **** ステータスバー境界の操作 ****
+let mainPanelHeightOrigin = -1;
+function borderStatusMouseDown (ev) {
+    ev.stopPropagation();
+    let hutimeElement = document.getElementById("hutime");
+    hutimeElement.addEventListener("mousemove", borderStatusMouseMove);
+    hutimeElement.addEventListener("mouseup", borderStatusMouseUp);
+    hutimeElement.addEventListener("mouseleave", borderStatusMouseUp);
+    hutimeElement.style.cursor = "ns-resize";
+
+    mouseYOrigin = ev.clientY;
+    mainPanelHeightOrigin = document.getElementById("mainPanel").offsetHeight;
+}
+function borderStatusMouseMove (ev) {
+    ev.stopPropagation();
+    let dMouseY = ev.clientY - mouseYOrigin;
+    if (mainPanelHeightOrigin + dMouseY < minHuTimeMainheight)
+        return;
+    document.getElementById("mainPanel").style.height = mainPanelHeightOrigin + dMouseY + "px";
+}
+function borderStatusMouseUp (ev) {
+    ev.stopPropagation();
+    let hutimeElement = document.getElementById("hutime");
+    hutimeElement.style.cursor = "default";
+    hutimeElement.removeEventListener("mouseleave", borderStatusMouseUp);
+    hutimeElement.removeEventListener("mouseup", borderStatusMouseUp);
+    hutimeElement.removeEventListener("mousemove", borderStatusMouseMove);
+
+    hutime.panelCollections[0].vBreadth = document.getElementById("hutimeMain").clientHeight;
+    hutime.redraw();
+}
+
+
+
 // **** 個別の操作 ****
 
 // リモートのJSONデータ
@@ -372,11 +443,11 @@ function importObject (obj) {
 // **** 個別のダイアログ操作 ****
 function dialogImportRemote_Import (ev) {   // リモートインポート
     closeDialog("dialogImportRemote");
-    importRemoteJsonContainer (document.forms.dialogImportRemoteForm.url.value);
+    importRemoteJsonContainer (document.forms["dialogImportRemoteForm"].url.value);
 }
 function dialogImportLocal_Import (ev) {    // ローカルインポート
     closeDialog("dialogImportLocal");
-    importLocalJsonContainer (document.forms.dialogImportLocalForm.file);
+    importLocalJsonContainer (document.forms["dialogImportLocalForm"].file);
 }
 
 // **** ダイアログ関係（共通） ****

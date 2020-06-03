@@ -28,6 +28,7 @@
     </div>
   </div>
 
+<!-- ****** HuTime Panel ****** -->
   <div id="hutime">
 
 <!-- **** Menu Bar **** -->
@@ -85,36 +86,45 @@
 
       </ul>
     </div>
+<!-- End of Menu Bar -->
 
-<!-- **** Layer Tree **** -->
-    <div id="layerTree">
-      <ul class="tree">
-        <li id="treeRoot">
-          <span class="branchSpan">
-            <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img src="img/check.png" alt="knob" class="branchCheckBox" onclick="selectBranch(event)" /><!--input type="checkbox" class="branchCheckBox" checked="checked" /--><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan" title="HuTime root">HuTime root</span>
+<!-- **** Main Panel ****-->
+    <div id="mainPanel">
+
+      <!-- *** Layer Tree *** -->
+      <div id="layerTree">
+        <ul class="tree">
+          <li id="treeRoot">
+            <span class="branchSpan">
+              <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img src="img/check.png" alt="knob" class="branchCheckBox" onclick="selectBranch(event)" /><!--input type="checkbox" class="branchCheckBox" checked="checked" /--><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan" title="HuTime root">HuTime root</span>
+              </span>
             </span>
-          </span>
-          <ul></ul>
-        </li>
-      </ul>
-   </div>
+            <ul></ul>
+          </li>
+        </ul>
 
-<!-- **** Border between Layer Tree and Main Panel **** -->
-    <div id="borderTree"></div>
 
-<!-- **** Main Panel **** -->
-    <div id="mainPanels">
+      </div>
+
+      <!-- *** Border between Layer Tree and Main Panel *** -->
+      <div id="borderTree" onmousedown="borderTreeMouseDown(event)"></div>
+
+      <!-- *** HuTime Main *** -->
+      <div id="hutimeMain"></div>
+
     </div>
+<!-- End of Main Panel -->
 
 <!-- **** Border for Satus Bar **** -->
-    <div id="borderStatusBar"></div>
+    <div id="borderStatusBar" onmousedown="borderStatusMouseDown(event)"></div>
 
 <!-- **** Statuds Bar **** -->
     <div id="statusBar">
-      status bar
+      &nbsp;
     </div>
 
   </div>
+<!-- End of HuTime Panel -->
 
   <div id="information">
     <table style="margin: 0 auto; width: 500px;">
@@ -140,7 +150,7 @@
     <img src="img/close.png" alt="close" onclick="closeDialog('dialogImportRemote')" class="dialogCloseButton" />
   </div>
   <div class="dialogBody">
-    <form name="dialogImportRemoteForm">
+    <form id="dialogImportRemoteForm" name="dialogImportRemoteForm">
       URL <input type="text" name="url" style="width: 90%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
 
       <div style="padding: 10px 0;">
@@ -161,7 +171,7 @@
     <img src="img/close.png" alt="close" onclick="closeDialog('dialogImportLocal')" class="dialogCloseButton" />
   </div>
   <div class="dialogBody">
-    <form name="dialogImportLocalForm">
+    <form id="dialogImportLocalForm" name="dialogImportLocalForm">
       File <input type="file" name="file" />
       <div style="padding: 10px 0;">
         <input type="radio" name="fileType" title="JSON" checked="checked" /> JSON
