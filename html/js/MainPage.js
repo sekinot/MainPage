@@ -25,6 +25,7 @@ function initialize () {
 
     initMenu();
     initTree();
+    initTreeMenu();
     initDialog("dialogImportRemote");
     initDialog("dialogImportLocal");
 }
@@ -53,6 +54,10 @@ function initMenu () {      // メニュー初期化
     }(top);
 }
 let clickMenu = function clickMenu (ev) {   // clickでの動作
+    if (isTreeMenuActive) {
+        return;
+    }
+
     ev.stopPropagation();
 
     if (!isMenuActive) {
@@ -111,7 +116,7 @@ let operateMenu = function operateMenu (ev) {   // mouseOverでの動作
     }
 };
 
-// **** ツリーメニューの操作 ****
+// **** レイヤーツリーの操作 ****
 function initTree () {
     document.getElementById("treeRoot").hutimeObject = hutime.panelCollections[0];
     document.getElementById("treeRootCheckBox").value = true;
@@ -185,6 +190,8 @@ function addBranch (targetElement, hutimeObj) {
     // 選択範囲用のspan要素の追加
     let selectSpan = branchSpan.appendChild(document.createElement("span"));
     selectSpan.addEventListener("click", selectBranch);
+    selectSpan.addEventListener("contextmenu", treeContextMenu);
+    selectSpan.className = "branchSelectSpan";
 
     // アイコンのul要素の追加
     let icon = document.createElement("img");
@@ -333,6 +340,129 @@ function selectBranch (ev) {
     ev.stopPropagation();
     return false;
 }
+
+// ** 右クリックメニュー **
+let openedTreeMenus = [];       // ユーザによって開かれたメニュー
+let isTreeMenuActive = false;   // メニュー操作中のフラグ
+function initTreeMenu () {      // メニュー初期化
+    let top = document.getElementById("treeMenuTop");
+    let initTreeMenuItem = function initTreeMenuItem (element) {
+        for (let i = 0; i < element.childNodes.length; ++i) {
+            if (element.childNodes[i].nodeName === "LI") {
+                element.childNodes[i].addEventListener("mouseover", operateTreeMenu);
+                element.childNodes[i].addEventListener("click", clickTreeMenu);
+
+                for (let j = 0; j < element.childNodes[i].childNodes.length; ++j) {
+                    if (element.childNodes[i].childNodes[j].nodeName === "UL") {
+                        initTreeMenuItem(element.childNodes[i].childNodes[j]);  // 再帰による子メニューの初期化
+                        break;
+                    }
+                }
+            }
+        }
+    }(top);
+}
+function treeContextMenu (ev) {     // 右クリックでの動作
+    ev.stopPropagation();
+    ev.preventDefault();
+    if (isMenuActive) {
+        return;
+    }
+
+    if (isTreeMenuActive) {
+        let element = ev.target;
+        while (element.id !== "mainPanel") {
+            if (element.className === "branchSelectSpan") {
+                while (openedTreeMenus.length > 0) {    // 全部閉じる
+                    openedTreeMenus.pop().style.display = "none";
+                }
+                document.getElementById("treeContextMenu").style.display = "none";
+                isTreeMenuActive = false;
+                document.getElementById("body").removeEventListener("click", clickTreeMenu);
+                return;
+            }
+            element = element.parentNode;
+        }
+        clickTreeMenu(ev);
+        return;
+    }
+    isTreeMenuActive = true;
+    document.getElementById("body").addEventListener("click", clickTreeMenu);
+    let menuContainer = document.getElementById("treeContextMenu");
+    let mainPanel = document.getElementById("mainPanel");
+    menuContainer.style.display = "block";
+    menuContainer.style.left = (ev.clientX - mainPanel.offsetLeft) + "px";
+    menuContainer.style.top = (ev.clientY - mainPanel.offsetTop)+ "px";
+    let topMenu = document.getElementById("treeMenuTop");
+    topMenu.style.display = "block";
+    openedTreeMenus.push(topMenu);
+}
+let clickTreeMenu = function clickTreeMenu (ev) {   // clickでの動作
+    ev.stopPropagation();
+    if (!isTreeMenuActive)
+        return;
+
+    let parentElement = ev.target.parentNode;
+    while (parentElement.id !== "body") {
+        if (parentElement.nodeName === "UL") {
+            let targetElement = ev.target;
+            for (let i = 0; i < targetElement.childNodes.length; ++i) {
+                if (targetElement.childNodes[i].nodeName === "UL")
+                    return;     // 子メニューのある項目のクリック
+            }
+        }
+        parentElement = parentElement.parentNode;
+    }
+
+    // inactivate menu (トップメニュー、body、または、子メニューの無い項目のクリック)
+    while (openedTreeMenus.length > 0) {    // 全部閉じる
+        openedTreeMenus.pop().style.display = "none";
+    }
+    document.getElementById("treeContextMenu").style.display = "none";
+    document.getElementById("body").removeEventListener("click", clickTreeMenu);
+    isTreeMenuActive = false;
+
+    /*
+    for (let i = openedTreeMenus.length - 1; i >= 0; --i) {
+        openedTreeMenus.pop().style.display = "none";
+    }
+    document.getElementById("treeContextMenu").style.display = "none";
+    document.getElementById("body").removeEventListener("click", clickTreeMenu);
+    isTreeMenuActive = false;
+    // */
+};
+let operateTreeMenu = function operateTreeMenu (ev) {   // mouseOverでの動作
+    ev.stopPropagation();
+    if (!isTreeMenuActive)
+        return;
+
+    let targetMenu = ev.target.parentNode;
+    for (let i = openedTreeMenus.length - 1; i >= 0; --i) {
+        let openedMenu = openedTreeMenus[i];
+        while (openedMenu.id !== "treeContextMenu") {
+            if (targetMenu.nodeName === "UL" && openedTreeMenus[i] === targetMenu) {
+                for (let j = 0; j < ev.target.childNodes.length; ++j) {
+                    if (ev.target.childNodes[j].nodeName === "UL") {
+                        ev.target.childNodes[j].style.display = "block";
+                        openedTreeMenus.push(ev.target.childNodes[j]);
+                        return;
+                    }
+                }
+                return;     // 下位メニューがない場合
+            }
+            while (true) {
+                openedMenu = openedMenu.parentNode;
+                if (openedMenu.nodeName === "UL" || openedMenu.id === "treeContextMenu")
+                    break;
+            }
+        }
+        if (openedMenus.length > 1)     // Top Menuでなければ閉じる
+            openedTreeMenus.pop().style.display = "none";
+    }
+};
+
+
+
 
 // ** ツリー境界の操作 **
 let layerTreeWidthOrigin = -1;

@@ -22,14 +22,14 @@
       <label for="selectLanguage">
         <select id="selectLanguage" title="language" name="language">
           <option>English</option>
-          <option>Japanese</option>
+          <!--option>Japanese</option-->
         </select>
       </label>
     </div>
   </div>
 
 <!-- ****** HuTime Panel ****** -->
-  <div id="hutime">
+  <div id="hutime" oncontextmenu="return false;">
 
 <!-- **** Menu Bar **** -->
     <div id="menuBar">
@@ -96,14 +96,27 @@
         <ul class="tree">
           <li id="treeRoot">
             <span class="branchSpan">
-              <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img id="treeRootCheckBox" src="img/discheck.png" alt="knob" class="branchCheckBox" /><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan" title="HuTime root">HuTime root</span>
+              <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img id="treeRootCheckBox" src="img/discheck.png" alt="knob" class="branchCheckBox" /><span class="branchSelectSpan" onclick="selectBranch(event)" oncontextmenu="treeContextMenu(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan" title="HuTime root">HuTime root</span>
               </span>
             </span>
             <ul></ul>
           </li>
         </ul>
+      </div>
 
-
+      <!-- *** Layer Tree Context Menu *** -->
+      <div id="treeContextMenu">
+        <ul id="treeMenuTop" class="treeMenu">
+          <li>Rename</li>
+          <li>Append &raquo;
+            <ul>
+              <li>Create</li>
+              <li>Import</li>
+            </ul>
+          </li>
+          <li>Export</li>
+          <li>Preferences</li>
+        </ul>
       </div>
 
       <!-- *** Border between Layer Tree and Main Panel *** -->
