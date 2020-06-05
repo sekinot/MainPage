@@ -88,7 +88,7 @@ ul.menu li {
     cursor: default;
 }
 ul.menu li:hover {
-    background-color: #ffff99;
+    background-color: #ffffcc;
     color: #cc0000;
 }
 
@@ -273,11 +273,11 @@ ul.tree ul li {
     left: 100px;
     top: 100px;
     visibility: hidden;
+    display: block;
     z-index: 200;
 }
 .dialogTitle {
     height: 23px;
-    /*background-color: #ccccff;*/
     background-color: #0066cc;
     color: #ffffff;
     font-size: 12px;

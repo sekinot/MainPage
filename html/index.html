@@ -96,7 +96,7 @@
         <ul class="tree">
           <li id="treeRoot">
             <span class="branchSpan">
-              <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img src="img/check.png" alt="knob" class="branchCheckBox" onclick="selectBranch(event)" /><!--input type="checkbox" class="branchCheckBox" checked="checked" /--><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan" title="HuTime root">HuTime root</span>
+              <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img id="treeRootCheckBox" src="img/discheck.png" alt="knob" class="branchCheckBox" /><span onclick="selectBranch(event)" onmousedown="fixTreeCursor(event)" onmouseover="fixTreeCursor(event)" onmousemove="fixTreeCursor(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan" title="HuTime root">HuTime root</span>
               </span>
             </span>
             <ul></ul>
@@ -129,7 +129,7 @@
   <div id="information">
     <table style="margin: 0 auto; width: 500px;">
       <tr>
-        <td onclick="test(event)">News</td>
+        <td>News</td>
         <td>Samples</td>
         <td>API</td>
         <td>HuTime Project</td>
@@ -137,13 +137,15 @@
     </table>
   </div>
 
-  <div id="footer" onclick="operateBranch(this)">
+  <div id="footer">
     <p>Copyright &copy; 2012-2020 Tatsuki Sekino. All rights reserved.</p>
   </div>
 
 </div>
 
 
+<!-- ****** Dialogs ****** -->
+<!-- **** Select import data from remote **** -->
 <div id="dialogImportRemote" class="dialog">
   <div class="dialogTitle">
     Import Remote
@@ -151,12 +153,11 @@
   </div>
   <div class="dialogBody">
     <form id="dialogImportRemoteForm" name="dialogImportRemoteForm">
-      URL <input type="text" name="url" style="width: 90%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
+      <label for="dialogImportRemoteUrl">URL</label> <input id="dialogImportRemoteUrl" type="text" name="url" style="width: 90%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
 
       <div style="padding: 10px 0;">
-        <!--input type="file" />AAAA-->
-        <input type="radio" name="fileType" checked="checked" /> JSON
-        <input type="radio" name="fileType" /> GTS/GTM
+        <input id="dialogImportRemoteJson" type="radio" name="fileType" checked="checked" /> <label for="dialogImportRemoteJson">JSON</label>
+        <input id="dialogImportRemoteGts" type="radio" name="fileType" /> <label for="dialogImportRemoteGts">GTS/GTM</label>
         <input type="button" name="import" value="import" onclick="dialogImportRemote_Import(event)" style="float:right;" />
         <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportRemote')" style="float:right; margin-right: 10px;" />
       </div>
@@ -165,6 +166,7 @@
   <div class="dialogSizeKnob"></div>
 </div>
 
+<!-- **** Select import data from local **** -->
 <div id="dialogImportLocal" class="dialog">
   <div class="dialogTitle">
     Import Remote
@@ -174,8 +176,8 @@
     <form id="dialogImportLocalForm" name="dialogImportLocalForm">
       File <input type="file" name="file" />
       <div style="padding: 10px 0;">
-        <input type="radio" name="fileType" title="JSON" checked="checked" /> JSON
-        <input type="radio" name="fileType" title="GTS/GTM"/> GTS/GTM
+        <input id="dialogImportLocalJson" type="radio" name="fileType" title="JSON" checked="checked" /> <label for="dialogImportLocalJson">JSON</label>
+        <input id="dialogImportLocalGts" type="radio" name="fileType" title="GTS/GTM"/> <label for="dialogImportLocalGts">GTS/GTM</label>
         <input type="button" name="import" value="import" onclick="dialogImportLocal_Import(event)" style="float:right;" />
         <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportLocal')" style="float:right; margin-right: 10px;" />
       </div>

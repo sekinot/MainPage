@@ -10,7 +10,7 @@ let mainPanelCollection;
 let mouseXOrigin = -1;          // マウス操作用の汎用変数（操作開始時の座標）
 let mouseYOrigin = -1;
 
-const selectedBranchColor = "aqua";     // 選択中のツリー項目の色
+const selectedBranchColor = "#ffffcc";     // 選択中のツリー項目の色
 const minLayerTreeWidth = 100;  // ツリーの最小幅
 const minHuTimeMainWidth = 150; // メインパネルの最小幅
 const minHuTimeMainheight = 50; // メインパネルの最小幅
@@ -24,6 +24,7 @@ function initialize () {
     document.getElementById("treeRoot").hutimeObj = mainPanelCollection;
 
     initMenu();
+    initTree();
     initDialog("dialogImportRemote");
     initDialog("dialogImportLocal");
 }
@@ -31,9 +32,7 @@ function initialize () {
 // **** メニュー操作 ****
 let openedMenus = [];       // ユーザによって開かれたメニュー
 let isMenuActive = false;   // メニュー操作中のフラグ
-
-// メニュー初期化
-function initMenu () {
+function initMenu () {      // メニュー初期化
     let top = document.getElementById("menuTop");
     openedMenus.push(top);
 
@@ -53,9 +52,7 @@ function initMenu () {
         }
     }(top);
 }
-
-// clickでの動作
-let clickMenu = function clickMenu (ev) {
+let clickMenu = function clickMenu (ev) {   // clickでの動作
     ev.stopPropagation();
 
     if (!isMenuActive) {
@@ -84,9 +81,7 @@ let clickMenu = function clickMenu (ev) {
     document.getElementById("body").removeEventListener("click", clickMenu);
     isMenuActive = false;
 };
-
-// mouseOverでの動作
-let operateMenu = function operateMenu (ev) {
+let operateMenu = function operateMenu (ev) {   // mouseOverでの動作
     ev.stopPropagation();
     if (!isMenuActive)
         return;
@@ -116,8 +111,13 @@ let operateMenu = function operateMenu (ev) {
     }
 };
 
-
 // **** ツリーメニューの操作 ****
+function initTree () {
+    document.getElementById("treeRoot").hutimeObject = hutime.panelCollections[0];
+    document.getElementById("treeRootCheckBox").value = true;
+
+}
+
 // ツリーの開閉
 function operateBranch (ev) {
     let targetElements = ev.target.parentNode.parentNode.childNodes;
@@ -178,20 +178,12 @@ function addBranch (targetElement, hutimeObj) {
     checkbox.src = "img/check.png";
     checkbox.className = "branchCheckBox";
     checkbox.alt = "checkbox";
-    checkbox.addEventListener("click", operateBranch);
+    checkbox.addEventListener("click", clickBranchCheckBox);
+    checkbox.value = true;
     branchSpan.appendChild(checkbox);
-
-    // let checkbox = document.createElement("input");
-    // checkbox.type = "checkbox";
-    // checkbox.className = "branchCheckBox";
-    // checkbox.checked = "checked";
-    //branchSpan.appendChild(checkbox);
 
     // 選択範囲用のspan要素の追加
     let selectSpan = branchSpan.appendChild(document.createElement("span"));
-    selectSpan.addEventListener("mouseover", fixTreeCursor);
-    selectSpan.addEventListener("mousemove", fixTreeCursor);
-    selectSpan.addEventListener("mousedown", fixTreeCursor);
     selectSpan.addEventListener("click", selectBranch);
 
     // アイコンのul要素の追加
@@ -279,12 +271,26 @@ function addBranch (targetElement, hutimeObj) {
     }
 }
 
-// ツリー上でのカーソル制御
-function fixTreeCursor (ev) {
-    document.body.style.cursor = "default";
-    ev.preventDefault();
-    ev.stopPropagation();
-    return false;
+// チェックボックスをクリック
+function clickBranchCheckBox (ev) {
+    let element = ev.target;
+    while (element.nodeName !== "LI") {
+        element = element.parentNode;
+    }
+
+    if (ev.target.value) {
+        ev.target.src
+            = ev.target.src.substr(0, ev.target.src.lastIndexOf("/") + 1) + "uncheck.png";
+        ev.target.value = false;
+        element.hutimeObject.visible = false;
+    }
+    else {
+        ev.target.src
+            = ev.target.src.substr(0, ev.target.src.lastIndexOf("/") + 1) + "check.png";
+        ev.target.value = true;
+        element.hutimeObject.visible = true;
+    }
+    hutime.redraw();
 }
 
 // ツリー上のアイテムの選択
@@ -328,7 +334,7 @@ function selectBranch (ev) {
     return false;
 }
 
-// **** ツリー境界の操作 ****
+// ** ツリー境界の操作 **
 let layerTreeWidthOrigin = -1;
 let hutimeMainWidthOrigin = -1;
 function borderTreeMouseDown (ev) {
@@ -363,7 +369,7 @@ function borderTreeMouseUp (ev) {
     hutime.redraw();
 }
 
-// **** ステータスバー境界の操作 ****
+// ** ステータスバー境界の操作 **
 let mainPanelHeightOrigin = -1;
 function borderStatusMouseDown (ev) {
     ev.stopPropagation();
@@ -398,7 +404,6 @@ function borderStatusMouseUp (ev) {
 
 
 // **** 個別の操作 ****
-
 // リモートのJSONデータ
 function importRemoteJsonContainer (url) {
     let loadJson =
@@ -407,6 +412,7 @@ function importRemoteJsonContainer (url) {
                 importObject(loadJson.parsedObject);
             });
 }
+
 // ローカルのJSONデータ
 function importLocalJsonContainer(file) {
     let result = file.files[0];
@@ -416,6 +422,7 @@ function importLocalJsonContainer(file) {
         importObject(HuTime.JSON.parse(reader.result));
     });
 }
+
 // オブジェクトのインポート
 function importObject (obj) {
     if (obj instanceof HuTime.PanelBase) {
@@ -441,10 +448,13 @@ function importObject (obj) {
 }
 
 // **** 個別のダイアログ操作 ****
+// リモートデータのインポート
 function dialogImportRemote_Import (ev) {   // リモートインポート
     closeDialog("dialogImportRemote");
     importRemoteJsonContainer (document.forms["dialogImportRemoteForm"].url.value);
 }
+
+// ローカルデータのインポート
 function dialogImportLocal_Import (ev) {    // ローカルインポート
     closeDialog("dialogImportLocal");
     importLocalJsonContainer (document.forms["dialogImportLocalForm"].file);
@@ -519,7 +529,7 @@ function showDialog (dialogId) {
     let element = dialogs[dialogId];
     element.style.left = ((window.innerWidth - element.clientWidth) / 2).toString() + "px";
     element.style.top = ((window.innerHeight - element.clientHeight) / 2).toString() + "px";
-    element.style.visibility = "visible"
+    element.style.visibility = "visible";
 }
 function closeDialog (dialogId) {
     dialogs[dialogId].style.visibility = "hidden";
@@ -531,7 +541,6 @@ function moveDialog (ev) {
     if (!document.dialogElement)
         return;
     let dialogElement = document.dialogElement;
-
     dialogElement.style.left =
         (parseInt(dialogElement.style.left) - dialogElement.originX + ev.pageX) + "px";
     dialogElement.style.top =
