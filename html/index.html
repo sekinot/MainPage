@@ -94,13 +94,6 @@
       <!-- *** Layer Tree *** -->
       <div id="layerTree">
         <ul class="tree">
-          <li id="treeRoot">
-            <span class="branchSpan">
-              <img src="img/expand.png" alt="knob" class="knob" onclick="operateBranch(event)" /><img id="treeRootCheckBox" src="img/discheck.png" alt="knob" class="branchCheckBox" /><span class="branchSelectSpan" onclick="selectBranch(event)" oncontextmenu="treeContextMenu(event)"><img src="img/panelCollection.png" alt="Panel Collection" title="Panel Collection" class="branchIcon" /><span class="branchLabelSpan" title="HuTime root">HuTime root</span>
-              </span>
-            </span>
-            <ul></ul>
-          </li>
         </ul>
       </div>
 
@@ -120,7 +113,7 @@
       </div>
 
       <!-- *** Border between Layer Tree and Main Panel *** -->
-      <div id="borderTree" onmousedown="borderTreeMouseDown(event)"></div>
+      <div id="borderTree"></div>
 
       <!-- *** HuTime Main *** -->
       <div id="hutimeMain"></div>
@@ -128,10 +121,10 @@
     </div>
 <!-- End of Main Panel -->
 
-<!-- **** Border for Satus Bar **** -->
-    <div id="borderStatusBar" onmousedown="borderStatusMouseDown(event)"></div>
+<!-- **** Border for Status Bar **** -->
+    <div id="borderStatusBar"></div>
 
-<!-- **** Statuds Bar **** -->
+<!-- **** Status Bar **** -->
     <div id="statusBar">
       &nbsp;
     </div>
@@ -171,7 +164,7 @@
       <div style="padding: 10px 0;">
         <input id="dialogImportRemoteJson" type="radio" name="fileType" checked="checked" /> <label for="dialogImportRemoteJson">JSON</label>
         <input id="dialogImportRemoteGts" type="radio" name="fileType" /> <label for="dialogImportRemoteGts">GTS/GTM</label>
-        <input type="button" name="import" value="import" onclick="dialogImportRemote_Import(event)" style="float:right;" />
+        <input type="button" name="import" value="import" onclick="dialogImportRemote_Import()" style="float:right;" />
         <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportRemote')" style="float:right; margin-right: 10px;" />
       </div>
     </form>
@@ -191,7 +184,7 @@
       <div style="padding: 10px 0;">
         <input id="dialogImportLocalJson" type="radio" name="fileType" title="JSON" checked="checked" /> <label for="dialogImportLocalJson">JSON</label>
         <input id="dialogImportLocalGts" type="radio" name="fileType" title="GTS/GTM"/> <label for="dialogImportLocalGts">GTS/GTM</label>
-        <input type="button" name="import" value="import" onclick="dialogImportLocal_Import(event)" style="float:right;" />
+        <input type="button" name="import" value="import" onclick="dialogImportLocal_Import()" style="float:right;" />
         <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportLocal')" style="float:right; margin-right: 10px;" />
       </div>
     </form>

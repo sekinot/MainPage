@@ -7,144 +7,116 @@
 let hutime;
 let mainPanelCollection;
 
+let opStatus = 0;       // 現在の操作状態
+const opNull = 0;       // 操作なし
+const opMenuBar = 1;    // メニューバー操作中
+const opTreeMenu = 2;   // レイヤツリーのコンテキストメニュ操作中
+//const opDialog = 4;     // ダイアログ操作中
+
 let mouseXOrigin = -1;          // マウス操作用の汎用変数（操作開始時の座標）
 let mouseYOrigin = -1;
 
 const selectedBranchColor = "#ffffcc";     // 選択中のツリー項目の色
 const minLayerTreeWidth = 100;  // ツリーの最小幅
 const minHuTimeMainWidth = 150; // メインパネルの最小幅
-const minHuTimeMainheight = 50; // メインパネルの最小幅
+const minHuTimeMainHeight = 50; // メインパネルの最小幅
+const HuTimeBackgroundColor = "#cccccc";    // メインパネルの背景色
 
-function initialize () {
+function initialize () {    // 全体の初期化
     hutime = new HuTime("hutimeMain");
     mainPanelCollection = new HuTime.PanelCollection(document.getElementById("hutimeMain").clientHeight);
-    mainPanelCollection.style.backgroundColor = "#cccccc";
+    mainPanelCollection.style.backgroundColor = HuTimeBackgroundColor;
     hutime.appendPanelCollection(mainPanelCollection);
     hutime.redraw();
-    document.getElementById("treeRoot").hutimeObj = mainPanelCollection;
+    //document.getElementById("treeRoot").hutimeObj = mainPanelCollection;
 
     initMenu();
     initTree();
     initTreeMenu();
+    document.getElementById("borderStatusBar").addEventListener("mousedown", borderStatusMouseDown);
+    document.getElementById("borderTree").addEventListener("mousedown", borderTreeMouseDown);
     initDialog("dialogImportRemote");
     initDialog("dialogImportLocal");
 }
 
-// **** メニュー操作 ****
+// **** メニューバーの操作 ****
 let openedMenus = [];       // ユーザによって開かれたメニュー
-let isMenuActive = false;   // メニュー操作中のフラグ
 function initMenu () {      // メニュー初期化
-    let top = document.getElementById("menuTop");
-    openedMenus.push(top);
-
-    let initMenuItem = function initMenuItem (element) {
-        for (let i = 0; i < element.childNodes.length; ++i) {
-            if (element.childNodes[i].nodeName === "LI") {
-                element.childNodes[i].addEventListener("mouseover", operateMenu);
-                element.childNodes[i].addEventListener("click", clickMenu);
-
-                for (let j = 0; j < element.childNodes[i].childNodes.length; ++j) {
-                    if (element.childNodes[i].childNodes[j].nodeName === "UL") {
-                        initMenuItem(element.childNodes[i].childNodes[j]);  // 再帰による子メニューの初期化
-                        break;
-                    }
-                }
-            }
-        }
-    }(top);
-}
-let clickMenu = function clickMenu (ev) {   // clickでの動作
-    if (isTreeMenuActive) {
-        return;
+    let liElements = document.getElementById("menuTop").getElementsByTagName("li");
+    for (let i = 0; i < liElements.length; ++i) {
+        liElements[i].addEventListener("mouseover", operateMenu);
+        liElements[i].addEventListener("click", clickMenu);
     }
-
+}
+function clickMenu (ev) {   // clickでの動作
     ev.stopPropagation();
 
-    if (!isMenuActive) {
-        isMenuActive = true;
+    // メニュー操作開始
+    if (opStatus === opNull) {
+        openedMenus = [ document.getElementById("menuTop") ];
         document.getElementById("body").addEventListener("click", clickMenu);
+        opStatus |= opMenuBar;
         operateMenu(ev);
         return;
     }
 
-    let parentElement = ev.target.parentNode;
-    while (parentElement.id !== "body") {
-        if (parentElement.nodeName === "UL" && parentElement.id !== "menuTop") {
-            let targetElement = ev.target;
-            for (let i = 0; i < targetElement.childNodes.length; ++i) {
-                if (targetElement.childNodes[i].nodeName === "UL")
-                    return;     // 子メニューのある項目のクリック
-            }
-        }
-        parentElement = parentElement.parentNode;
-    }
-
-    // inactivate menu (トップメニュー、body、または、子メニューの無い項目のクリック)
-    for (let i = openedMenus.length - 1; i > 0; --i) {
-        openedMenus.pop().style.display = "none";
-    }
-    document.getElementById("body").removeEventListener("click", clickMenu);
-    isMenuActive = false;
-};
-let operateMenu = function operateMenu (ev) {   // mouseOverでの動作
-    ev.stopPropagation();
-    if (!isMenuActive)
+    if ((opStatus & ~opMenuBar) !== 0)      // メニュ以外を操作中は何もしない
         return;
 
-    let targetMenu = ev.target.parentNode;
-    for (let i = openedMenus.length - 1; i >= 0; --i) {
-        let openedMenu = openedMenus[i];
-        while (openedMenu.id !== "menuBar") {
-            if (targetMenu.nodeName === "UL" && openedMenus[i] === targetMenu) {
-                for (let j = 0; j < ev.target.childNodes.length; ++j) {
-                    if (ev.target.childNodes[j].nodeName === "UL") {
-                        ev.target.childNodes[j].style.display = "block";
-                        openedMenus.push(ev.target.childNodes[j]);
-                        return;
-                    }
-                }
-                return;     // 下位メニューがない場合
-            }
-            while (true) {
-                openedMenu = openedMenu.parentNode;
-                if (openedMenu.nodeName === "UL" || openedMenu.id === "menuBar")
-                    break;
-            }
-        }
-        if (openedMenus.length > 1)     // Top Menuでなければ閉じる
-            openedMenus.pop().style.display = "none";
+    // メニュー操作継続 (操作終了場所以外（トップ以外の子メニューのある項目）のクリック)
+    if (ev.target.closest("#menuTop") && ev.target.parentNode.id !== "menuTop"
+        && ev.target.querySelector("ul"))
+        return;
+
+    // メニュー操作終了 (トップメニュー、メニューの外、または、子メニューの無い項目のクリック)
+    while (openedMenus.length > 1) {    // topMenu（=item[0]）は残すので >1
+        openedMenus.pop().style.display = "none";
     }
-};
+    openedMenus = [];       // スタックをクリア
+    document.getElementById("body").removeEventListener("click", clickMenu);
+    opStatus &= ~opMenuBar;
+}
+function operateMenu (ev) {   // mouseOverでの動作
+    ev.stopPropagation();
+    if ((opStatus & opMenuBar) === 0)   // メニューバー操作中以外
+        return;
+
+    for (let i = openedMenus.length - 1; i >= 0; --i) {     // 開いているメニューを末端から確認
+        if (openedMenus[i] === ev.target.parentNode) {      // targetの親ULとスタック末尾を比較
+            let childUL = ev.target.querySelector("ul");    // targetの子メニュー
+            if (childUL) {                                  // targetに子メニューがあれば、開いて終了
+                childUL.style.display = "block";
+                openedMenus.push(childUL);
+            }
+            return;
+        }
+        if (i > 0)      // i=0のtopMenuは開いたまま
+            openedMenus.pop().style.display = "none";   // targetと異なれば閉じて次のスタックデータへ
+    }
+}
 
 // **** レイヤーツリーの操作 ****
 function initTree () {
-    document.getElementById("treeRoot").hutimeObject = hutime.panelCollections[0];
-    document.getElementById("treeRootCheckBox").value = true;
-
+    addBranch(document.getElementById("layerTree")
+        , hutime.panelCollections[0], "HuTime root", -1, "treeRoot");
 }
 
 // ツリーの開閉
 function operateBranch (ev) {
-    let targetElements = ev.target.parentNode.parentNode.childNodes;
-    for (let i = 0; i < targetElements.length; ++i) {
-        if (targetElements[i].nodeName === "UL") {
-            if (targetElements[i].style.display === "block") {
-                targetElements[i].style.display = "none";
-                ev.target.src = "img/expand.png";
-                return;
-            }
-            else {
-                targetElements[i].style.display = "block";
-                ev.target.src = "img/collapse.png";
-                return;
-            }
-        }
-    }
     ev.stopPropagation();
+    let childUL = ev.target.closest("li").querySelector("ul");
+    if (childUL.style.display === "block") {
+        childUL.style.display = "none";
+        ev.target.src = "img/expand.png";
+    }
+    else {
+        childUL.style.display = "block";
+        ev.target.src = "img/collapse.png";
+    }
 }
 
 // ツリーの項目を追加
-function addBranch (targetElement, hutimeObj) {
+function addBranch (targetElement, hutimeObj, name, check, id) {
     // targetElement: 追加する先のli要素
     // hutimeObj: HuTimeオブジェクト (PanelCollection, Panel, Layer, Recordset)
 
@@ -154,14 +126,8 @@ function addBranch (targetElement, hutimeObj) {
     // li要素の追加
     let li = document.createElement("li");
     li.hutimeObject = hutimeObj;
-    let ul;
-    for (let i = 0; i < targetElement.childNodes.length; ++i) {
-        if (targetElement.childNodes[i].nodeName === "UL") {
-            ul = targetElement.childNodes[i];
-            ul.appendChild(li);
-            break;
-        }
-    }
+    li.id = id;
+    targetElement.querySelector("ul").appendChild(li);
 
     // ブランチを示すspan要素
     let branchSpan = document.createElement("span");
@@ -180,10 +146,18 @@ function addBranch (targetElement, hutimeObj) {
 
     // チェックボックスの追加
     let checkbox = document.createElement("img");
-    checkbox.src = "img/check.png";
+    if (check < 0) {
+        checkbox.src = "img/discheck.png";
+    }
+    else {
+        checkbox.addEventListener("click", clickBranchCheckBox);
+        if (check === 0)
+            checkbox.src = "img/uncheck.png";
+        else
+            checkbox.src = "img/check.png";
+    }
     checkbox.className = "branchCheckBox";
     checkbox.alt = "checkbox";
-    checkbox.addEventListener("click", clickBranchCheckBox);
     checkbox.value = true;
     branchSpan.appendChild(checkbox);
 
@@ -194,65 +168,57 @@ function addBranch (targetElement, hutimeObj) {
     selectSpan.className = "branchSelectSpan";
 
     // アイコンのul要素の追加
+    let iconSettings = {
+        recordset: {src: "img/recordset.png", title: "Recordset"},
+        tlineLayer: {src: "img/tlineLayer.png", title: "TLine Layer"},
+        chartLayer: {src: "img/chartLayer.png", title: "Chart Layer"},
+        scaleLayer: {src: "img/scaleLayer.png", title: "Tick Scale Layer"},
+        generalLayer: {src: "img/layer.png", title: "General Layer"},
+        panelCollection: {src: "img/panelCollection.png", title: "Panel Collection"},
+        tilePanel: {src: "img/tilePanel.png", title: "Tile Panel"},
+        other: {src: "img/tilePanel.png", title: "Other"},
+        recordItem: {src: "img/recordItem.png", title: "Record Item"}
+    };
+    let setIcon = function setIcon (element, key) {
+        element.src = iconSettings[key].src;
+        element.alt = iconSettings[key].title;
+        element.title = iconSettings[key].title;
+    };
     let icon = document.createElement("img");
     icon.className = "branchIcon";
     let childObj = [];
+
     if (hutimeObj instanceof HuTime.RecordsetBase) {
-        icon.src = "img/recordset.png";
-        icon.alt = "Recordset";
-        icon.title = "Recordset";
+        setIcon(icon, "recordset");
         if (hutimeObj instanceof HuTime.ChartRecordset)
             childObj = hutimeObj._valueItems;
         else if (hutimeObj instanceof HuTime.TLineRecordset)
             childObj = [ hutimeObj.labelItem ];
     }
     else if (hutimeObj instanceof HuTime.RecordLayerBase) {
-        if (hutimeObj instanceof HuTime.TLineLayer) {
-            icon.src = "img/tlineLayer.png";
-            icon.alt = "TLine Layer";
-            icon.title = "TLine Layer";
-        }
-        else {
-            icon.src = "img/chartLayer.png";
-            icon.alt = "Chart Layer";
-            icon.title = "Chart Layer";
-        }
+        if (hutimeObj instanceof HuTime.TLineLayer)
+            setIcon(icon, "tlineLayer");
+        else
+            setIcon(icon, "chartLayer");
         childObj = hutimeObj.recordsets;
     }
     else if (hutimeObj instanceof HuTime.Layer) {
-        if (hutimeObj instanceof HuTime.TickScaleLayer) {
-            icon.src = "img/scaleLayer.png";
-            icon.alt = "Tick Scale Layer";
-            icon.title = "Tick Scale Layer";
-        }
-        else {
-            icon.src = "img/chartLayer.png";
-            icon.alt = "General Layer";
-            icon.title = "General Layer";
-        }
+        if (hutimeObj instanceof HuTime.TickScaleLayer)
+            setIcon(icon, "scaleLayer");
+        else
+            setIcon(icon, "generalLayer");
     }
     else if (hutimeObj instanceof HuTime.ContainerBase) {
-        if (hutimeObj instanceof HuTime.PanelCollection) {
-            icon.src = "img/panelCollection.png";
-            icon.alt = "Panel Collection";
-            icon.title = "Panel Collection";
-        }
-        else if (hutimeObj instanceof HuTime.TilePanel) {
-            icon.src = "img/tilePanel.png";
-            icon.alt = "Tile Panel";
-            icon.title = "Tile Panel";
-        }
-        else {
-            icon.src = "img/tilePanel.png";
-            icon.alt = "Other";
-            icon.title = "Tile Panel";
-        }
+        if (hutimeObj instanceof HuTime.PanelCollection)
+            setIcon(icon, "panelCollection");
+        else if (hutimeObj instanceof HuTime.TilePanel)
+            setIcon(icon, "tilePanel");
+        else
+            setIcon(icon, "other");
         childObj = hutimeObj.contents;
     }
     else {
-        icon.src = "img/recorditem.png";    // レコード項目
-        icon.alt = "Record Item";
-        icon.title = "Record Item";
+        setIcon(icon, "recordItem");     // レコード項目
         childObj = [];
     }
     selectSpan.appendChild(icon);
@@ -260,12 +226,15 @@ function addBranch (targetElement, hutimeObj) {
     // ラベルの追加（span要素を含む）
     let labelSpan = branchSpan.appendChild(document.createElement("span"));
     labelSpan.className = "branchLabelSpan";
-    if (!hutimeObj.name) {
-        labelSpan.style.fontStyle = "italic";
-        labelSpan.appendChild(document.createTextNode("untitled"));
+    if (name) {
+        labelSpan.appendChild(document.createTextNode(name));
+    }
+    else if (hutimeObj.name) {
+        labelSpan.appendChild(document.createTextNode(hutimeObj.name));
     }
     else {
-        labelSpan.appendChild(document.createTextNode(hutimeObj.name));
+        labelSpan.style.fontStyle = "italic";
+        labelSpan.appendChild(document.createTextNode("untitled"));
     }
     selectSpan.appendChild(labelSpan);
 
@@ -280,22 +249,18 @@ function addBranch (targetElement, hutimeObj) {
 
 // チェックボックスをクリック
 function clickBranchCheckBox (ev) {
-    let element = ev.target;
-    while (element.nodeName !== "LI") {
-        element = element.parentNode;
-    }
-
+    ev.stopPropagation();
     if (ev.target.value) {
         ev.target.src
             = ev.target.src.substr(0, ev.target.src.lastIndexOf("/") + 1) + "uncheck.png";
         ev.target.value = false;
-        element.hutimeObject.visible = false;
+        ev.target.closest("li").hutimeObject.visible = false;
     }
     else {
         ev.target.src
             = ev.target.src.substr(0, ev.target.src.lastIndexOf("/") + 1) + "check.png";
         ev.target.value = true;
-        element.hutimeObject.visible = true;
+        ev.target.closest("li").hutimeObject.visible = true;
     }
     hutime.redraw();
 }
@@ -305,20 +270,10 @@ let selectedObject = null;      // 選択中の HuTimeオブジェクト
 let selectedBranch = null;      // 選択中の枝（li）
 let selectedBranchSpan = null;  // 選択中の枝（span）
 function selectBranch (ev) {
-    let branchSpanElement = ev.target;
-    while (branchSpanElement.nodeName !== "UL") {
-        if (branchSpanElement.className === "branchSpan")
-            break;
-        branchSpanElement = branchSpanElement.parentNode;
-    }
-    let branchLiElement = branchSpanElement;
-    while (branchLiElement.nodeName !== "UL") {
-        if (branchLiElement.nodeName === "LI")
-            break;
-        branchLiElement = branchLiElement.parentNode;
-    }
+    let branchSPAN = ev.target.closest("span.branchSpan");
+    let branchLI = ev.target.closest("li");
 
-    if  (branchLiElement === selectedBranch) {      // 選択中の枝－＞選択解除
+    if  (branchLI === selectedBranch) {      // 選択中の枝－＞選択解除
         selectedBranchSpan.style.backgroundColor = "";
         selectedBranch = null;
         selectedBranchSpan = null;
@@ -331,138 +286,90 @@ function selectBranch (ev) {
         selectedBranchSpan = null;
         selectedObject = null;
     }
-    branchSpanElement.style.backgroundColor = selectedBranchColor;
-    selectedObject = branchLiElement.hutimeObject;
-    selectedBranch = branchLiElement;
-    selectedBranchSpan = branchSpanElement;
+    branchSPAN.style.backgroundColor = selectedBranchColor;
+    selectedObject = branchLI.hutimeObject;
+    selectedBranch = branchLI;
+    selectedBranchSpan = branchSPAN;
 
     ev.preventDefault();
     ev.stopPropagation();
     return false;
 }
 
-// ** 右クリックメニュー **
+// ** レイヤツリーの右クリックメニュー操作 **
 let openedTreeMenus = [];       // ユーザによって開かれたメニュー
-let isTreeMenuActive = false;   // メニュー操作中のフラグ
 function initTreeMenu () {      // メニュー初期化
-    let top = document.getElementById("treeMenuTop");
-    let initTreeMenuItem = function initTreeMenuItem (element) {
-        for (let i = 0; i < element.childNodes.length; ++i) {
-            if (element.childNodes[i].nodeName === "LI") {
-                element.childNodes[i].addEventListener("mouseover", operateTreeMenu);
-                element.childNodes[i].addEventListener("click", clickTreeMenu);
-
-                for (let j = 0; j < element.childNodes[i].childNodes.length; ++j) {
-                    if (element.childNodes[i].childNodes[j].nodeName === "UL") {
-                        initTreeMenuItem(element.childNodes[i].childNodes[j]);  // 再帰による子メニューの初期化
-                        break;
-                    }
-                }
-            }
-        }
-    }(top);
+    let liElements = document.getElementById("treeMenuTop").getElementsByTagName("li");
+    for (let i = 0; i < liElements.length; ++i) {
+        liElements[i].addEventListener("mouseover", operateTreeMenu);
+        liElements[i].addEventListener("click", clickTreeMenu);
+        liElements[i].addEventListener("contextmenu", clickTreeMenu);
+    }
 }
-function treeContextMenu (ev) {     // 右クリックでの動作
+function treeContextMenu (ev) {     // 右クリックでの動作（開始時）
     ev.stopPropagation();
     ev.preventDefault();
-    if (isMenuActive) {
-        return;
-    }
 
-    if (isTreeMenuActive) {
-        let element = ev.target;
-        while (element.id !== "mainPanel") {
-            if (element.className === "branchSelectSpan") {
-                while (openedTreeMenus.length > 0) {    // 全部閉じる
-                    openedTreeMenus.pop().style.display = "none";
-                }
-                document.getElementById("treeContextMenu").style.display = "none";
-                isTreeMenuActive = false;
-                document.getElementById("body").removeEventListener("click", clickTreeMenu);
-                return;
-            }
-            element = element.parentNode;
-        }
+    // メニュー操作中の場合は左右クリック同じ動作
+    if ((opStatus & opTreeMenu) !== 0)
         clickTreeMenu(ev);
+
+    // 他の機能を操作中の場合はそのまま戻る
+    if (opStatus !== opNull)
         return;
-    }
-    isTreeMenuActive = true;
+
+    // メニュー操作開始
+    opStatus |= opTreeMenu;
     document.getElementById("body").addEventListener("click", clickTreeMenu);
+    document.getElementById("body").addEventListener("contextmenu", clickTreeMenu);
     let menuContainer = document.getElementById("treeContextMenu");
     let mainPanel = document.getElementById("mainPanel");
-    menuContainer.style.display = "block";
     menuContainer.style.left = (ev.clientX - mainPanel.offsetLeft) + "px";
     menuContainer.style.top = (ev.clientY - mainPanel.offsetTop)+ "px";
+    menuContainer.style.display = "block";
     let topMenu = document.getElementById("treeMenuTop");
     topMenu.style.display = "block";
     openedTreeMenus.push(topMenu);
 }
-let clickTreeMenu = function clickTreeMenu (ev) {   // clickでの動作
+function clickTreeMenu (ev) {   // clickでの動作/
+    ev.preventDefault();
     ev.stopPropagation();
-    if (!isTreeMenuActive)
+    if ((opStatus & opTreeMenu) === 0)
         return;
 
-    let parentElement = ev.target.parentNode;
-    while (parentElement.id !== "body") {
-        if (parentElement.nodeName === "UL") {
-            let targetElement = ev.target;
-            for (let i = 0; i < targetElement.childNodes.length; ++i) {
-                if (targetElement.childNodes[i].nodeName === "UL")
-                    return;     // 子メニューのある項目のクリック
-            }
-        }
-        parentElement = parentElement.parentNode;
-    }
-
-    // inactivate menu (トップメニュー、body、または、子メニューの無い項目のクリック)
-    while (openedTreeMenus.length > 0) {    // 全部閉じる
-        openedTreeMenus.pop().style.display = "none";
-    }
-    document.getElementById("treeContextMenu").style.display = "none";
-    document.getElementById("body").removeEventListener("click", clickTreeMenu);
-    isTreeMenuActive = false;
-
-    /*
-    for (let i = openedTreeMenus.length - 1; i >= 0; --i) {
-        openedTreeMenus.pop().style.display = "none";
-    }
-    document.getElementById("treeContextMenu").style.display = "none";
-    document.getElementById("body").removeEventListener("click", clickTreeMenu);
-    isTreeMenuActive = false;
-    // */
-};
-let operateTreeMenu = function operateTreeMenu (ev) {   // mouseOverでの動作
-    ev.stopPropagation();
-    if (!isTreeMenuActive)
+    // メニュー操作継続 (操作終了場所以外（子メニューのある項目）のクリック)
+    if (ev.target.closest("#treeMenuTop") && ev.target.querySelector("ul"))
         return;
 
-    let targetMenu = ev.target.parentNode;
-    for (let i = openedTreeMenus.length - 1; i >= 0; --i) {
-        let openedMenu = openedTreeMenus[i];
-        while (openedMenu.id !== "treeContextMenu") {
-            if (targetMenu.nodeName === "UL" && openedTreeMenus[i] === targetMenu) {
-                for (let j = 0; j < ev.target.childNodes.length; ++j) {
-                    if (ev.target.childNodes[j].nodeName === "UL") {
-                        ev.target.childNodes[j].style.display = "block";
-                        openedTreeMenus.push(ev.target.childNodes[j]);
-                        return;
-                    }
-                }
-                return;     // 下位メニューがない場合
-            }
-            while (true) {
-                openedMenu = openedMenu.parentNode;
-                if (openedMenu.nodeName === "UL" || openedMenu.id === "treeContextMenu")
-                    break;
-            }
-        }
-        if (openedMenus.length > 1)     // Top Menuでなければ閉じる
-            openedTreeMenus.pop().style.display = "none";
+    // メニュー操作終了 (メニューの外、または、子メニューの無い項目のクリック)
+    while (openedTreeMenus.length > 0) {    // topTreeMenu（=item[0]）も含めて閉じる
+        openedTreeMenus.pop().style.display = "none";
     }
-};
+    document.getElementById("treeContextMenu").style.display = "false";
+    document.getElementById("treeContextMenu").style.display = "none";
+    document.getElementById("body").removeEventListener("contextmenu", clickTreeMenu);
+    document.getElementById("body").removeEventListener("click", clickTreeMenu);
+    opStatus &= ~opTreeMenu;
+}
+function operateTreeMenu (ev) {   // mouseOverでの動作
+    ev.preventDefault();
+    ev.stopPropagation();
+    if ((opStatus & opTreeMenu) === 0)
+        return;
 
-
-
+    for (let i = openedTreeMenus.length - 1; i >= 0; --i) {
+        if (openedTreeMenus[i] === ev.target.parentNode) {
+            let childUL = ev.target.querySelector("ul");
+            if (childUL) {
+                childUL.style.display = "block";
+                openedTreeMenus.push(childUL);
+            }
+            return;
+        }
+        if (i > 0)     // i=0のtopTreeMenuは開いたまま
+            openedTreeMenus.pop().style.display = "none";   // targetと異なれば閉じて次のスタックデータへ
+    }
+}
 
 // ** ツリー境界の操作 **
 let layerTreeWidthOrigin = -1;
@@ -515,7 +422,7 @@ function borderStatusMouseDown (ev) {
 function borderStatusMouseMove (ev) {
     ev.stopPropagation();
     let dMouseY = ev.clientY - mouseYOrigin;
-    if (mainPanelHeightOrigin + dMouseY < minHuTimeMainheight)
+    if (mainPanelHeightOrigin + dMouseY < minHuTimeMainHeight)
         return;
     document.getElementById("mainPanel").style.height = mainPanelHeightOrigin + dMouseY + "px";
 }
@@ -530,7 +437,6 @@ function borderStatusMouseUp (ev) {
     hutime.panelCollections[0].vBreadth = document.getElementById("hutimeMain").clientHeight;
     hutime.redraw();
 }
-
 
 
 // **** 個別の操作 ****
@@ -579,13 +485,13 @@ function importObject (obj) {
 
 // **** 個別のダイアログ操作 ****
 // リモートデータのインポート
-function dialogImportRemote_Import (ev) {   // リモートインポート
+function dialogImportRemote_Import () {    // リモートインポート
     closeDialog("dialogImportRemote");
     importRemoteJsonContainer (document.forms["dialogImportRemoteForm"].url.value);
 }
 
 // ローカルデータのインポート
-function dialogImportLocal_Import (ev) {    // ローカルインポート
+function dialogImportLocal_Import () {      // ローカルインポート
     closeDialog("dialogImportLocal");
     importLocalJsonContainer (document.forms["dialogImportLocalForm"].file);
 }
