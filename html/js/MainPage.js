@@ -37,6 +37,7 @@ function initialize () {    // 全体の初期化
     document.getElementById("borderTree").addEventListener("mousedown", borderTreeMouseDown);
     initDialog("dialogImportRemote");
     initDialog("dialogImportLocal");
+    initDialog("dialogAppendLayer");
 }
 
 // **** メニューバーの操作 ****
@@ -626,4 +627,23 @@ function stopChangeDialogSize (ev) {
     ev.stopPropagation();
     return false;
 }
+
+// タブ切り替え
+function clickTabLabel (ev) {
+    let tabs = ev.target.closest(".tabContainer").querySelectorAll("div.tab");
+    for (let i = 0; i < tabs.length; ++i) {
+        if (tabs[i].id === ev.target.getAttribute("for"))
+            tabs[i].className = "tab tabSelected";
+        else
+            tabs[i].className = "tab";
+    }
+    let labels = ev.target.closest(".tabContainer").querySelectorAll("label.tabLabel");
+    for (let i = 0; i < labels.length; ++i) {
+        if (labels[i] === ev.target)
+            labels[i].className = "tabLabel tabLabelSelected";
+        else
+            labels[i].className = "tabLabel";
+    }
+}
+
 

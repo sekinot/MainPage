@@ -195,6 +195,51 @@
   <div class="dialogSizeKnob"></div>
 </div>
 
+<!-- **** Select import data from local **** -->
+<div id="dialogAppendLayer" class="dialog" style="visibility: visible;">
+  <div class="dialogTitle">
+    Append Layer
+    <img src="img/close.png" alt="close" onclick="closeDialog('dialogAppendLayer')" class="dialogCloseButton" />
+  </div>
+
+
+  <div class="dialogBody">
+    <form id="dialogAppendLayerForm" name="dialogAppendLayerForm">
+
+      <div class="tabContainer">
+        <label id="tab1Label" class="tabLabel tabLabelSelected" for="dialogAppendLayerTabGeneral" onclick="clickTabLabel(event)" >General</label>
+        <label id="tab2Label" class="tabLabel" for="dialogAppendLayerTabData" onclick="clickTabLabel(event)">Data</label>
+        <label id="tab3Label" class="tabLabel" for="dialogAppendLayerTabView" onclick="clickTabLabel(event)">View</label>
+        <div id="dialogAppendLayerTabGeneral" class="tab tabSelected">
+          <input type="radio" id="dialogAppendLayerTLine" /><label for="dialogAppendLayerTLine"> TLine</label>
+          <input type="radio" id="dialogAppendLayerLineChart" /><label for="dialogAppendLayerLineChart"> Line Chart</label>
+          <input type="radio" id="dialogAppendLayerBarChart" /><label for="dialogAppendLayerBarChart"> Bar Chart</label>
+        </div>
+        <div id="dialogAppendLayerTabData" class="tab">
+          2222
+        </div>
+        <div id="dialogAppendLayerTabView" class="tab">
+          3333
+        </div>
+      </div>
+
+<!--
+      File <input type="file" name="file" />
+      <div style="padding: 10px 0;">
+        <input id="dialogAppendJson" type="radio" name="fileType" title="JSON" checked="checked" /> <label for="dialogAppendJson">JSON</label>
+        <input id="dialogAppendGts" type="radio" name="fileType" title="GTS/GTM"/> <label for="dialogAppendGts">GTS/GTM</label>
+        <input type="button" name="import" value="import" onclick="dialogImportLocal_Import()" style="float:right;" />
+        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportLocal')" style="float:right; margin-right: 10px;" />
+      </div>
+-->
+
+    </form>
+  </div>
+
+  <div class="dialogSizeKnob"></div>
+</div>
+
+
 
 </body>
 </html>

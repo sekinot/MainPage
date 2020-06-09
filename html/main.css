@@ -312,8 +312,8 @@ ul.treeMenu ul {
     border: black 1px solid;
     background-color: #ffffff;
     position: absolute;
-    left: 100px;
-    top: 100px;
+    left: 150px;
+    top: 150px;
     visibility: hidden;
     display: block;
     z-index: 200;
@@ -334,7 +334,6 @@ ul.treeMenu ul {
 .dialogTitle img:hover {
     background-color: #ff3333;
 }
-
 .dialogBody {
     clear: both;
     text-align: left;
@@ -361,11 +360,72 @@ ul.treeMenu ul {
     cursor: se-resize;
 }
 
+/**** Tab slip ****/
+.tabContainer {
+    margin: 0;
+    padding: 0;
+    width: 400px;
+    height: 180px;
+    position: relative;
+}
+.tab {
+    margin: 0;
+    padding: 5px;
+    position: absolute;
+    width: 400px;
+    height: 150px;
+    top: 23px;
+    visibility: hidden;
+    clear: both;
+    overflow: visible;
+    background-color: #ffffff;
+
+    border: solid 1px #000000;
+    z-index: 20;
+}
+.tabLabel {
+    margin: 0 4px 0 0;
+    padding: 0;
+    width: 100px;
+    height: 23px;
+    float: left;
+    position: relative;
+
+    font-size: 12px;
+    text-align: center;
+    line-height: 23px;
+    overflow: visible;
+    background-color: #cccccc;
+
+    border-top: solid 1px #000000;
+    border-right: solid 1px #000000;
+    border-left: solid 1px #000000;
+
+    z-index: 10;
+}
+label.tabLabel:hover {
+    background-color: #ffffcc;
+    color: #cc0000;
+}
+.tabSelected {
+    visibility: visible;
+}
+.tabLabelSelected {
+    background-color: #ffffff;
+    z-index: 30;
+}
+
+
+
 #dialogImportRemote {
     width: 400px;
 }
 #dialogImportLocal {
     width: 400px;
+}
+#dialogAppendLayer {
+    width: 500px;
+    top:300px;
 }
 
 
