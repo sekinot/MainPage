@@ -259,10 +259,6 @@ ul.treeMenu ul {
     border-left: 1px solid #9999ff;
 }
 
-
-
-
-
 /**** Border between Layer Tree and Main Panel ****/
 #borderTree {
     margin: 0;
@@ -332,9 +328,13 @@ ul.treeMenu ul {
     cursor: default;
 }
 .dialogCloseButton {
-    width: 20px;
+    width: 23px;
     float: right;
 }
+.dialogTitle img:hover {
+    background-color: #ff3333;
+}
+
 .dialogBody {
     clear: both;
     text-align: left;
