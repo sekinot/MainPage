@@ -364,16 +364,16 @@ ul.treeMenu ul {
 .tabContainer {
     margin: 0;
     padding: 0;
-    width: 400px;
-    height: 180px;
+    width: 480px;
+    height: 300px;
     position: relative;
 }
 .tab {
     margin: 0;
-    padding: 5px;
+    padding: 8px;
     position: absolute;
-    width: 400px;
-    height: 150px;
+    width: 470px;
+    height: 250px;
     top: 23px;
     visibility: hidden;
     clear: both;
@@ -385,8 +385,7 @@ ul.treeMenu ul {
 }
 .tabLabel {
     margin: 0 4px 0 0;
-    padding: 0;
-    width: 100px;
+    padding: 0 5px;
     height: 23px;
     float: left;
     position: relative;
@@ -402,6 +401,8 @@ ul.treeMenu ul {
     border-left: solid 1px #000000;
 
     z-index: 10;
+
+    user-select: none;
 }
 label.tabLabel:hover {
     background-color: #ffffcc;
@@ -415,6 +416,47 @@ label.tabLabel:hover {
     z-index: 30;
 }
 
+.dialogParts {
+    margin: 0 0 8px 0;
+    padding: 0;
+    clear: both;
+    overflow: hidden;
+    /*background-color: #ccccff;/**/
+}
+.dialogPartsLabel {
+    margin: 0 5px 0  0;
+    padding: 0;
+    line-height: 20px;
+    font-weight: bold;
+    vertical-align: top;
+
+    /*background-color: #ccffcc;*/
+}
+.dialogPartsSubLabel {
+    margin: 0 3px 0  0;
+    padding: 0;
+    line-height: 20px;
+    /*background-color: #ccffcc;*/
+}
+.dialogParts input {
+    vertical-align: -1px;
+}
+
+.partsListLabel {
+    margin: 2px 0 0 0;
+    line-height: 23px;
+    clear: both;
+}
+.partsList {
+    margin: 0 0 0 5px;
+    width: 270px;
+    height: 57px;
+    border: solid 1px #999999;
+    line-height: 14px;
+    overflow: auto;
+}
+
+
 
 
 #dialogImportRemote {
@@ -424,7 +466,7 @@ label.tabLabel:hover {
     width: 400px;
 }
 #dialogAppendLayer {
-    width: 500px;
+    width: 550px;
     top:300px;
 }
 

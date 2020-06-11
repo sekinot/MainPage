@@ -195,8 +195,8 @@
   <div class="dialogSizeKnob"></div>
 </div>
 
-<!-- **** Select import data from local **** -->
-<div id="dialogAppendLayer" class="dialog" style="visibility: visible;">
+<!-- ****  **** -->
+<div id="dialogAppendLayer" class="dialog" style="visibility: visible; top: 10px; left: 300px;">
   <div class="dialogTitle">
     Append Layer
     <img src="img/close.png" alt="close" onclick="closeDialog('dialogAppendLayer')" class="dialogCloseButton" />
@@ -207,20 +207,155 @@
     <form id="dialogAppendLayerForm" name="dialogAppendLayerForm">
 
       <div class="tabContainer">
-        <label id="tab1Label" class="tabLabel tabLabelSelected" for="dialogAppendLayerTabGeneral" onclick="clickTabLabel(event)" >General</label>
-        <label id="tab2Label" class="tabLabel" for="dialogAppendLayerTabData" onclick="clickTabLabel(event)">Data</label>
-        <label id="tab3Label" class="tabLabel" for="dialogAppendLayerTabView" onclick="clickTabLabel(event)">View</label>
-        <div id="dialogAppendLayerTabGeneral" class="tab tabSelected">
-          <input type="radio" id="dialogAppendLayerTLine" /><label for="dialogAppendLayerTLine"> TLine</label>
-          <input type="radio" id="dialogAppendLayerLineChart" /><label for="dialogAppendLayerLineChart"> Line Chart</label>
-          <input type="radio" id="dialogAppendLayerBarChart" /><label for="dialogAppendLayerBarChart"> Bar Chart</label>
+        <label id="tabPabelLabel" class="tabLabel tabLabelSelected" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
+        <label id="tabLayerLabel" class="tabLabel" for="tabLayer" onclick="clickTabLabel(event)">Layer</label>
+        <label id="tabRecordsetLabel" class="tabLabel" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
+        <label id="tabRecordItemLabel" class="tabLabel" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
+        <label id="tabObjectLabel" class="tabLabel" for="tabObject" onclick="clickTabLabel(event)">Object</label>
+        <label id="tabVScaleLabel" class="tabLabel" for="tabVScale" onclick="clickTabLabel(event)">Value Scale</label>
+
+<!-- *** Preferences of Panel *** -->
+        <div id="tabPanel" class="tab tabSelected">
+
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="panelNameText">Name:</label><input id="panelNameText" type="text" style="width: 250px;"/>
+          </div>
+
+
+          <div id="panelType" class="dialogParts">
+            <span class="dialogPartsLabel">Type:</span>
+            <input id="panelTypeTile" type="radio" value="tile" name="panelType" checked="checked" /><label class="dialogPartsSubLabel" for="panelTypeTile">Tile</label>
+            <input id="panelTypeOverlay" type="radio" value="overlay" name="panelType" /><label class="dialogPartsSubLabel" for="panelTypeOverlay">Overlay</label>
+          </div>
+
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="panelHeight">Height:</label><input id="panelHeight" type="text" style="width:30px; text-align: right;" /> px
+            <label class="dialogPartsLabel" for="panelTop" style="margin-left:15px;">Top:</label><input id="panelTop" type="text"  style="width:30px; text-align: right;"/> px
+          </div>
+
+
+          <div class="dialogParts">
+            <div class="dialogPartsLabel" style="float: left;">Layers:</div>
+            <div id="layersInPanel" class="partsList" style="height: 57px;">
+              <table>
+                <tr><td>Layer 1</td></tr>
+                <tr><td>Layer 2</td></tr>
+                <tr><td>Layer 3</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="panelBackgroundColor">Background Color:</label><input id="panelBackgroundColor" type="text" value="#cccccc"  style="width: 55px;" />
+            <label class="dialogPartsLabel" for="panelTRatio" style="margin-left: 15px;">T Ratio:</label><input id="panelTRatio" type="text" value="1.0" style="width: 30px; text-align: right;" />
+          </div>
+
+          <div class="dialogParts">
+            <span class="dialogPartsLabel">Operation:</span>
+            <input id="panelResizable" type="checkbox" checked="checked"/><label class="dialogPartsSubLabel" for="panelResizable">Resizable</label>
+            <input id="panelRepositionable" type="checkbox" checked="checked" style="margin-left:15px;" /><label class="dialogPartsSubLabel" for="panelRepositionable" >Repositionable</label>
+          </div>
         </div>
-        <div id="dialogAppendLayerTabData" class="tab">
-          2222
+
+<!-- *** Preferences of Layer *** -->
+        <div id="tabLayer" class="tab">
+
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="layerNameText">Name:</label><input id="layerNameText" type="text" style="width: 250px;" value=""/>
+          </div>
+
+          <div id="layerType" class="dialogParts">
+            <span class="dialogPartsLabel" style="float: left;">Type:</span>
+            <span style="float: left">
+              <input id="layerTypeTLine" type="radio" value="tline" name="layerType" checked="checked" /><label class="dialogPartsSubLabel" for="layerTypeTLine">Time Line</label>
+              <input id="layerTypeLineChart" type="radio" value="lineChart" name="layerType" /><label class="dialogPartsSubLabel" for="layerTypeLineChart">Line Chart</label>
+              <input id="layerTypeBarChart" type="radio" value="barChart" name="layerType" /><label class="dialogPartsSubLabel" for="layerTypeBarChart">Bar Chart</label>
+              <input id="layerTypePlotChart" type="radio" value="plotChart" name="layerType" /><label class="dialogPartsSubLabel" for="layerTypePlotChart">Plot Chart</label><br/>
+
+              <input id="layerTypeScale" type="radio" value="tline" name="layerType" checked="checked" /><label class="dialogPartsSubLabel" for="layerTypeScale">Time Scale</label>
+              <input id="layerTypePlain" type="radio" value="tline" name="layerType" checked="checked" /><label class="dialogPartsSubLabel" for="layerTypePlain">Plain</label>
+              (<input id="layerFixed" type="checkbox" /><label for="layerFixed" class="dialogPartsSubLabel">Fixed Layer</label>)</span>
+          </div>
+
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="layerHeight">Height:</label><input id="layerHeight" type="text" value="" style="width:30px; text-align: right;" /> px
+            <span class="dialogPartsLabel" style="margin-left: 10px;">Margin:</span>
+            <label for="layerMarginTop">Top </label><input id="layerMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
+            <label for="layerMarginBottom" style="margin-left: 10px;">Bottom </label><input id="layerMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
+          </div>
+
+          <!-- for TLine and Charts -->
+          <div id="recordsetSettings" class="dialogParts" style="display: block;">
+            <div class="dialogPartsLabel" style="float: left;">Recordsets:</div>
+            <div id="recordsetsInLayer" class="partsList" style="height: 38px;">
+              <table>
+                <tr><td>Recordset 1</td></tr>
+                <tr><td>Recordset 2</td></tr>
+                <tr><td>Recordset 3</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div id="vSettings" class="dialogParts" style="display: block;">
+            <div style="float: left;">
+            <span class="dialogPartsLabel">Value:</span>
+            <label for="layerVTop">Top </label><input id="layerVTop" type="text" value="100" style="width: 30px; text-align: right;" />
+            <label for="layerVBottom" style="margin-left: 10px;">Bottom </label><input id="layerVBottom" type="text" value="0" style="width: 30px; text-align: right;" />
+            </div>
+            <div class="dialogPartsSubLabel" style="float: left; margin-left: 15px;">Scales</div>
+            <div id="vScales" class="partsList" style="height: 38px; width: 100px; float: left;">
+              <table>
+                <tr><td>Scale 1</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- for Time Scale -->
+          <div id="tScaleSettings" class="dialogParts" style="display: none;">
+            <label class="dialogPartsLabel" for="calendarOfScale">Calendar</label>
+            <select id="calendarOfScale" style="width: 300px;">
+              <option value="2.1">Gregorian Calendar (proleptic)</option>
+              <option value="102.1">Julian Calendar</option>
+              <option value="101.1" selected="selected">Julian/Gregorian Calendar (reformed in 1582)</option>
+              <option value="101.2">Julian/Gregorian Calendar (reformed in 1752)</option>
+              <option value="1001.1">Japanese Calendar</option>
+            </select>
+          </div>
+
+          <!-- for plain Layer -->
+          <div id="objectSettings" class="dialogParts" style="display: block;">
+            <div class="dialogPartsLabel" style="float: left;">Objects:</div>
+            <div id="objectsInLayer" class="partsList" style="height: 38px;">
+              <table>
+                <tr><td>Object 1</td></tr>
+                <tr><td>Object 2</td></tr>
+                <tr><td>Object 3</td></tr>
+              </table>
+            </div>
+          </div>
+
+
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="layerBackgroundColor">Background Color:</label><input id="layerBackgroundColor" type="text" value="#cccccc"  style="width: 60px;" />
+          </div>
         </div>
-        <div id="dialogAppendLayerTabView" class="tab">
+
+        <div id="tabRecordset" class="tab">
           3333
         </div>
+
+        <div id="tabRecordItem" class="tab">
+          4444
+        </div>
+
+        <div id="tabObject" class="tab">
+          55555
+        </div>
+
+        <div id="tabVScale" class="tab">
+          66666
+        </div>
+
       </div>
 
 <!--
