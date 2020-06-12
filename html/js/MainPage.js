@@ -647,3 +647,64 @@ function clickTabLabel (ev) {
 }
 
 
+function partsListContextMenu (ev) {
+    ev.stopPropagation();
+    ev.preventDefault();
+    document.getElementById("statusBar").innerText = ev.target.childNodes[0].textContent;
+}
+
+// レイヤタイプの切り替え
+function changeLayerType (ev) {
+    let layerType = ev.target.value;
+    if (layerType === "tScale") {
+        document.getElementById("recordsetSettings").style.display = "none";
+        document.getElementById("vSettings").style.display = "none";
+        document.getElementById("tScaleSettings").style.display = "block";
+        document.getElementById("objectSettings").style.display = "none";
+        document.getElementById("layerFixed").disabled = true;
+        document.getElementById("layerFixedLabel").style.color = "#999999";
+    }
+    else if (layerType === "plain") {
+        document.getElementById("recordsetSettings").style.display = "none";
+        document.getElementById("vSettings").style.display = "none";
+        document.getElementById("tScaleSettings").style.display = "none";
+        document.getElementById("objectSettings").style.display = "block";
+        document.getElementById("layerFixed").disabled = false;
+        document.getElementById("layerFixedLabel").style.color = "#000000";
+    }
+    else {
+        document.getElementById("recordsetSettings").style.display = "block";
+        document.getElementById("vSettings").style.display = "block";
+        document.getElementById("tScaleSettings").style.display = "none";
+        document.getElementById("objectSettings").style.display = "none";
+        document.getElementById("layerFixed").disabled = true;
+        document.getElementById("layerFixedLabel").style.color = "#999999";
+    }
+}
+
+function changeRecordsetLocationType (ev) {
+    if (ev.target.value === "local") {
+        document.getElementById("sourceURLSettings").style.display = "none";
+        document.getElementById("sourceFileSettings").style.display = "block";
+    }
+    else {
+        document.getElementById("sourceURLSettings").style.display = "block";
+        document.getElementById("sourceFileSettings").style.display = "none";
+    }
+}
+
+function clickItemSelectButton (ev) {
+    ev.stopPropagation();
+    //document.getElementById("statusBar").innerText = "clickItemSelectButton";
+    document.getElementById("itemSelectMenu").style.display = "block";
+}
+function clickItemSelectMenu (ev) {
+    ev.stopPropagation();
+    document.getElementById("itemSelectMenu").style.display = "none";
+}
+
+
+
+
+
+

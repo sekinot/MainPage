@@ -207,15 +207,15 @@
     <form id="dialogAppendLayerForm" name="dialogAppendLayerForm">
 
       <div class="tabContainer">
-        <label id="tabPabelLabel" class="tabLabel tabLabelSelected" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
+        <label id="tabPabelLabel" class="tabLabel" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
         <label id="tabLayerLabel" class="tabLabel" for="tabLayer" onclick="clickTabLabel(event)">Layer</label>
-        <label id="tabRecordsetLabel" class="tabLabel" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
+        <label id="tabRecordsetLabel" class="tabLabel tabLabelSelected" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
         <label id="tabRecordItemLabel" class="tabLabel" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
         <label id="tabObjectLabel" class="tabLabel" for="tabObject" onclick="clickTabLabel(event)">Object</label>
         <label id="tabVScaleLabel" class="tabLabel" for="tabVScale" onclick="clickTabLabel(event)">Value Scale</label>
 
 <!-- *** Preferences of Panel *** -->
-        <div id="tabPanel" class="tab tabSelected">
+        <div id="tabPanel" class="tab">
 
           <div class="dialogParts">
             <label class="dialogPartsLabel" for="panelNameText">Name:</label><input id="panelNameText" type="text" style="width: 250px;"/>
@@ -267,14 +267,14 @@
           <div id="layerType" class="dialogParts">
             <span class="dialogPartsLabel" style="float: left;">Type:</span>
             <span style="float: left">
-              <input id="layerTypeTLine" type="radio" value="tline" name="layerType" checked="checked" /><label class="dialogPartsSubLabel" for="layerTypeTLine">Time Line</label>
-              <input id="layerTypeLineChart" type="radio" value="lineChart" name="layerType" /><label class="dialogPartsSubLabel" for="layerTypeLineChart">Line Chart</label>
-              <input id="layerTypeBarChart" type="radio" value="barChart" name="layerType" /><label class="dialogPartsSubLabel" for="layerTypeBarChart">Bar Chart</label>
-              <input id="layerTypePlotChart" type="radio" value="plotChart" name="layerType" /><label class="dialogPartsSubLabel" for="layerTypePlotChart">Plot Chart</label><br/>
+              <input id="layerTypeTLine" type="radio" value="tLine" name="layerType" checked="checked" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypeTLine">Time Line</label>
+              <input id="layerTypeLineChart" type="radio" value="lineChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypeLineChart">Line Chart</label>
+              <input id="layerTypeBarChart" type="radio" value="barChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypeBarChart">Bar Chart</label>
+              <input id="layerTypePlotChart" type="radio" value="plotChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypePlotChart">Plot Chart</label><br/>
 
-              <input id="layerTypeScale" type="radio" value="tline" name="layerType" checked="checked" /><label class="dialogPartsSubLabel" for="layerTypeScale">Time Scale</label>
-              <input id="layerTypePlain" type="radio" value="tline" name="layerType" checked="checked" /><label class="dialogPartsSubLabel" for="layerTypePlain">Plain</label>
-              (<input id="layerFixed" type="checkbox" /><label for="layerFixed" class="dialogPartsSubLabel">Fixed Layer</label>)</span>
+              <input id="layerTypeScale" type="radio" value="tScale" name="layerType" onclick="changeLayerType(event)"/><label class="dialogPartsSubLabel" for="layerTypeScale">Time Scale</label>
+              <input id="layerTypePlain" type="radio" value="plain" name="layerType" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypePlain">Plain</label>
+              (<input id="layerFixed" type="checkbox" /><label id="layerFixedLabel" for="layerFixed" class="dialogPartsSubLabel">Fixed Layer</label>)</span>
           </div>
 
           <div class="dialogParts">
@@ -287,13 +287,17 @@
           <!-- for TLine and Charts -->
           <div id="recordsetSettings" class="dialogParts" style="display: block;">
             <div class="dialogPartsLabel" style="float: left;">Recordsets:</div>
-            <div id="recordsetsInLayer" class="partsList" style="height: 38px;">
-              <table>
-                <tr><td>Recordset 1</td></tr>
-                <tr><td>Recordset 2</td></tr>
-                <tr><td>Recordset 3</td></tr>
+            <div id="recordsetsInLayer" class="partsList" style="height: 38px; float: left;">
+              <table style="user-select: none;">
+                <tr><td oncontextmenu="partsListContextMenu(event)">Recordset 1</td></tr>
+                <tr><td oncontextmenu="partsListContextMenu(event)">Recordset 2</td></tr>
+                <tr><td oncontextmenu="partsListContextMenu(event)">Recordset 3</td></tr>
               </table>
             </div>
+            <!--div>
+              <input type="button" value="append" style="font-size: 12px; margin-left: 10px;" />
+              <input type="button" value="remove" style="font-size: 12px; margin-left: 10px;" />
+            </div-->
           </div>
 
           <div id="vSettings" class="dialogParts" style="display: block;">
@@ -340,8 +344,89 @@
           </div>
         </div>
 
-        <div id="tabRecordset" class="tab">
-          3333
+<!-- *** Preferences of Recordset *** -->
+        <div id="tabRecordset" class="tab tabSelected">
+
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="recordsetNameText">Name:</label><input id="recordsetNameText" type="text" style="width: 250px;" value=""/>
+          </div>
+
+          <div class="dialogParts">
+            <div class="dialogPartsLabel" style="float: left;">Source:</div>
+            <div style="float: left;">
+              <input id="sourceRemote" type="radio" name="recordsetLocationType" value="remote" checked="checked" onclick="changeRecordsetLocationType(event)"/><label class="dialogPartsSubLabel" for="sourceRemote">Remote</label>
+              <input id="sourceLocal" type="radio" name="recordsetLocationType" value="local" onclick="changeRecordsetLocationType(event)" style="margin-left: 10px;" /><label class="dialogPartsSubLabel" for="sourceLocal" >Local</label><br />
+
+              <span id="sourceURLSettings" style="display: block; height: 25px;"><label for="sourceURL">URL </label><input id="sourceURL" type="text" style="width: 300px;"/></span>
+              <span id="sourceFileSettings" style="display: none; height: 25px;"><label for="sourceFile">File </label><input id="sourceFile" type="file" style="width: 300px;" /></span>
+            </div>
+          </div>
+          <div class="dialogParts">
+            <span class="dialogPartsLabel">Source Type:</span>
+            <input id="sourceCsv" type="radio" name="recordsetSourceType" value="csv" checked="checked" /><label class="dialogPartsSubLabel" for="sourceCsv">CSV</label> (<input id="sourceHeading" type="checkbox" checked="checked" /><label class="dialogPartsSubLabel" for="sourceHeading">Headers</label>)
+            <input id="sourceJson" type="radio" name="recordsetSourceType" value="json" style="margin-left: 10px;" /><label class="dialogPartsSubLabel" for="sourceJson" >JSON</label>
+          </div>
+
+
+          <div class="dialogParts">
+            <div class="dialogPartsLabel" style="float: left; margin-right: 8px;">Items:</div>
+
+
+            <div style="float: left; margin-top:4px;">
+              <div style="font-weight: bold;">Loaded</div>
+              <div id="itemsLoadedFromRecordset" class="itemList" style="width: 138px;">
+                <table style="float: left; width:120px;">
+                  <tr><td class="itemName"><div>Item 1223</div></td></tr>
+                  <tr><td class="itemName"><div>Item 222222222222222222</div></td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                </table>
+              </div>
+            </div>
+
+            <div style="float: left; width: 60px;text-align: center; vertical-align: bottom;">
+              <div style="font-weight: bold;">&nbsp;</div>
+              <img class="itemImageButton" src="img/arrowR.png" alt="Select Item" onclick="clickItemSelectButton(event)" style="margin-top: 15px;"/>
+              <img class="itemImageButton" src="img/arrowL.png" alt="Deselect Item" />
+
+              <input class="itemButton" type="button" value="Reload" style="margin-top: 10px;"/>
+            </div>
+
+            <div style="float: left; margin-top:4px;">
+              <div style="font-weight: bold;">Selected</div>
+              <div id="itemsInRecordset" class="itemList" style="width: 188px;">
+                <table style="width:170px;">
+                  <tr><td class="itemName"><div>Item 123888888999999988</div></td><td class="itemIcon" style=""><span >from/to</span></td></tr>
+                  <tr><td class="itemName"><div>Item 222</div></td><td class="itemIcon"><span >from</span></td></tr>
+                  <tr><td class="itemName"><div>Item 333</div></td><td class="itemIcon"><span>to</span></td></tr>
+                  <tr><td class="itemName"><div>Item 444</div></td><td class="itemIcon"><span>label</span></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Itemの役割メニュ -->
+          <div id="itemSelectMenu" class="itemSelectMenu">
+              <ul>
+                <li onclick="clickItemSelectMenu(event)">Time (from/to)</li>
+                <li>Time (from)</li>
+                <li>Time (to)</li>
+                <li>Value</li>
+                <li>Other</li>
+                <li class="itemSelectMenuCancel">Cancel</li>
+            </ul>
+          </div>
+
         </div>
 
         <div id="tabRecordItem" class="tab">

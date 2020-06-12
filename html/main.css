@@ -451,12 +451,130 @@ label.tabLabel:hover {
     margin: 0 0 0 5px;
     width: 270px;
     height: 57px;
-    border: solid 1px #999999;
+    border: none;
     line-height: 14px;
     overflow: auto;
 }
 
 
+
+
+
+.itemList {
+    margin: 0;
+    padding: 0;
+    height: 95px;
+    /*float: left;/**/
+    border: solid 1px #999999;
+    line-height: 14px;
+    overflow: auto;
+    user-select: none;
+}
+.itemList table {
+    border-spacing: 0;
+}
+.itemList {
+    margin-bottom: 30px;
+}
+.itemList tr:hover {
+    background-color: #ccccff;
+    color: #993300;
+}
+.itemName {
+    margin: 0;
+    padding: 0;
+    width: 115px;
+}
+td.itemName div {
+    margin-left: 10px;
+    text-indent: -10px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.itemIcon {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
+}
+td.itemIcon {
+    padding-left: 3px;
+}
+td.itemIcon span {
+    margin: 0;
+    padding:0 3px;
+    font-size: 10px;
+    line-height: 14px;
+    border-radius: 4px;
+    background-color: #ffffcc;
+}
+.itemImageButton {
+    height:14px;
+    width: 22px;
+    padding: 3px 12px;
+    font-size: 12px;
+    background-color: #e1e1e1;
+    border: solid 1px #adadad;
+}
+.itemImageButton:hover {
+    background-color: #ccffff;
+    border: solid 1px #0000FF;
+}
+.itemButton {
+    margin: 0;
+    padding: 0 2px;
+    width: 50px;
+    height: 22px;
+    font-size: 12px;
+    background-color: #e1e1e1;
+    border: solid 1px #adadad;
+}
+input.itemButton:hover {
+    background-color: #ccffff;
+    border: solid 1px #0000FF;
+}
+
+div.itemSelectMenu {
+    top: 165px;
+    left: 250px;
+    position: absolute;
+    display: none;
+}
+div.itemSelectMenu ul {
+    margin: 0;
+    padding: 0;
+    left: 12px;
+    top: -12px;
+    width: 100px;
+    position: absolute;
+    white-space: normal;
+}
+div.itemSelectMenu li {
+    height: 16px;
+    width: 100px;
+    list-style-type: none;
+    position: relative;
+    border-top: 1px solid #cccccc;
+    color: #000000;
+    line-height: 18px;
+    text-align: left;
+    text-decoration: none;
+    font-size: 12px;
+    display: inline-block;
+    cursor: default;
+
+    background-color: #ffffcc;
+}
+div.itemSelectMenu li:hover {
+    background-color: #ccccff;
+    color: #cc0000;
+}
+div.itemSelectMenu li.itemSelectMenuCancel {
+    background-color: #ffcccc;
+}
+div.itemSelectMenu li.itemSelectMenuCancel:hover {
+    background-color: #ccccff;
+    color: #cc0000;
+}
 
 
 #dialogImportRemote {
