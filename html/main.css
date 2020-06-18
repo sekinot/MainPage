@@ -441,6 +441,11 @@ label.tabLabel:hover {
 .dialogParts input {
     vertical-align: -1px;
 }
+.dialogParts input.readonlyInputText {
+    background-color: #eeeeee;
+    border: solid 1px #666666;
+    height: 18px;
+}
 
 .partsListLabel {
     margin: 2px 0 0 0;
@@ -575,7 +580,6 @@ div.itemSelectMenu li.itemSelectMenuCancel:hover {
     background-color: #ccccff;
     color: #cc0000;
 }
-
 
 #dialogImportRemote {
     width: 400px;

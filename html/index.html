@@ -209,8 +209,8 @@
       <div class="tabContainer">
         <label id="tabPabelLabel" class="tabLabel" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
         <label id="tabLayerLabel" class="tabLabel" for="tabLayer" onclick="clickTabLabel(event)">Layer</label>
-        <label id="tabRecordsetLabel" class="tabLabel tabLabelSelected" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
-        <label id="tabRecordItemLabel" class="tabLabel" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
+        <label id="tabRecordsetLabel" class="tabLabel" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
+        <label id="tabRecordItemLabel" class="tabLabel tabLabelSelected" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
         <label id="tabObjectLabel" class="tabLabel" for="tabObject" onclick="clickTabLabel(event)">Object</label>
         <label id="tabVScaleLabel" class="tabLabel" for="tabVScale" onclick="clickTabLabel(event)">Value Scale</label>
 
@@ -345,7 +345,7 @@
         </div>
 
 <!-- *** Preferences of Recordset *** -->
-        <div id="tabRecordset" class="tab tabSelected">
+        <div id="tabRecordset" class="tab">
 
           <div class="dialogParts">
             <label class="dialogPartsLabel" for="recordsetNameText">Name:</label><input id="recordsetNameText" type="text" style="width: 250px;" value=""/>
@@ -429,8 +429,79 @@
 
         </div>
 
-        <div id="tabRecordItem" class="tab">
-          4444
+
+<!-- *** Preferences of Record Item *** -->
+        <div id="tabRecordItem" class="tab tabSelected">
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="itemRecordsetNameText">Name in Recordset:</label><input id="itemRecordsetNameText" class="readonlyInputText" type="text" readonly="readonly" style="width: 250px;"  value="name in recordset"/>
+          </div>
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="itemNameText">Name:</label><input id="itemNameText" type="text" style="width: 250px;" value=""/>
+          </div>
+
+          <!-- for TLine -->
+          <div class="dialogParts">
+            <label class="dialogPartsLabel">Period Bar:</label>
+            <label class="dialogPartsSubLabel" for="barColor">Color</label><input id="barColor" type="text" style="width: 70px;" value=""/>
+          </div>
+
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" style="float: left;">Label:</label>
+            <div style="float: left;">
+              <div>
+                <label class="dialogPartsSubLabel" for="labelFont">Font Family </label><input id="labelFont" type="text" style="width: 120px;" value=""/>
+                <label class="dialogPartsSubLabel" for="labelDecoration" style="margin-left: 10px;">Decoration </label>
+                <select id="labelDecoration" style="width: 90px;" name="labelDecoration">
+                  <option selected="selected">None</option>
+                  <option>Bold</option>
+                  <option>Italic</option>
+                  <option>Italic/Bold</option>
+                </select>
+              </div>
+              <div style="margin-top: 5px;">
+                <label class="dialogPartsSubLabel" for="labelColor">Color </label><input id="labelColor" type="text" style="width: 70px;" value="#000000"/>
+                <label class="dialogPartsSubLabel" for="labelSize" style="margin-left: 10px;">Size</label><input id="labelSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+              </div>
+            </div>
+          </div>
+
+          <!-- for Line Chart -->
+          <div class="dialogParts">
+            <label class="dialogPartsLabel">Line:</label>
+            <label class="dialogPartsSubLabel" for="lineColor">Color </label><input id="lineColor" type="text" style="width: 50px;" value=""/>
+            <label class="dialogPartsSubLabel" for="lineWidth" style="margin-left: 10px;">Size </label><input id="lineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+          </div>
+
+          <!-- for Line and Plot Chart -->
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" style="float: left;">Plot:</label>
+            <div style="float: left;">
+              <div>
+                <label class="dialogPartsSubLabel" for="plotType">Type</label>
+                <select id="plotType">
+                  <option selected="selected" style="width: 50px;">Circle</option>
+                  <option>Square</option>
+                  <option>Triangle</option>
+                  <option>Cross</option>
+                </select>
+                <label class="dialogPartsSubLabel" for="plotSize" style="margin-left: 10px;">Size </label><input id="plotSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+                <label class="dialogPartsSubLabel" for="plotFillColor" style="margin-left: 10px;">Fill Color </label><input id="plotFillColor" type="text" style="width: 50px;" value=""/>
+              </div>
+              <div style="margin-top: 5px;">
+                <label class="dialogPartsSubLabel" for="plotLinelColor">Line Color </label><input id="plotLinelColor" type="text" style="width: 50px;" value=""/>
+                <label class="dialogPartsSubLabel" for="plotLineWidth" style="margin-left: 10px;">width </label><input id="plotLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+              </div>
+            </div>
+          </div>
+
+          <!-- for Bar Chart -->
+          <div class="dialogParts">
+            <label class="dialogPartsLabel">Bar:</label>
+            <label class="dialogPartsSubLabel" for="barFillColor">Fill Color </label><input id="barFillColor" type="text" style="width: 50px;" value=""/>
+            <label class="dialogPartsSubLabel" for="barLinelColor" style="margin-left: 10px;">Line Color </label><input id="barLinelColor" type="text" style="width: 50px;" value=""/>
+            <label class="dialogPartsSubLabel" for="barLineWidth" style="margin-left: 10px;">width </label><input id="barLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+          </div>
+
         </div>
 
         <div id="tabObject" class="tab">
