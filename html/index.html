@@ -4,9 +4,13 @@
   <meta charset="UTF-8">
   <title>Web HuTime</title>
   <link href="main.css" rel="stylesheet" type="text/css" />
+  <link href="dialogs.css" rel="stylesheet" type="text/css" />
   <!--script type="text/javascript" src="http://web.hutime.org/js/HuTime.min.js"></script-->
   <script type="text/javascript" src="../../debug.js"></script>
+
   <script type="text/javascript" src="js/MainPage.js"></script>
+  <script type="text/javascript" src="js/Operations.js"></script>
+  <script type="text/javascript" src="js/Dialogs.js"></script>
 </head>
 <body id="body" onload="initialize()">
 
@@ -108,7 +112,7 @@
             </ul>
           </li>
           <li>Export</li>
-          <li>Preferences</li>
+          <li onclick="showPanelPreferences()">Preferences</li>
         </ul>
       </div>
 
@@ -150,40 +154,45 @@
 </div>
 <!-- End of Container -->
 
-
 <!-- ****** Dialogs ****** -->
 <!-- **** Select import data from remote **** -->
-<div id="dialogImportRemote" class="dialog">
+<div id="dialogImportRemote" class="dialog" style="height: 130px; width: 420px;">
   <div class="dialogTitle">
-    Import Remote
-    <img src="img/close.png" alt="close" onclick="closeDialog('dialogImportRemote')" class="dialogCloseButton" />
+    Import Remote<span class="dialogCloseButton"></span>
   </div>
 
   <div class="dialogBody">
     <form id="dialogImportRemoteForm" name="dialogImportRemoteForm">
-      <label for="dialogImportRemoteUrl">URL</label> <input id="dialogImportRemoteUrl" type="text" name="url" style="width: 90%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
-
-      <div style="padding: 10px 0;">
-        <input id="dialogImportRemoteJson" type="radio" name="fileType" checked="checked" /> <label for="dialogImportRemoteJson">JSON</label>
-        <input id="dialogImportRemoteGts" type="radio" name="fileType" /> <label for="dialogImportRemoteGts">GTS/GTM</label>
+      <div class="dialogParts">
+        <label class="dialogPartsLabel" for="dialogImportRemoteUrl" style="float: left;">URL:</label>
+        <div style="float: left; width: 90%;">
+          <div>
+            <input id="dialogImportRemoteUrl" type="text" name="url" style="width: 100%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
+          </div>
+          <div style="margin-top: 5px;">
+            <input id="dialogImportRemoteJson" type="radio" name="fileType" checked="checked" /> <label class="dialogPartsSubLabel" for="dialogImportRemoteJson"> JSON</label>
+            <input id="dialogImportRemoteGts" class="dialogPartsSubLabel" type="radio" name="fileType" /> <label for="dialogImportRemoteGts"> GTS/GTM</label>
+          </div>
+        </div>
+      </div>
+      <div class="dialogParts">
         <input type="button" name="import" value="import" onclick="dialogImportRemote_Import()" style="float:right;" />
-        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportRemote')" style="float:right; margin-right: 10px;" />
+        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportRemote')" style="float:right;" />
       </div>
     </form>
   </div>
 
-  <div class="dialogSizeKnob"></div>
+  <div class="dialogResizeHandle" style="cursor: ew-resize;"></div>
 </div>
 
 <!-- **** Select import data from local **** -->
-<div id="dialogImportLocal" class="dialog">
+<div id="dialogImportLocal" class="dialog" style="height: 100px; width: 520px;">
   <div class="dialogTitle">
-    Import Remote
-    <img src="img/close.png" alt="close" onclick="closeDialog('dialogImportLocal')" class="dialogCloseButton" />
+    Import Remote<span class="dialogCloseButton"></span>
   </div>
   <div class="dialogBody">
     <form id="dialogImportLocalForm" name="dialogImportLocalForm">
-      File <input type="file" name="file" />
+      File <input type="file" name="file" style="overflow: hidden; width: 100%;"/>
       <div style="padding: 10px 0;">
         <input id="dialogImportLocalJson" type="radio" name="fileType" title="JSON" checked="checked" /> <label for="dialogImportLocalJson">JSON</label>
         <input id="dialogImportLocalGts" type="radio" name="fileType" title="GTS/GTM"/> <label for="dialogImportLocalGts">GTS/GTM</label>
@@ -192,14 +201,13 @@
       </div>
     </form>
   </div>
-  <div class="dialogSizeKnob"></div>
+  <div class="dialogResizeHandle"></div>
 </div>
 
-<!-- ****  **** -->
-<div id="dialogAppendLayer" class="dialog" style="visibility: visible; top: 10px; left: 300px;">
+<!-- **** Preferences **** -->
+<div id="dialogPreferences" class="dialog" style="width: 510px; height: 400px;">
   <div class="dialogTitle">
-    Append Layer
-    <img src="img/close.png" alt="close" onclick="closeDialog('dialogAppendLayer')" class="dialogCloseButton" />
+    Append Layer<span class="dialogCloseButton"></span>
   </div>
 
 
@@ -207,20 +215,19 @@
     <form id="dialogAppendLayerForm" name="dialogAppendLayerForm">
 
       <div class="tabContainer">
-        <label id="tabPabelLabel" class="tabLabel" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
+        <label id="tabPabelLabel" class="tabLabel tabLabelSelected" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
         <label id="tabLayerLabel" class="tabLabel" for="tabLayer" onclick="clickTabLabel(event)">Layer</label>
         <label id="tabRecordsetLabel" class="tabLabel" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
-        <label id="tabRecordItemLabel" class="tabLabel tabLabelSelected" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
+        <label id="tabRecordItemLabel" class="tabLabel" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
         <label id="tabObjectLabel" class="tabLabel" for="tabObject" onclick="clickTabLabel(event)">Object</label>
         <label id="tabVScaleLabel" class="tabLabel" for="tabVScale" onclick="clickTabLabel(event)">Value Scale</label>
 
 <!-- *** Preferences of Panel *** -->
-        <div id="tabPanel" class="tab">
+        <div id="tabPanel" class="tab tabSelected">
 
           <div class="dialogParts">
-            <label class="dialogPartsLabel" for="panelNameText">Name:</label><input id="panelNameText" type="text" style="width: 250px;"/>
+            <label class="dialogPartsLabel" for="panelNameText" style="float: left;">Name:</label><input id="panelNameText" type="text" style="width: 250px;" />
           </div>
-
 
           <div id="panelType" class="dialogParts">
             <span class="dialogPartsLabel">Type:</span>
@@ -230,9 +237,8 @@
 
           <div class="dialogParts">
             <label class="dialogPartsLabel" for="panelHeight">Height:</label><input id="panelHeight" type="text" style="width:30px; text-align: right;" /> px
-            <label class="dialogPartsLabel" for="panelTop" style="margin-left:15px;">Top:</label><input id="panelTop" type="text"  style="width:30px; text-align: right;"/> px
+            <label class="dialogPartsLabel" for="panelTop" style="margin-left:15px;">Top:</label><input id="panelTop" class="readonlyInputText" type="text"  style="width:30px; text-align: right;"/> px
           </div>
-
 
           <div class="dialogParts">
             <div class="dialogPartsLabel" style="float: left;">Layers:</div>
@@ -255,6 +261,8 @@
             <input id="panelResizable" type="checkbox" checked="checked"/><label class="dialogPartsSubLabel" for="panelResizable">Resizable</label>
             <input id="panelRepositionable" type="checkbox" checked="checked" style="margin-left:15px;" /><label class="dialogPartsSubLabel" for="panelRepositionable" >Repositionable</label>
           </div>
+
+
         </div>
 
 <!-- *** Preferences of Layer *** -->
@@ -431,7 +439,7 @@
 
 
 <!-- *** Preferences of Record Item *** -->
-        <div id="tabRecordItem" class="tab tabSelected">
+        <div id="tabRecordItem" class="tab">
           <div class="dialogParts">
             <label class="dialogPartsLabel" for="itemRecordsetNameText">Name in Recordset:</label><input id="itemRecordsetNameText" class="readonlyInputText" type="text" readonly="readonly" style="width: 250px;"  value="name in recordset"/>
           </div>
@@ -514,20 +522,10 @@
 
       </div>
 
-<!--
-      File <input type="file" name="file" />
-      <div style="padding: 10px 0;">
-        <input id="dialogAppendJson" type="radio" name="fileType" title="JSON" checked="checked" /> <label for="dialogAppendJson">JSON</label>
-        <input id="dialogAppendGts" type="radio" name="fileType" title="GTS/GTM"/> <label for="dialogAppendGts">GTS/GTM</label>
-        <input type="button" name="import" value="import" onclick="dialogImportLocal_Import()" style="float:right;" />
-        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportLocal')" style="float:right; margin-right: 10px;" />
-      </div>
--->
-
     </form>
   </div>
 
-  <div class="dialogSizeKnob"></div>
+  <div class="dialogResizeHandle"></div>
 </div>
 
 
