@@ -43,6 +43,7 @@
         <li>File
           <ul>
             <li>New</li>
+            <li onclick="showDialog('dialogCreateLayer')">Create Layer</li>
             <li>Import &raquo;
               <ul>
                 <li onclick="showDialog('dialogImportRemote')">Remote</li>
@@ -60,11 +61,14 @@
           </ul>
         </li>
 
-        <!-- ** Database Menu ** -->
-        <!--li>Database</li-->
+        <!-- ** Data Menu ** -->
+        <li>Data</li>
+        <!--
+          プロジェクトのデータリストをここにインポートできるようにする
+        -->
 
         <!-- ** Analysis Menu ** -->
-        <li title="Analysis Menu">Analysis
+        <!--li title="Analysis Menu">Analysis
           <ul>
             <li>Search &raquo;
               <ul>
@@ -79,7 +83,7 @@
             </li>
             <li>Mask</li>
           </ul>
-        </li>
+        </li-->
 
         <!-- ** About Menu ** -->
         <li>Help
@@ -163,19 +167,19 @@
 
   <div class="dialogBody">
     <form id="dialogImportRemoteForm" name="dialogImportRemoteForm">
-      <div class="dialogParts">
-        <label class="dialogPartsLabel" for="dialogImportRemoteUrl" style="float: left;">URL:</label>
+      <div class="dialogContainer">
+        <label class="dialogContainerLabel" for="dialogImportRemoteUrl" style="float: left;">URL:</label>
         <div style="float: left; width: 90%;">
           <div>
             <input id="dialogImportRemoteUrl" type="text" name="url" style="width: 100%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
           </div>
           <div style="margin-top: 5px;">
-            <input id="dialogImportRemoteJson" type="radio" name="fileType" checked="checked" /> <label class="dialogPartsSubLabel" for="dialogImportRemoteJson"> JSON</label>
-            <input id="dialogImportRemoteGts" class="dialogPartsSubLabel" type="radio" name="fileType" /> <label for="dialogImportRemoteGts"> GTS/GTM</label>
+            <input id="dialogImportRemoteJson" type="radio" name="fileType" checked="checked" /> <label class="dialogSubContainerLabel" for="dialogImportRemoteJson"> JSON</label>
+            <input id="dialogImportRemoteGts" class="dialogSubContainerLabel" type="radio" name="fileType" /> <label for="dialogImportRemoteGts"> GTS/GTM</label>
           </div>
         </div>
       </div>
-      <div class="dialogParts">
+      <div class="dialogContainer">
         <input type="button" name="import" value="import" onclick="dialogImportRemote_Import()" style="float:right;" />
         <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportRemote')" style="float:right;" />
       </div>
@@ -210,38 +214,49 @@
     Append Layer<span class="dialogCloseButton"></span>
   </div>
 
-
   <div class="dialogBody">
     <form id="dialogAppendLayerForm" name="dialogAppendLayerForm">
 
       <div class="tabContainer">
-        <label id="tabPabelLabel" class="tabLabel tabLabelSelected" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
+        <label id="tabRootLabel" class="tabLabel tabLabelSelected" for="tabRoot" onclick="clickTabLabel(event)" >Root</label>
+        <label id="tabPanelLabel" class="tabLabel" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
         <label id="tabLayerLabel" class="tabLabel" for="tabLayer" onclick="clickTabLabel(event)">Layer</label>
         <label id="tabRecordsetLabel" class="tabLabel" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
         <label id="tabRecordItemLabel" class="tabLabel" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
         <label id="tabObjectLabel" class="tabLabel" for="tabObject" onclick="clickTabLabel(event)">Object</label>
         <label id="tabVScaleLabel" class="tabLabel" for="tabVScale" onclick="clickTabLabel(event)">Value Scale</label>
 
-<!-- *** Preferences of Panel *** -->
-        <div id="tabPanel" class="tab tabSelected">
-
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" for="panelNameText" style="float: left;">Name:</label><input id="panelNameText" type="text" style="width: 250px;" />
+        <!-- *** Preferences of Panel Collection *** -->
+        <div id="tabRoot" class="tab tabSelected">
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="rootNameText" style="float: left;">Name:</label><input id="rootNameText" type="text" style="width: 250px;" />
           </div>
 
-          <div id="panelType" class="dialogParts">
-            <span class="dialogPartsLabel">Type:</span>
-            <input id="panelTypeTile" type="radio" value="tile" name="panelType" checked="checked" /><label class="dialogPartsSubLabel" for="panelTypeTile">Tile</label>
-            <input id="panelTypeOverlay" type="radio" value="overlay" name="panelType" /><label class="dialogPartsSubLabel" for="panelTypeOverlay">Overlay</label>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="rootBackgroundColor">Background Color:</label><input id="rootBackgroundColor" type="text" value="#cccccc" style="width: 55px;" />
+          </div>
+        </div>
+
+
+        <!-- *** Preferences of Panel *** -->
+        <div id="tabPanel" class="tab">
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="panelNameText" style="float: left;">Name:</label><input id="panelNameText" type="text" style="width: 250px;" />
           </div>
 
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" for="panelHeight">Height:</label><input id="panelHeight" type="text" style="width:30px; text-align: right;" /> px
-            <label class="dialogPartsLabel" for="panelTop" style="margin-left:15px;">Top:</label><input id="panelTop" class="readonlyInputText" type="text"  style="width:30px; text-align: right;"/> px
+          <div id="panelType" class="dialogContainer">
+            <span class="dialogContainerLabel">Type:</span>
+            <input id="panelTypeTile" type="radio" value="tile" name="panelType" checked="checked" /><label class="dialogSubContainerLabel" for="panelTypeTile">Tile</label>
+            <input id="panelTypeOverlay" type="radio" value="overlay" name="panelType" /><label class="dialogSubContainerLabel" for="panelTypeOverlay">Overlay</label>
           </div>
 
-          <div class="dialogParts">
-            <div class="dialogPartsLabel" style="float: left;">Layers:</div>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="panelHeight">Height:</label><input id="panelHeight" type="text" style="width:30px; text-align: right;" /> px
+            <label class="dialogContainerLabel" for="panelTop" style="margin-left:15px;">Top:</label><input id="panelTop" class="readonlyInputText" type="text" style="width:30px; text-align: right;"/> px
+          </div>
+
+          <div class="dialogContainer">
+            <div class="dialogContainerLabel" style="float: left;">Layers:</div>
             <div id="layersInPanel" class="partsList" style="height: 57px;">
               <table>
                 <tr><td>Layer 1</td></tr>
@@ -251,15 +266,15 @@
             </div>
           </div>
 
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" for="panelBackgroundColor">Background Color:</label><input id="panelBackgroundColor" type="text" value="#cccccc"  style="width: 55px;" />
-            <label class="dialogPartsLabel" for="panelTRatio" style="margin-left: 15px;">T Ratio:</label><input id="panelTRatio" type="text" value="1.0" style="width: 30px; text-align: right;" />
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="panelBackgroundColor">Background Color:</label><input id="panelBackgroundColor" type="text" value="#cccccc" style="width: 55px;" />
+            <label class="dialogContainerLabel" for="panelTRatio" style="margin-left: 15px;">T Ratio:</label><input id="panelTRatio" type="text" value="1.0" style="width: 30px; text-align: right;" />
           </div>
 
-          <div class="dialogParts">
-            <span class="dialogPartsLabel">Operation:</span>
-            <input id="panelResizable" type="checkbox" checked="checked"/><label class="dialogPartsSubLabel" for="panelResizable">Resizable</label>
-            <input id="panelRepositionable" type="checkbox" checked="checked" style="margin-left:15px;" /><label class="dialogPartsSubLabel" for="panelRepositionable" >Repositionable</label>
+          <div class="dialogContainer">
+            <span class="dialogContainerLabel">Operation:</span>
+            <input id="panelResizable" type="checkbox" checked="checked"/><label class="dialogSubContainerLabel" for="panelResizable">Resizable</label>
+            <input id="panelRepositionable" type="checkbox" checked="checked" style="margin-left:15px;" /><label class="dialogSubContainerLabel" for="panelRepositionable" >Repositionable</label>
           </div>
 
 
@@ -268,33 +283,33 @@
 <!-- *** Preferences of Layer *** -->
         <div id="tabLayer" class="tab">
 
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" for="layerNameText">Name:</label><input id="layerNameText" type="text" style="width: 250px;" value=""/>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="layerNameText">Name:</label><input id="layerNameText" type="text" style="width: 250px;" value=""/>
           </div>
 
-          <div id="layerType" class="dialogParts">
-            <span class="dialogPartsLabel" style="float: left;">Type:</span>
+          <div id="layerType" class="dialogContainer">
+            <span class="dialogContainerLabel" style="float: left;">Type:</span>
             <span style="float: left">
-              <input id="layerTypeTLine" type="radio" value="tLine" name="layerType" checked="checked" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypeTLine">Time Line</label>
-              <input id="layerTypeLineChart" type="radio" value="lineChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypeLineChart">Line Chart</label>
-              <input id="layerTypeBarChart" type="radio" value="barChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypeBarChart">Bar Chart</label>
-              <input id="layerTypePlotChart" type="radio" value="plotChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypePlotChart">Plot Chart</label><br/>
+              <input id="layerTypeTLine" type="radio" value="tLine" name="layerType" checked="checked" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypeTLine">Time Line</label>
+              <input id="layerTypeLineChart" type="radio" value="lineChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypeLineChart">Line Chart</label>
+              <input id="layerTypeBarChart" type="radio" value="barChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypeBarChart">Bar Chart</label>
+              <input id="layerTypePlotChart" type="radio" value="plotChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypePlotChart">Plot Chart</label><br/>
 
-              <input id="layerTypeScale" type="radio" value="tScale" name="layerType" onclick="changeLayerType(event)"/><label class="dialogPartsSubLabel" for="layerTypeScale">Time Scale</label>
-              <input id="layerTypePlain" type="radio" value="plain" name="layerType" onclick="changeLayerType(event)" /><label class="dialogPartsSubLabel" for="layerTypePlain">Plain</label>
-              (<input id="layerFixed" type="checkbox" /><label id="layerFixedLabel" for="layerFixed" class="dialogPartsSubLabel">Fixed Layer</label>)</span>
+              <input id="layerTypeScale" type="radio" value="tScale" name="layerType" onclick="changeLayerType(event)"/><label class="dialogSubContainerLabel" for="layerTypeScale">Time Scale</label>
+              <input id="layerTypePlain" type="radio" value="plain" name="layerType" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypePlain">Plain</label>
+              (<input id="layerFixed" type="checkbox" /><label id="layerFixedLabel" for="layerFixed" class="dialogSubContainerLabel">Fixed Layer</label>)</span>
           </div>
 
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" for="layerHeight">Height:</label><input id="layerHeight" type="text" value="" style="width:30px; text-align: right;" /> px
-            <span class="dialogPartsLabel" style="margin-left: 10px;">Margin:</span>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="layerHeight">Height:</label><input id="layerHeight" type="text" value="" style="width:30px; text-align: right;" /> px
+            <span class="dialogContainerLabel" style="margin-left: 10px;">Margin:</span>
             <label for="layerMarginTop">Top </label><input id="layerMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
             <label for="layerMarginBottom" style="margin-left: 10px;">Bottom </label><input id="layerMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
           </div>
 
           <!-- for TLine and Charts -->
-          <div id="recordsetSettings" class="dialogParts" style="display: block;">
-            <div class="dialogPartsLabel" style="float: left;">Recordsets:</div>
+          <div id="recordsetSettings" class="dialogContainer" style="display: block;">
+            <div class="dialogContainerLabel" style="float: left;">Recordsets:</div>
             <div id="recordsetsInLayer" class="partsList" style="height: 38px; float: left;">
               <table style="user-select: none;">
                 <tr><td oncontextmenu="partsListContextMenu(event)">Recordset 1</td></tr>
@@ -308,13 +323,13 @@
             </div-->
           </div>
 
-          <div id="vSettings" class="dialogParts" style="display: block;">
+          <div id="vSettings" class="dialogContainer" style="display: block;">
             <div style="float: left;">
-            <span class="dialogPartsLabel">Value:</span>
+            <span class="dialogContainerLabel">Value:</span>
             <label for="layerVTop">Top </label><input id="layerVTop" type="text" value="100" style="width: 30px; text-align: right;" />
             <label for="layerVBottom" style="margin-left: 10px;">Bottom </label><input id="layerVBottom" type="text" value="0" style="width: 30px; text-align: right;" />
             </div>
-            <div class="dialogPartsSubLabel" style="float: left; margin-left: 15px;">Scales</div>
+            <div class="dialogSubContainerLabel" style="float: left; margin-left: 15px;">Scales</div>
             <div id="vScales" class="partsList" style="height: 38px; width: 100px; float: left;">
               <table>
                 <tr><td>Scale 1</td></tr>
@@ -323,8 +338,8 @@
           </div>
 
           <!-- for Time Scale -->
-          <div id="tScaleSettings" class="dialogParts" style="display: none;">
-            <label class="dialogPartsLabel" for="calendarOfScale">Calendar</label>
+          <div id="tScaleSettings" class="dialogContainer" style="display: none;">
+            <label class="dialogContainerLabel" for="calendarOfScale">Calendar</label>
             <select id="calendarOfScale" style="width: 300px;">
               <option value="2.1">Gregorian Calendar (proleptic)</option>
               <option value="102.1">Julian Calendar</option>
@@ -335,8 +350,8 @@
           </div>
 
           <!-- for plain Layer -->
-          <div id="objectSettings" class="dialogParts" style="display: block;">
-            <div class="dialogPartsLabel" style="float: left;">Objects:</div>
+          <div id="objectSettings" class="dialogContainer" style="display: block;">
+            <div class="dialogContainerLabel" style="float: left;">Objects:</div>
             <div id="objectsInLayer" class="partsList" style="height: 38px;">
               <table>
                 <tr><td>Object 1</td></tr>
@@ -347,14 +362,14 @@
           </div>
 
 
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" for="layerBackgroundColor">Background Color:</label><input id="layerBackgroundColor" type="text" value="#cccccc"  style="width: 60px;" />
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="layerBackgroundColor">Background Color:</label><input id="layerBackgroundColor" type="text" value="#cccccc" style="width: 60px;" />
           </div>
         </div>
 
 <!-- *** Preferences of Recordset *** -->
         <div id="tabRecordset" class="tab">
-
+<!--
           <div class="dialogParts">
             <label class="dialogPartsLabel" for="recordsetNameText">Name:</label><input id="recordsetNameText" type="text" style="width: 250px;" value=""/>
           </div>
@@ -362,8 +377,8 @@
           <div class="dialogParts">
             <div class="dialogPartsLabel" style="float: left;">Source:</div>
             <div style="float: left;">
-              <input id="sourceRemote" type="radio" name="recordsetLocationType" value="remote" checked="checked" onclick="changeRecordsetLocationType(event)"/><label class="dialogPartsSubLabel" for="sourceRemote">Remote</label>
-              <input id="sourceLocal" type="radio" name="recordsetLocationType" value="local" onclick="changeRecordsetLocationType(event)" style="margin-left: 10px;" /><label class="dialogPartsSubLabel" for="sourceLocal" >Local</label><br />
+              <input id="sourceRemote" type="radio" name="recordsetLocationType" value="remote" checked="checked" onclick="createSwitchSourceLocationType(event)"/><label class="dialogPartsSubLabel" for="sourceRemote">Remote</label>
+              <input id="sourceLocal" type="radio" name="recordsetLocationType" value="local" onclick="createSwitchSourceLocationType(event)" style="margin-left: 10px;" /><label class="dialogPartsSubLabel" for="sourceLocal" >Local</label><br />
 
               <span id="sourceURLSettings" style="display: block; height: 25px;"><label for="sourceURL">URL </label><input id="sourceURL" type="text" style="width: 300px;"/></span>
               <span id="sourceFileSettings" style="display: none; height: 25px;"><label for="sourceFile">File </label><input id="sourceFile" type="file" style="width: 300px;" /></span>
@@ -398,7 +413,7 @@
 
             <div style="float: left; width: 60px;text-align: center; vertical-align: bottom;">
               <div style="font-weight: bold;">&nbsp;</div>
-              <img class="itemImageButton" src="img/arrowR.png" alt="Select Item" onclick="clickItemSelectButton(event)" style="margin-top: 15px;"/>
+              <img class="itemImageButton" src="img/arrowR.png" alt="Select Item" onclick="dclMoveItemToRecordset(event)" style="margin-top: 15px;"/>
               <img class="itemImageButton" src="img/arrowL.png" alt="Deselect Item" />
 
               <input class="itemButton" type="button" value="Reload" style="margin-top: 10px;"/>
@@ -422,11 +437,12 @@
             </div>
 
           </div>
-
+-->
           <!-- Itemの役割メニュ -->
+<!--
           <div id="itemSelectMenu" class="itemSelectMenu">
               <ul>
-                <li onclick="clickItemSelectMenu(event)">Time (from/to)</li>
+                <li onclick="dclSelectItemRole(event)">Time (from/to)</li>
                 <li>Time (from)</li>
                 <li>Time (to)</li>
                 <li>Value</li>
@@ -434,31 +450,31 @@
                 <li class="itemSelectMenuCancel">Cancel</li>
             </ul>
           </div>
-
+-->
         </div>
 
 
 <!-- *** Preferences of Record Item *** -->
         <div id="tabRecordItem" class="tab">
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" for="itemRecordsetNameText">Name in Recordset:</label><input id="itemRecordsetNameText" class="readonlyInputText" type="text" readonly="readonly" style="width: 250px;"  value="name in recordset"/>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="itemRecordsetNameText">Name in Recordset:</label><input id="itemRecordsetNameText" class="readonlyInputText" type="text" readonly="readonly" style="width: 250px;" value="name in recordset"/>
           </div>
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" for="itemNameText">Name:</label><input id="itemNameText" type="text" style="width: 250px;" value=""/>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="itemNameText">Name:</label><input id="itemNameText" type="text" style="width: 250px;" value=""/>
           </div>
 
           <!-- for TLine -->
-          <div class="dialogParts">
-            <label class="dialogPartsLabel">Period Bar:</label>
-            <label class="dialogPartsSubLabel" for="barColor">Color</label><input id="barColor" type="text" style="width: 70px;" value=""/>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel">Period Bar:</label>
+            <label class="dialogSubContainerLabel" for="barColor">Color</label><input id="barColor" type="text" style="width: 70px;" value=""/>
           </div>
 
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" style="float: left;">Label:</label>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" style="float: left;">Label:</label>
             <div style="float: left;">
               <div>
-                <label class="dialogPartsSubLabel" for="labelFont">Font Family </label><input id="labelFont" type="text" style="width: 120px;" value=""/>
-                <label class="dialogPartsSubLabel" for="labelDecoration" style="margin-left: 10px;">Decoration </label>
+                <label class="dialogSubContainerLabel" for="labelFont">Font Family </label><input id="labelFont" type="text" style="width: 120px;" value=""/>
+                <label class="dialogSubContainerLabel" for="labelDecoration" style="margin-left: 10px;">Decoration </label>
                 <select id="labelDecoration" style="width: 90px;" name="labelDecoration">
                   <option selected="selected">None</option>
                   <option>Bold</option>
@@ -467,47 +483,47 @@
                 </select>
               </div>
               <div style="margin-top: 5px;">
-                <label class="dialogPartsSubLabel" for="labelColor">Color </label><input id="labelColor" type="text" style="width: 70px;" value="#000000"/>
-                <label class="dialogPartsSubLabel" for="labelSize" style="margin-left: 10px;">Size</label><input id="labelSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+                <label class="dialogSubContainerLabel" for="labelColor">Color </label><input id="labelColor" type="text" style="width: 70px;" value="#000000"/>
+                <label class="dialogSubContainerLabel" for="labelSize" style="margin-left: 10px;">Size</label><input id="labelSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
               </div>
             </div>
           </div>
 
           <!-- for Line Chart -->
-          <div class="dialogParts">
-            <label class="dialogPartsLabel">Line:</label>
-            <label class="dialogPartsSubLabel" for="lineColor">Color </label><input id="lineColor" type="text" style="width: 50px;" value=""/>
-            <label class="dialogPartsSubLabel" for="lineWidth" style="margin-left: 10px;">Size </label><input id="lineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel">Line:</label>
+            <label class="dialogSubContainerLabel" for="lineColor">Color </label><input id="lineColor" type="text" style="width: 50px;" value=""/>
+            <label class="dialogSubContainerLabel" for="lineWidth" style="margin-left: 10px;">Size </label><input id="lineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
           </div>
 
           <!-- for Line and Plot Chart -->
-          <div class="dialogParts">
-            <label class="dialogPartsLabel" style="float: left;">Plot:</label>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" style="float: left;">Plot:</label>
             <div style="float: left;">
               <div>
-                <label class="dialogPartsSubLabel" for="plotType">Type</label>
+                <label class="dialogSubContainerLabel" for="plotType">Type</label>
                 <select id="plotType">
                   <option selected="selected" style="width: 50px;">Circle</option>
                   <option>Square</option>
                   <option>Triangle</option>
                   <option>Cross</option>
                 </select>
-                <label class="dialogPartsSubLabel" for="plotSize" style="margin-left: 10px;">Size </label><input id="plotSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
-                <label class="dialogPartsSubLabel" for="plotFillColor" style="margin-left: 10px;">Fill Color </label><input id="plotFillColor" type="text" style="width: 50px;" value=""/>
+                <label class="dialogSubContainerLabel" for="plotSize" style="margin-left: 10px;">Size </label><input id="plotSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+                <label class="dialogSubContainerLabel" for="plotFillColor" style="margin-left: 10px;">Fill Color </label><input id="plotFillColor" type="text" style="width: 50px;" value=""/>
               </div>
               <div style="margin-top: 5px;">
-                <label class="dialogPartsSubLabel" for="plotLinelColor">Line Color </label><input id="plotLinelColor" type="text" style="width: 50px;" value=""/>
-                <label class="dialogPartsSubLabel" for="plotLineWidth" style="margin-left: 10px;">width </label><input id="plotLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+                <label class="dialogSubContainerLabel" for="plotLinelColor">Line Color </label><input id="plotLinelColor" type="text" style="width: 50px;" value=""/>
+                <label class="dialogSubContainerLabel" for="plotLineWidth" style="margin-left: 10px;">width </label><input id="plotLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
               </div>
             </div>
           </div>
 
           <!-- for Bar Chart -->
-          <div class="dialogParts">
-            <label class="dialogPartsLabel">Bar:</label>
-            <label class="dialogPartsSubLabel" for="barFillColor">Fill Color </label><input id="barFillColor" type="text" style="width: 50px;" value=""/>
-            <label class="dialogPartsSubLabel" for="barLinelColor" style="margin-left: 10px;">Line Color </label><input id="barLinelColor" type="text" style="width: 50px;" value=""/>
-            <label class="dialogPartsSubLabel" for="barLineWidth" style="margin-left: 10px;">width </label><input id="barLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel">Bar:</label>
+            <label class="dialogSubContainerLabel" for="barFillColor">Fill Color </label><input id="barFillColor" type="text" style="width: 50px;" value=""/>
+            <label class="dialogSubContainerLabel" for="barLinelColor" style="margin-left: 10px;">Line Color </label><input id="barLinelColor" type="text" style="width: 50px;" value=""/>
+            <label class="dialogSubContainerLabel" for="barLineWidth" style="margin-left: 10px;">width </label><input id="barLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
           </div>
 
         </div>
@@ -522,13 +538,205 @@
 
       </div>
 
+
     </form>
+
+    <input id="applyPreference" type="button" value="Apply" onclick="applyPreference()" />
+
+
   </div>
 
   <div class="dialogResizeHandle"></div>
 </div>
 
+<!-- **** Create **** -->
+<div id="dialogCreateLayer" class="dialog" style="width: 520px; display: block; left: 200px; top: 100px">
+  <div class="dialogTitle">
+    Create Layer<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
 
+    <!-- Layer -->
+    <div id="createLayer" class="dialogContainer">
+      <div class="dialogContainerLabel" style="float:left;">Layer:</div>
+      <div class="dialogSubContainerGroupBorder">
+        <div class="dialogSubContainer">
+          <!-- Layer Type -->
+          <label class="dialogSubContainerLabel" for="createLayerType" >Layer Type</label>
+          <select  id="createLayerType" style="width: 120px;">
+            <option value="TimeLine">Time Line</option>
+            <option value="LineChart">Line Chart</option>
+            <option value="BarChart">Bar Chart</option>
+            <option value="PlotChart">Plot Chart</option>
+            <option value="Plain">Plain</option>
+          </select>
+          <!-- Calendar Scale -->
+          <label for="createLayerAddScale" style="margin-left: 15px;">Time Scale</label>
+          <input id="createLayerAddScale" type="checkbox" />
+          <script type="text/javascript">
+            document.getElementById("createLayerType").addEventListener(
+                "change", createChangeLayerType);
+            document.getElementById("createLayerAddScale").addEventListener(
+                "change", createChangeLayerScale);
+          </script>
+        </div>
+
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="createLayerCalendarOfScale">Calendar of Scale</label>
+          <select id="createLayerCalendarOfScale" style="width: 300px;">
+            <option selected="selected" value="101.1">Julian / Gregorian Calendar (modified in 1582)</option>
+            <option value="101.2">Julian / Gregorian Calendar (modified in 1752)</option>
+            <option value="2.1">Gregorian Calendar</option>
+            <option value="1.1">Julian date (real number)</option>
+            <option value="1001.1">Japanese Calendar</option>
+          </select>
+        </div>
+      </div>
+
+      <script type="text/javascript">
+        // Initialize Container
+        createChangeLayerScale();
+      </script>
+    </div>
+
+    <!-- Source -->
+    <div id="createSource" class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Source:</div>
+      <div class="dialogSubContainerGroupBorder">
+
+        <!-- location of the source (Remote | Local) -->
+        <div class="dialogSubContainer">
+          <input id="createSourceRemoteType" type="radio" name="createSourceLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="createSourceRemoteType">Remote</label>
+          <input id="createSourceLocalType" type="radio" name="createSourceLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="createSourceLocalType" >Local</label>
+          <script type="text/javascript">
+            document.getElementById("createSourceRemoteType").addEventListener("click", createSwitchSourceLocationType);
+            document.getElementById("createSourceLocalType").addEventListener("click", createSwitchSourceLocationType);
+          </script>
+        </div>
+
+        <!-- Type of the source -->
+        <div class="dialogSubContainer">
+          <span class="dialogSubContainerLabel">Type</span>
+          <input id="createSourceCsv" type="radio" name="recordsetSourceType" value="csv" checked="checked" /><label class="dialogSubContainerLabel" for="createSourceCsv">CSV</label> (<input id="createSourceHeading" type="checkbox" checked="checked" /><label class="dialogSubContainerLabel" for="createSourceHeading">Headers</label>)
+          <!--input id="createSourceJson" type="radio" name="recordsetSourceType" value="json" style="margin-left: 10pxs;" /><label class="dialogPartsSubLabel" for="sourceJson" >JSON</label-->
+        </div>
+
+        <!-- URL or path of the source -->
+        <div class="dialogSubContainer">
+          <div style="float: left;">
+            <span id="createSourceRemoteFile" style="display: block;">
+              <label class="dialogSubContainerLabel" for="createSourceURL">URL</label>
+              <textarea id="createSourceURL" style="width: 325px; height: 27px; resize:vertical;"></textarea>
+            </span>
+            <span id="createSourceLocalFile" style="display: none; height: 27px;">
+              <label class="dialogSubContainerLabel" for="createSourceFile">File</label>
+              <input id="createSourceFile" type="file" style="width: 325px;" />
+            </span>
+          </div>
+          <div style="float: right;">
+            <input id="createSourceLoad" type="button" value="Load" style="width:60px; height: 25px;"/>
+          </div>
+          <script type="text/javascript">
+            document.getElementById("createSourceURL").value = createSourceURLDefault;
+            document.getElementById("createSourceLoad").addEventListener("click", createLoadSource);
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item -->
+    <div id="createItem" class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Items:</div>
+      <div class="dialogSubContainerGroupBorder">
+
+        <!-- Lists and operation buttons -->
+        <div class="dialogSubContainer">
+
+          <!-- Item list of source -->
+          <div style="float: left;">
+            <div>Source</div>
+            <div id="createItemsInSource" class="itemList" style="width: 150px;">
+              <table style="width:130px;">
+              </table>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div style="float: left; width: 76px; text-align: center; vertical-align: bottom;">
+            <input id="createItemMoveToRecordset" class="itemImageButton" type="image" src="img/arrowR.png" alt="Select Item" style="margin-top: 25px;" />
+            <input id="createItemMoveToSource" class="itemImageButton" type="image" src="img/arrowL.png" alt="Deselect Item" />
+            <input id="createSourcePreview" class="itemButton" type="button" value="Preview" style="margin-top: 10px;" />
+          </div>
+
+          <!-- Selected item list for recordset -->
+          <div style="float: right;">
+            <div>Recordset</div>
+            <div id="createItemsInRecordset" class="itemList" style="width: 200px;">
+              <table style="width:180px;">
+              </table>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+            document.getElementById("createItemMoveToRecordset").addEventListener("click", dclMoveItemToRecordset);
+            document.getElementById("createItemMoveToSource").addEventListener("click", dclMoveItemToSource);
+            document.getElementById("createSourcePreview").addEventListener("click", dclSourcePreview);
+          </script>
+       </div>
+
+        <!-- Calendar on which temporal data in the source is based -->
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="calendarOfSource">Calendar of Source </label>
+          <select id="calendarOfSource" style="width: 300px;">
+            <option selected="selected" value="101.1">Julian / Gregorian Calendar (modified in 1582)</option>
+            <option value="101.2">Julian / Gregorian Calendar (modified in 1752)</option>
+            <option value="2.1">Gregorian Calendar</option>
+            <option value="1.1">Julian date (real number)</option>
+            <option value="1001.1">Japanese Calendar</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Context menu to select role of an item -->
+    <div id="itemRoleMenu" class="itemRoleMenu">
+      <ul>
+        <li value="from">Time (from)</li>
+        <li value="to">Time (to)</li>
+        <li value="from/to">Time (from/to)</li>
+        <li value="value">Value</li>
+        <li value="other">Other</li>
+      </ul>
+      <script type="text/javascript">
+        document.getElementById("itemRoleMenu").querySelectorAll("li").forEach(e => {
+            e.addEventListener("click", function (ev) {
+                dclSelectItemRole(ev, e.getAttribute("value"));
+            })
+        });
+      </script>
+    </div>
+
+    <!-- Operation buttons -->
+    <div class="dialogContainer">
+      <input id="createLayerButton" type="button" value="Create" style="width:80px; height: 30px; float: right;" />
+      <script type="text/javascript">
+        document.getElementById("createLayerButton").addEventListener("click", dclCreateLayer);
+      </script>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    // Initialize Dialog
+    document.getElementById("createSourceRemoteType").checked = true;
+    document.getElementById("createSourceLocalType").checked = false;
+    createChangeLayerType();
+    createSwitchSourceLocationType();
+
+  </script>
+
+</div>
+<!-- End of Create Dialog -->
 
 </body>
 </html>

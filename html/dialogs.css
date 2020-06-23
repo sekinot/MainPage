@@ -32,6 +32,7 @@
     text-align: left;
     padding: 10px;
     font-size: 12px;
+    /*background-color: #ffffcc;/**/
 }
 .dialogResizeHandle {
     position: absolute;
@@ -53,35 +54,67 @@
 }
 
 /*** Parts Container in Dialog ***/
-.dialogParts {
+div.dialogContainer {
     margin: 0 0 8px 0;
     padding: 0;
     clear: both;
     overflow: hidden;
     /*background-color: #ccccff;/**/
 }
-.dialogPartsLabel {
+div.dialogBody div.dialogContainer:last-child {
+    margin: 0;
+}
+div.dialogSubContainerGroup {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /*background-color: #ff99cc;/**/
+}
+div.dialogSubContainerGroupBorder {
+    margin: 0;
+    padding: 4px;
+    border: solid 1px #999999;
+    overflow: hidden;
+    /*background-color: #ff99cc;/**/
+}
+div.dialogSubContainer {
+    margin: 0 0 4px 0;
+    padding: 0;
+    clear: both;
+    overflow: hidden;
+    /*background-color: #ccffff;/**/
+}
+div.dialogContainer div.dialogSubContainer:last-child {
+    margin: 0;
+}
+.dialogContainerLabel {
     margin: 0 5px 0  0;
     padding: 0;
     line-height: 20px;
     font-weight: bold;
     vertical-align: top;
 }
-.dialogPartsSubLabel {
+.dialogSubContainerLabel {
     margin: 0 3px 0  0;
     padding: 0;
     line-height: 20px;
+    vertical-align: top;
 }
-.dialogParts input {
+
+.dialogContainer input {
     vertical-align: -1px;
 }
-.dialogParts input.readonlyInputText {
+.dialogContainerDisabled {
+    color: #999999;
+}
+
+.dialogContainer input.readonlyInputText {
     background-color: #eeeeee;
     border: solid 1px #666666;
     height: 18px;
 }
 
-/**** Tab ****/
+/*** Tab ***/
 .tabContainer {
     margin: 0;
     padding: 0;
@@ -134,6 +167,103 @@ label.tabLabel:hover {
     z-index: 30;
 }
 
+/*** Recordset Item List ***/
+.itemList {
+    margin: 0;
+    padding: 0;
+    height: 98px;
+    border: solid 1px #999999;
+    line-height: 14px;
+    overflow: auto;
+    user-select: none;
+}
+.itemList table {
+    border-spacing: 0;
+}
+.itemList tr:hover {
+    background-color: #ccccff;
+    color: #993300;
+}
+
+.itemName {
+    margin: 0;
+    padding: 0;
+    width:130px;
+}
+td.itemName div {
+    margin-left: 15px;
+    text-indent: -15px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+td.itemIcon {
+    margin: 0;
+    padding: 0 0 3px 0;
+    vertical-align: top;
+}
+td.itemIcon span {
+    margin: 0;
+    padding:0 3px;
+    font-size: 10px;
+    line-height: 14px;
+    border-radius: 4px;
+    background-color: #ffffcc;
+}
+
+.selectedItem {
+    background-color: #ffcccc;
+}
+
+.itemImageButton {
+    height:14px;
+    width: 22px;
+    padding: 2px 16px;
+    background-color: #e1e1e1;
+    border: solid 1px #adadad;
+}
+.itemButton {
+    margin: 0;
+    padding: 0;
+    width: 60px;
+    height: 24px;
+    font-size: 12px;
+}
+
+/** Recordset Item Select Menu **/
+div.itemRoleMenu {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    display: none;
+}
+div.itemRoleMenu ul {
+    margin: 0;
+    padding: 0;
+    width: 100px;
+    position: absolute;
+    white-space: normal;
+}
+div.itemRoleMenu li {
+    width: 100px;
+    height: 16px;
+    list-style-type: none;
+    position: relative;
+    border-top: 1px solid #cccccc;
+    color: #000000;
+    line-height: 18px;
+    text-align: left;
+    text-decoration: none;
+    font-size: 12px;
+    display: inline-block;
+    cursor: default;
+    background-color: #ffffcc;
+}
+div.itemRoleMenu li:hover {
+    background-color: #ccccff;
+    color: #cc0000;
+}
+
+
 /**** Preferences Dialog ****/
 /** List of Layers or Recordset **/
 .partsListLabel {
@@ -150,120 +280,8 @@ label.tabLabel:hover {
     overflow: auto;
 }
 
-/** Recordset Item List **/
-.itemList {
-    margin: 0;
-    padding: 0;
-    height: 95px;
-    /*float: left;/**/
-    border: solid 1px #999999;
-    line-height: 14px;
-    overflow: auto;
-    user-select: none;
-}
-.itemList table {
-    border-spacing: 0;
-}
-.itemList {
-    margin-bottom: 30px;
-}
-.itemList tr:hover {
-    background-color: #ccccff;
-    color: #993300;
-}
-.itemName {
-    margin: 0;
-    padding: 0;
-    width: 115px;
-}
-td.itemName div {
-    margin-left: 10px;
-    text-indent: -10px;
-    word-wrap: break-word;
-    word-break: break-all;
-}
-.itemIcon {
-    margin: 0;
-    padding: 0;
-    vertical-align: top;
-}
-td.itemIcon {
-    padding-left: 3px;
-}
-td.itemIcon span {
-    margin: 0;
-    padding:0 3px;
-    font-size: 10px;
-    line-height: 14px;
-    border-radius: 4px;
-    background-color: #ffffcc;
-}
-.itemImageButton {
-    height:14px;
-    width: 22px;
-    padding: 3px 12px;
-    font-size: 12px;
-    background-color: #e1e1e1;
-    border: solid 1px #adadad;
-}
-.itemImageButton:hover {
-    background-color: #ccffff;
-    border: solid 1px #0000FF;
-}
-.itemButton {
-    margin: 0;
-    padding: 0 2px;
-    width: 50px;
-    height: 22px;
-    font-size: 12px;
-    background-color: #e1e1e1;
-    border: solid 1px #adadad;
-}
-input.itemButton:hover {
-    background-color: #ccffff;
-    border: solid 1px #0000FF;
-}
 
-/** Recordset Item Select Menu **/
-div.itemSelectMenu {
-    top: 165px;
-    left: 250px;
-    position: absolute;
-    display: none;
-}
-div.itemSelectMenu ul {
-    margin: 0;
-    padding: 0;
-    left: 12px;
-    top: -12px;
-    width: 100px;
-    position: absolute;
-    white-space: normal;
-}
-div.itemSelectMenu li {
-    height: 16px;
-    width: 100px;
-    list-style-type: none;
-    position: relative;
-    border-top: 1px solid #cccccc;
-    color: #000000;
-    line-height: 18px;
-    text-align: left;
-    text-decoration: none;
-    font-size: 12px;
-    display: inline-block;
-    cursor: default;
-
-    background-color: #ffffcc;
-}
-div.itemSelectMenu li:hover {
-    background-color: #ccccff;
-    color: #cc0000;
-}
-div.itemSelectMenu li.itemSelectMenuCancel {
-    background-color: #ffcccc;
-}
-div.itemSelectMenu li.itemSelectMenuCancel:hover {
-    background-color: #ccccff;
-    color: #cc0000;
+/**** Specific Dialog Settings ****/
+#dialogCreate div.dialogSubContainerGroup, div.dialogSubContainerGroupBorder {
+    margin: 0 0 0 60px;
 }
