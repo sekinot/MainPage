@@ -42,31 +42,48 @@
         <!-- ** File Menu ** -->
         <li>File
           <ul>
-            <li>New</li>
-            <li onclick="showDialog('dialogCreateLayer')">Create Layer</li>
-            <li>Import &raquo;
+            <!--li onclick="showDialog('dialogCreate')">Create</li-->
+            <li>Create &raquo;
               <ul>
-                <li onclick="showDialog('dialogImportRemote')">Remote</li>
-                <li onclick="showDialog('dialogImportLocal')">Local</li>
+                <li onclick="showDialog('dialogCreate')">Time Line</li>
+                <li onclick="showDialog('dialogCreate')">Chart</li>
+                <li onclick="showDialog('dialogCreate')">Blank</li>
               </ul>
             </li>
+            <li>Save</li>
+            <li>Load</li>
+
+            <!--li>Clear</li-->
             <li>Export &raquo;
               <ul>
-                <li>Json</li>
+                <li>Image</li>
+                <li>Embedding Code</li>
               </ul>
             </li>
-            <li>Print</li>
-            <li>Save Image</li>
             <li>Preferences</li>
           </ul>
         </li>
 
         <!-- ** Data Menu ** -->
-        <li>Data</li>
-        <!--
-          プロジェクトのデータリストをここにインポートできるようにする
-        -->
+        <li>Data
+          <ul>
+            <li onclick="showDialog('dialogImportRemote')">Import Data</li>
+            <li>Time Scales</li>
+            <li>Repository</li>
+            <!-- Project Data -->
+            <li>Import Collection</li>
+            <li class="importedCollection">Project A &raquo;
+              <ul>
+                <li>Data 1</li>
+                <li>Data 2</li>
+                <li>Data 3</li>
+              </ul>
+            </li>
+            <li class="importedCollection">Project B</li>
+          </ul>
+        </li>
 
+        <!--li onclick="showDialog('dialogImportLocal')">Export</li-->
         <!-- ** Analysis Menu ** -->
         <!--li title="Analysis Menu">Analysis
           <ul>
@@ -377,8 +394,8 @@
           <div class="dialogParts">
             <div class="dialogPartsLabel" style="float: left;">Source:</div>
             <div style="float: left;">
-              <input id="sourceRemote" type="radio" name="recordsetLocationType" value="remote" checked="checked" onclick="createSwitchSourceLocationType(event)"/><label class="dialogPartsSubLabel" for="sourceRemote">Remote</label>
-              <input id="sourceLocal" type="radio" name="recordsetLocationType" value="local" onclick="createSwitchSourceLocationType(event)" style="margin-left: 10px;" /><label class="dialogPartsSubLabel" for="sourceLocal" >Local</label><br />
+              <input id="sourceRemote" type="radio" name="recordsetLocationType" value="remote" checked="checked" onclick="dCrSwitchSourceLocationType(event)"/><label class="dialogPartsSubLabel" for="sourceRemote">Remote</label>
+              <input id="sourceLocal" type="radio" name="recordsetLocationType" value="local" onclick="dCrSwitchSourceLocationType(event)" style="margin-left: 10px;" /><label class="dialogPartsSubLabel" for="sourceLocal" >Local</label><br />
 
               <span id="sourceURLSettings" style="display: block; height: 25px;"><label for="sourceURL">URL </label><input id="sourceURL" type="text" style="width: 300px;"/></span>
               <span id="sourceFileSettings" style="display: none; height: 25px;"><label for="sourceFile">File </label><input id="sourceFile" type="file" style="width: 300px;" /></span>
@@ -413,7 +430,7 @@
 
             <div style="float: left; width: 60px;text-align: center; vertical-align: bottom;">
               <div style="font-weight: bold;">&nbsp;</div>
-              <img class="itemImageButton" src="img/arrowR.png" alt="Select Item" onclick="dclMoveItemToRecordset(event)" style="margin-top: 15px;"/>
+              <img class="itemImageButton" src="img/arrowR.png" alt="Select Item" onclick="dCrMoveItemToRecordset(event)" style="margin-top: 15px;"/>
               <img class="itemImageButton" src="img/arrowL.png" alt="Deselect Item" />
 
               <input class="itemButton" type="button" value="Reload" style="margin-top: 10px;"/>
@@ -442,7 +459,7 @@
 <!--
           <div id="itemSelectMenu" class="itemSelectMenu">
               <ul>
-                <li onclick="dclSelectItemRole(event)">Time (from/to)</li>
+                <li onclick="dCrSelectItemRole(event)">Time (from/to)</li>
                 <li>Time (from)</li>
                 <li>Time (to)</li>
                 <li>Value</li>
@@ -549,21 +566,25 @@
   <div class="dialogResizeHandle"></div>
 </div>
 
-<!-- **** Create **** -->
-<div id="dialogCreateLayer" class="dialog" style="width: 520px; display: block; left: 200px; top: 100px">
+<!-- **** Create Dialog **** -->
+<div id="dialogCreate" class="dialog" style="width: 520px; left: 200px; top: 100px;">
   <div class="dialogTitle">
-    Create Layer<span class="dialogCloseButton"></span>
+    Create<span class="dialogCloseButton"></span>
   </div>
+  <script type="text/javascript">
+    document.getElementById("dialogCreate").
+      querySelector("span.dialogCloseButton").addEventListener("click", dCrClose);
+  </script>
   <div class="dialogBody">
 
     <!-- Layer -->
-    <div id="createLayer" class="dialogContainer">
+    <div id="dCrLayer" class="dialogContainer">
       <div class="dialogContainerLabel" style="float:left;">Layer:</div>
       <div class="dialogSubContainerGroupBorder">
         <div class="dialogSubContainer">
           <!-- Layer Type -->
-          <label class="dialogSubContainerLabel" for="createLayerType" >Layer Type</label>
-          <select  id="createLayerType" style="width: 120px;">
+          <label class="dialogSubContainerLabel" for="dCrLayerType" >Layer Type</label>
+          <select id="dCrLayerType" style="width: 120px;">
             <option value="TimeLine">Time Line</option>
             <option value="LineChart">Line Chart</option>
             <option value="BarChart">Bar Chart</option>
@@ -571,17 +592,17 @@
             <option value="Plain">Plain</option>
           </select>
           <!-- Calendar Scale -->
-          <label for="createLayerAddScale" style="margin-left: 15px;">Time Scale</label>
-          <input id="createLayerAddScale" type="checkbox" />
+          <!--label for="createLayerAddScale" style="margin-left: 15px;">Time Scale</label>
+          <input id="createLayerAddScale" type="checkbox" /-->
           <script type="text/javascript">
-            document.getElementById("createLayerType").addEventListener(
-                "change", createChangeLayerType);
-            document.getElementById("createLayerAddScale").addEventListener(
-                "change", createChangeLayerScale);
+            document.getElementById("dCrLayerType").addEventListener(
+                "change", dCrChangeLayerType);
+            //document.getElementById("createLayerAddScale").addEventListener(
+            //    "change", createChangeLayerScale);
           </script>
         </div>
 
-        <div class="dialogSubContainer">
+        <!--div class="dialogSubContainer">
           <label class="dialogSubContainerLabel" for="createLayerCalendarOfScale">Calendar of Scale</label>
           <select id="createLayerCalendarOfScale" style="width: 300px;">
             <option selected="selected" value="101.1">Julian / Gregorian Calendar (modified in 1582)</option>
@@ -590,62 +611,63 @@
             <option value="1.1">Julian date (real number)</option>
             <option value="1001.1">Japanese Calendar</option>
           </select>
-        </div>
+        </div-->
       </div>
 
       <script type="text/javascript">
         // Initialize Container
-        createChangeLayerScale();
+        //createChangeLayerScale();
       </script>
     </div>
 
     <!-- Source -->
-    <div id="createSource" class="dialogContainer">
+    <div id="dCrSource" class="dialogContainer">
       <div class="dialogContainerLabel" style="float: left;">Source:</div>
       <div class="dialogSubContainerGroupBorder">
 
         <!-- location of the source (Remote | Local) -->
         <div class="dialogSubContainer">
-          <input id="createSourceRemoteType" type="radio" name="createSourceLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="createSourceRemoteType">Remote</label>
-          <input id="createSourceLocalType" type="radio" name="createSourceLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="createSourceLocalType" >Local</label>
+          <input id="dCrSourceRemoteType" type="radio" name="dCrSourceLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceRemoteType">Remote</label>
+          <input id="dCrSourceLocalType" type="radio" name="dCrSourceLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="dCrSourceLocalType" >Local</label>
           <script type="text/javascript">
-            document.getElementById("createSourceRemoteType").addEventListener("click", createSwitchSourceLocationType);
-            document.getElementById("createSourceLocalType").addEventListener("click", createSwitchSourceLocationType);
+            document.getElementById("dCrSourceRemoteType").addEventListener("click", dCrSwitchSourceLocationType);
+            document.getElementById("dCrSourceLocalType").addEventListener("click", dCrSwitchSourceLocationType);
           </script>
         </div>
 
         <!-- Type of the source -->
         <div class="dialogSubContainer">
           <span class="dialogSubContainerLabel">Type</span>
-          <input id="createSourceCsv" type="radio" name="recordsetSourceType" value="csv" checked="checked" /><label class="dialogSubContainerLabel" for="createSourceCsv">CSV</label> (<input id="createSourceHeading" type="checkbox" checked="checked" /><label class="dialogSubContainerLabel" for="createSourceHeading">Headers</label>)
-          <!--input id="createSourceJson" type="radio" name="recordsetSourceType" value="json" style="margin-left: 10pxs;" /><label class="dialogPartsSubLabel" for="sourceJson" >JSON</label-->
+          <input id="dCrSourceCsv" type="radio" name="recordsetSourceType" value="csv" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceCsv">CSV</label> (<input id="dCrSourceHeading"
+                                                                                                                                                                                         type="checkbox" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceHeading">Headers</label>)
+          <!--input id="dCrSourceJson" type="radio" name="recordsetSourceType" value="json" style="margin-left: 10pxs;" /><label class="dialogPartsSubLabel" for="sourceJson" >JSON</label-->
         </div>
 
         <!-- URL or path of the source -->
         <div class="dialogSubContainer">
           <div style="float: left;">
-            <span id="createSourceRemoteFile" style="display: block;">
-              <label class="dialogSubContainerLabel" for="createSourceURL">URL</label>
-              <textarea id="createSourceURL" style="width: 325px; height: 27px; resize:vertical;"></textarea>
+            <span id="dCrSourceRemoteFile" style="display: block;">
+              <label class="dialogSubContainerLabel" for="dCrSourceURL">URL</label>
+              <textarea id="dCrSourceURL" style="width: 325px; height: 27px; resize: vertical;"></textarea>
             </span>
-            <span id="createSourceLocalFile" style="display: none; height: 27px;">
-              <label class="dialogSubContainerLabel" for="createSourceFile">File</label>
-              <input id="createSourceFile" type="file" style="width: 325px;" />
+            <span id="dCrSourceLocalFile" style="display: none; height: 27px;">
+              <label class="dialogSubContainerLabel" for="dCrSourceFile">File</label>
+              <input id="dCrSourceFile" type="file" style="width: 325px;" />
             </span>
           </div>
           <div style="float: right;">
-            <input id="createSourceLoad" type="button" value="Load" style="width:60px; height: 25px;"/>
+            <input id="dCrSourceLoad" type="button" value="Load" style="width:60px; height: 25px;"/>
           </div>
           <script type="text/javascript">
-            document.getElementById("createSourceURL").value = createSourceURLDefault;
-            document.getElementById("createSourceLoad").addEventListener("click", createLoadSource);
+            document.getElementById("dCrSourceURL").value = dCrSourceURLDefault;
+            document.getElementById("dCrSourceLoad").addEventListener("click", dCrLoadSource);
           </script>
         </div>
       </div>
     </div>
 
     <!-- Item -->
-    <div id="createItem" class="dialogContainer">
+    <div id="dCrItem" class="dialogContainer">
       <div class="dialogContainerLabel" style="float: left;">Items:</div>
       <div class="dialogSubContainerGroupBorder">
 
@@ -655,7 +677,7 @@
           <!-- Item list of source -->
           <div style="float: left;">
             <div>Source</div>
-            <div id="createItemsInSource" class="itemList" style="width: 150px;">
+            <div id="dCrItemsInSource" class="itemList" style="width: 150px;">
               <table style="width:130px;">
               </table>
             </div>
@@ -663,24 +685,24 @@
 
           <!-- Buttons -->
           <div style="float: left; width: 76px; text-align: center; vertical-align: bottom;">
-            <input id="createItemMoveToRecordset" class="itemImageButton" type="image" src="img/arrowR.png" alt="Select Item" style="margin-top: 25px;" />
-            <input id="createItemMoveToSource" class="itemImageButton" type="image" src="img/arrowL.png" alt="Deselect Item" />
-            <input id="createSourcePreview" class="itemButton" type="button" value="Preview" style="margin-top: 10px;" />
+            <input id="dCrItemMoveToRecordset" class="itemImageButton" type="image" src="img/arrowR.png" alt="Select Item" style="margin-top: 25px;" />
+            <input id="dCrItemMoveToSource" class="itemImageButton" type="image" src="img/arrowL.png" alt="Deselect Item" />
+            <input id="dCrSourcePreview" class="itemButton" type="button" value="Preview" disabled="disabled" style="margin-top: 10px;" />
           </div>
 
           <!-- Selected item list for recordset -->
           <div style="float: right;">
             <div>Recordset</div>
-            <div id="createItemsInRecordset" class="itemList" style="width: 200px;">
+            <div id="dCrItemsInRecordset" class="itemList" style="width: 200px;">
               <table style="width:180px;">
               </table>
             </div>
           </div>
 
           <script type="text/javascript">
-            document.getElementById("createItemMoveToRecordset").addEventListener("click", dclMoveItemToRecordset);
-            document.getElementById("createItemMoveToSource").addEventListener("click", dclMoveItemToSource);
-            document.getElementById("createSourcePreview").addEventListener("click", dclSourcePreview);
+            document.getElementById("dCrItemMoveToRecordset").addEventListener("click", dCrMoveItemToRecordset);
+            document.getElementById("dCrItemMoveToSource").addEventListener("click", dCrMoveItemToSource);
+            document.getElementById("dCrSourcePreview").addEventListener("click", dCrSourcePreview);
           </script>
        </div>
 
@@ -700,7 +722,7 @@
     </div>
 
     <!-- Context menu to select role of an item -->
-    <div id="itemRoleMenu" class="itemRoleMenu">
+    <div id="dCrItemRoleMenu" class="itemRoleMenu">
       <ul>
         <li value="from">Time (from)</li>
         <li value="to">Time (to)</li>
@@ -709,9 +731,9 @@
         <li value="other">Other</li>
       </ul>
       <script type="text/javascript">
-        document.getElementById("itemRoleMenu").querySelectorAll("li").forEach(e => {
+        document.getElementById("dCrItemRoleMenu").querySelectorAll("li").forEach(e => {
             e.addEventListener("click", function (ev) {
-                dclSelectItemRole(ev, e.getAttribute("value"));
+                dCrSelectItemRole(ev, e.getAttribute("value"));
             })
         });
       </script>
@@ -719,24 +741,47 @@
 
     <!-- Operation buttons -->
     <div class="dialogContainer">
-      <input id="createLayerButton" type="button" value="Create" style="width:80px; height: 30px; float: right;" />
+      <input id="dCrLayerButton" type="button" value="Create" style="width:80px; height: 30px; float: right;" />
+      <input id="dCrCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+
       <script type="text/javascript">
-        document.getElementById("createLayerButton").addEventListener("click", dclCreateLayer);
+        document.getElementById("dCrLayerButton").addEventListener("click", dCrCreate);
+        document.getElementById("dCrCancelButton").addEventListener("click", dCrClose);
       </script>
     </div>
   </div>
 
   <script type="text/javascript">
     // Initialize Dialog
-    document.getElementById("createSourceRemoteType").checked = true;
-    document.getElementById("createSourceLocalType").checked = false;
-    createChangeLayerType();
-    createSwitchSourceLocationType();
+    document.getElementById("dCrSourceRemoteType").checked = true;
+    document.getElementById("dCrSourceLocalType").checked = false;
+    dCrChangeLayerType();
+    dCrSwitchSourceLocationType();
 
   </script>
 
 </div>
 <!-- End of Create Dialog -->
+
+<!-- *** Create Source Data Preview *** -->
+<div id="dialogSourcePreview" class="dialog" style="width:300px; height:200px; left: 150px; top: 30px;">
+  <div class="dialogTitle">
+    Source Preview<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody" style="height: 156px;">
+    <table>
+    </table>
+  </div>
+  <div class="dialogResizeHandle" style="cursor: se-resize;"></div>
+
+  <script type="text/javascript">
+    document.getElementById("dialogSourcePreview").querySelector("span.dialogCloseButton").
+        addEventListener("click", dSpClose)
+  </script>
+</div>
+<!-- End of Create Source Data Preview -->
+
+
 
 </body>
 </html>

@@ -207,6 +207,14 @@ td.itemIcon span {
     font-size: 10px;
     line-height: 14px;
     border-radius: 4px;
+}
+td.itemIcon span.itemIconTime {
+    background-color: #ccffcc;
+}
+td.itemIcon span.itemIconValue {
+    background-color: #ffcc99;
+}
+td.itemIcon span.itemIconOther {
     background-color: #ffffcc;
 }
 
@@ -261,6 +269,28 @@ div.itemRoleMenu li {
 div.itemRoleMenu li:hover {
     background-color: #ccccff;
     color: #cc0000;
+}
+
+/*** Source Data Preview Dialog ***/
+#dialogSourcePreview {
+    overflow: hidden;
+}
+#dialogSourcePreview div.dialogBody {
+    /*height: 157px;*/
+    overflow: scroll;
+}
+#dialogSourcePreview table {
+    margin: 0;
+    padding: 0;
+    border-spacing: 0;
+    overflow: hidden;
+    border: solid 1px #cccccc;
+}
+#dialogSourcePreview td {
+    margin: 0;
+    padding: 2px;
+    border: solid 1px #cccccc;
+    font-size: 10px;
 }
 
 

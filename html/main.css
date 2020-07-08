@@ -67,7 +67,6 @@ body  {
 
     user-select: none;
 }
-
 ul.menu {
     margin: 0;
     padding: 0;
@@ -76,7 +75,7 @@ ul.menu li {
     width: 95px;
     list-style-type: none;
     position: relative;
-    z-index: 100;
+    z-index: 90;
     background-color: #0066cc;
     color: #ffffff;
     line-height: 23px;
@@ -110,6 +109,15 @@ ul.menu ul ul {
     top: -1px;
     left: 100%;
     border-left: 1px solid #9999ff;
+}
+ul.menu ul li.importedCollection,
+ul.menu ul li.importedCollection li {
+    background-color: #009900;
+}
+ul.menu ul li.importedCollection:hover,
+ul.menu ul li.importedCollection li:hover {
+    background-color: #ffffcc;
+    color: #cc0000;
 }
 
 /**** Main Panel ****/

@@ -40,9 +40,23 @@ function initialize () {    // 全体の初期化
     document.getElementById("borderTree").addEventListener("mousedown", borderTreeMouseDown);
     initDialog();
 
+
     //importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
 }
+/*
+function getScrollBarWidth () {
+    let div = document.createElement("div");
+    div.style.bottom = "100%";
+    div.style.height = "1px";
+    div.style.position = "absolute";
+    div.style.width = "calc(100vw - 100%)";
+    document.body.appendChild(div);
+    let result = window.getComputedStyle(div, null).getPropertyValue("width");
+    document.body.removeChild(div);
+    return result;
+}
+// */
 
 // **** メニューバーの操作 ****
 let openedMenus = [];       // ユーザによって開かれたメニュー
@@ -236,6 +250,9 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     }
     else if (hutimeObj.name) {
         labelSpan.appendChild(document.createTextNode(hutimeObj.name));
+    }
+    else if ( typeof hutimeObj === "string") {
+        labelSpan.appendChild(document.createTextNode(hutimeObj));
     }
     else {
         labelSpan.style.fontStyle = "italic";
@@ -442,3 +459,24 @@ function borderStatusMouseUp (ev) {
     hutime.panelCollections[0].vBreadth = document.getElementById("hutimeMain").clientHeight;
     hutime.redraw();
 }
+
+// **** 共通 ****
+
+function loadRemoteData (url, operation) {      // リモートデータの読み込み
+    let request = new XMLHttpRequest();
+    request.open("GET", url);
+    request.onreadystatechange  = function () {
+        if (request.readyState === 4 && request.status === 200)
+            operation(request.response);
+    };
+    request.send();
+}
+function loadLocalData (file, operation) {      // ローカルデータの読み込み
+    let reader = new FileReader();
+    reader.onloadend = function () {
+        if (reader.readyState === 2)
+            operation(reader.result);
+    };
+    reader.readAsText(file);
+}
+
