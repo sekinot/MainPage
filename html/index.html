@@ -45,9 +45,9 @@
             <!--li onclick="showDialog('dialogCreate')">Create</li-->
             <li>Create &raquo;
               <ul>
-                <li onclick="showDialog('dialogCreate')">Time Line</li>
-                <li onclick="showDialog('dialogCreate')">Chart</li>
-                <li onclick="showDialog('dialogCreate')">Blank</li>
+                <li onclick="dCrOpenAsTLine()">Time Line</li>
+                <li onclick="dCrOpenAsChart()">Chart</li>
+                <li onclick="dcCreateBlank()">Blank</li>
               </ul>
             </li>
             <li>Save</li>
@@ -580,44 +580,20 @@
     <!-- Layer -->
     <div id="dCrLayer" class="dialogContainer">
       <div class="dialogContainerLabel" style="float:left;">Layer:</div>
-      <div class="dialogSubContainerGroupBorder">
-        <div class="dialogSubContainer">
-          <!-- Layer Type -->
-          <label class="dialogSubContainerLabel" for="dCrLayerType" >Layer Type</label>
+      <div class="dialogSubContainerGroup">
+        <!-- Layer Type -->
+        <div id="dCrTypeTLine" class="dialogSubContainer" style="line-height: 20px; display: none;">
+          Time Line
+        </div>
+        <div id="dCrTypeChart" class="dialogSubContainer" style="display: block;">
           <select id="dCrLayerType" style="width: 120px;">
-            <option value="TimeLine">Time Line</option>
             <option value="LineChart">Line Chart</option>
             <option value="BarChart">Bar Chart</option>
             <option value="PlotChart">Plot Chart</option>
-            <option value="Plain">Plain</option>
           </select>
-          <!-- Calendar Scale -->
-          <!--label for="createLayerAddScale" style="margin-left: 15px;">Time Scale</label>
-          <input id="createLayerAddScale" type="checkbox" /-->
-          <script type="text/javascript">
-            document.getElementById("dCrLayerType").addEventListener(
-                "change", dCrChangeLayerType);
-            //document.getElementById("createLayerAddScale").addEventListener(
-            //    "change", createChangeLayerScale);
-          </script>
+          <label for="dCrLayerType"></label>
         </div>
-
-        <!--div class="dialogSubContainer">
-          <label class="dialogSubContainerLabel" for="createLayerCalendarOfScale">Calendar of Scale</label>
-          <select id="createLayerCalendarOfScale" style="width: 300px;">
-            <option selected="selected" value="101.1">Julian / Gregorian Calendar (modified in 1582)</option>
-            <option value="101.2">Julian / Gregorian Calendar (modified in 1752)</option>
-            <option value="2.1">Gregorian Calendar</option>
-            <option value="1.1">Julian date (real number)</option>
-            <option value="1001.1">Japanese Calendar</option>
-          </select>
-        </div-->
       </div>
-
-      <script type="text/javascript">
-        // Initialize Container
-        //createChangeLayerScale();
-      </script>
     </div>
 
     <!-- Source -->
@@ -638,8 +614,7 @@
         <!-- Type of the source -->
         <div class="dialogSubContainer">
           <span class="dialogSubContainerLabel">Type</span>
-          <input id="dCrSourceCsv" type="radio" name="recordsetSourceType" value="csv" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceCsv">CSV</label> (<input id="dCrSourceHeading"
-                                                                                                                                                                                         type="checkbox" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceHeading">Headers</label>)
+          <input id="dCrSourceCsv" type="radio" name="recordsetSourceType" value="csv" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceCsv">CSV</label> (<input id="dCrSourceHeading" type="checkbox" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceHeading">Headers</label>)
           <!--input id="dCrSourceJson" type="radio" name="recordsetSourceType" value="json" style="margin-left: 10pxs;" /><label class="dialogPartsSubLabel" for="sourceJson" >JSON</label-->
         </div>
 
@@ -752,14 +727,11 @@
   </div>
 
   <script type="text/javascript">
-    // Initialize Dialog
     document.getElementById("dCrSourceRemoteType").checked = true;
     document.getElementById("dCrSourceLocalType").checked = false;
-    dCrChangeLayerType();
     dCrSwitchSourceLocationType();
 
   </script>
-
 </div>
 <!-- End of Create Dialog -->
 

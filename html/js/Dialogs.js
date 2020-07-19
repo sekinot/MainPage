@@ -138,32 +138,6 @@ function stopResizeDialog (ev) {
 // **** Createダイアログ (dialogCreate => dCr) ****
 let dCrRecordset;    // ロードしたデータ
 
-// *** Layer 関係 ***
-function dCrChangeLayerType (ev) {       // レイヤタイプ変更に伴う処理
-    if (ev)
-        ev.stopPropagation();
-    let selectedType = document.getElementById("dCrLayerType").value
-    dCrSwitchSourceDisabled(selectedType === "Plain");
-    dCrSwitchItemDisabled(selectedType === "Plain");
-    dCrUpdateItemRoleMenu();
-}
-/*
-function createChangeLayerScale(ev) {       // 時間軸目盛りの有無に伴う処理
-    if (ev)
-        ev.stopPropagation();
-    createSwitchScaleCalendarDisabled(!document.getElementById("createLayerAddScale").checked);
-}
-function createSwitchScaleCalendarDisabled (disabled) {     // Calendar設定の利用可否設定
-    let calendarSelect = document.getElementById("createLayerCalendarOfScale");
-    calendarSelect.disabled = disabled;
-    let container = calendarSelect.closest("div.dialogSubContainer");
-    if (disabled)
-        container.className = (container.className + " dialogContainerDisabled").trim();
-    else
-        container.className = container.className.replace("dialogContainerDisabled", "").trim();
-}
-// */
-
 // *** Source 関係 ***
 function dCrSwitchSourceLocationType () {
     if (document.getElementById("dCrSourceRemoteType").checked) {
@@ -198,18 +172,9 @@ function dCrLoadSource (ev) {    // ソースデータを読み込み、Item Lis
     else
         loadLocalData(document.getElementById("dCrSourceFile").files[0], operation);
 }
-function dCrSwitchSourceDisabled (disabled) {    // Source全設定項目の利用可否設定
-    document.getElementById("dCrSource").querySelectorAll("input,textarea,select").forEach(e => {
-        e.disabled = disabled;
-    });
-    let container = document.getElementById("dCrSource");
-    if (disabled)
-        container.className = (container.className + " dialogContainerDisabled").trim();
-    else
-        container.className = container.className.replace("dialogContainerDisabled", "").trim();
-}
 
 // *** Item 関係 ***
+/*
 function dCrSwitchItemDisabled (disabled) {  // Item全設定項目の利用可否設定
     document.getElementById("createItem").querySelectorAll("input,textarea,select").forEach(e => {
         if (e.id !== "dCrSourcePreview")
@@ -221,22 +186,7 @@ function dCrSwitchItemDisabled (disabled) {  // Item全設定項目の利用可�
     else
         container.className = container.className.replace("dialogContainerDisabled", "").trim();
 }
-function dCrUpdateItemRoleMenu () {     // Itemの役割選択メニューをLayer Typeに応じて更新
-    if (document.getElementById("dCrLayerType").value === "TimeLine") {
-        let li = document.getElementById("dCrItemRoleMenu").querySelector("li[value='value']");
-        if (li) {
-            li.setAttribute("value", "label");
-            li.innerHTML = "Label";
-        }
-    }
-    else {
-        let li = document.getElementById("dCrItemRoleMenu").querySelector("li[value='label']");
-        if (li) {
-            li.setAttribute("value", "value");
-            li.innerHTML = "Value";
-        }
-    }
-}
+// */
 function dCrResetItemList () {  // Item選択リストのリセット
     // Listのクリア
     document.getElementById("dCrItemsInSource").querySelectorAll("tr").forEach(e => {
@@ -464,25 +414,39 @@ function dCrSourcePreview (ev) {
 }
 
 // *** 実行操作関係 ***
+function dCrOpenAsTLine () {
+    document.getElementById("dCrTypeTLine").style.display = "block";
+    document.getElementById("dCrTypeChart").style.display = "none";
+    let li = document.getElementById("dCrItemRoleMenu").querySelector("li[value='value']");
+    if (li) {
+        li.setAttribute("value", "label");
+        li.innerHTML = "Label";
+    }
+    showDialog("dialogCreate");
+}
+function dCrOpenAsChart () {
+    document.getElementById("dCrTypeTLine").style.display = "none";
+    document.getElementById("dCrTypeChart").style.display = "block";
+    let li = document.getElementById("dCrItemRoleMenu").querySelector("li[value='label']");
+    if (li) {
+        li.setAttribute("value", "value");
+        li.innerHTML = "Value";
+    }
+    showDialog("dialogCreate");
+}
+function dCrClose () {
+    dCrResetItemList();
+    closeDialog("dialogCreate");
+    dSpClose();
+}
 function dCrCreate (ev) {  // Layer生成
     ev.stopPropagation();
-    let layerType = document.getElementById("dCrLayerType").value;
+    let layerType;
+    if (document.getElementById("dCrTypeChart").style.display === "block")
+        layerType = document.getElementById("dCrLayerType").value;
+    else
+        layerType = "TLine";
 
-    // Plain Layerは先に別途処理
-    if (layerType === "Plain") {
-        let panel =  new HuTime.TilePanel(NewLayerVBreadth);
-        let plainLayer = new HuTime.Layer();
-        panel.appendLayer(plainLayer);
-        addTimeScale(plainLayer, panel);
-        hutime.panelCollections[0].appendPanel(panel);
-        hutime.redraw();
-        addBranch(document.getElementById("treeRoot"), panel);
-        dCrResetItemList();
-        closeDialog("dialogCreate");
-        return;
-    }
-
-    // 以下、Data Layerの処理
     // source
     let source, sourceName;
     if (document.getElementById("dCrSourceRemoteType").checked) {
@@ -528,8 +492,8 @@ function dCrCreate (ev) {  // Layer生成
                 break;
         }
     }
-    if (!from || !to || (layerType !== "TimeLine" && values.length === 0) ||
-        (layerType === "TimeLine" && !label)) {     // item指定のエラー
+    if (!from || !to || (layerType !== "TLine" && values.length === 0) ||
+        (layerType === "TLine" && !label)) {     // item指定のエラー
         document.getElementById("statusBar").innerText = "Error: Required items are not specified.";
         dCrClose();
         return;
@@ -539,7 +503,7 @@ function dCrCreate (ev) {  // Layer生成
     let plotColor = [ "#ff6633", "#99ff00", "#3399ff", "#ffff66", "#cc99ff" ];
     let rs;
     let calendarOfSource = document.getElementById("calendarOfSource").value;
-    if (layerType === "TimeLine")
+    if (layerType === "TLine")
         if (calendarOfSource === "1.1")
             rs = new HuTime.TLineRecordset(source, from, to, label);
         else
@@ -565,7 +529,7 @@ function dCrCreate (ev) {  // Layer生成
     // Data Layer
     let dataLayer;
     switch (layerType) {
-        case "TimeLine" :
+        case "TLine" :
             dataLayer = new HuTime.TLineLayer(rs);
             break;
         case "LineChart" :
@@ -587,7 +551,6 @@ function dCrCreate (ev) {  // Layer生成
     let panel = new HuTime.TilePanel(NewLayerVBreadth);
     panel.name = sourceName + "_" + itemName
     panel.appendLayer(dataLayer);
-    //addTimeScale(dataLayer, panel);
 
     // 最初のパネルの場合は、時間範囲を取得してから描画
     if (hutime.panelCollections[0].panels.length === 0) {
@@ -612,41 +575,29 @@ function dCrCreate (ev) {  // Layer生成
     }
     addBranch(document.getElementById("treeRoot"), panel);
     dCrClose();
-
-    // 時間軸目盛りの追加
-    function addTimeScale (layer, panel) {
-        if (document.getElementById("createLayerAddScale").checked) {
-            layer.vMarginBottom = NewLayerScaleVBreadth;
-            let scaleLayer;
-            let calendarId = document.getElementById("createLayerCalendarOfScale").value;
-            if (calendarId === "1.1")
-                scaleLayer = new HuTime.TickScaleLayer(NewLayerVBreadth, null, 0);
-            else
-                scaleLayer = new HuTime.CalendarScaleLayer(NewLayerVBreadth, null, 0,
-                    document.getElementById("createLayerCalendarOfScale").value);
-            scaleLayer.name = document.getElementById("createLayerCalendarOfScale").
-                querySelector("option[value='" + calendarId + "']").innerText;
-            panel.vBreadth += NewLayerScaleVBreadth;
-            panel.appendLayer(scaleLayer);
-        }
-    }
 }
-function dCrClose () {
+function dcCreateBlank () {
+    let panel = new HuTime.TilePanel(NewLayerVBreadth);
+    let plainLayer = new HuTime.Layer();
+    panel.appendLayer(plainLayer);
+    hutime.panelCollections[0].appendPanel(panel);
+    hutime.redraw();
+    addBranch(document.getElementById("treeRoot"), panel);
     dCrResetItemList();
     closeDialog("dialogCreate");
-    dSpClose();
 }
 
 // **** Preview ダイアログ (dialogSourcePreview => dSp) ****
 function dSpClose () {
-    let table = document.getElementById("dialogSourcePreview").querySelector("table").
-        querySelectorAll("tr").forEach(e => {
-            e.remove();
+    document.getElementById("dialogSourcePreview").querySelector("table").
+        querySelectorAll("tr").forEach(tr => {
+            tr.remove();
     })
     closeDialog("dialogSourcePreview");
 }
 
 
+/**** 整理中 ****/
 // *** タブ ***
 // タブの切り替え
 function clickTabLabel (ev) {
@@ -666,7 +617,6 @@ function clickTabLabel (ev) {
     }
 }
 
-/**** 整理中 ****/
 /*
 function partsListContextMenu (ev) {
     ev.stopPropagation();
