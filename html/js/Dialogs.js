@@ -136,7 +136,8 @@ function stopResizeDialog (ev) {
 }
 
 // **** Createダイアログ (dialogCreate => dCr) ****
-let dCrRecordset;    // ロードしたデータ
+let dCrRecordset;   // ロードしたデータ
+let dCrLayerType;   // レイヤタイプ
 
 // *** Source 関係 ***
 function dCrSwitchSourceLocationType () {
@@ -414,23 +415,17 @@ function dCrSourcePreview (ev) {
 }
 
 // *** 実行操作関係 ***
-function dCrOpenAsTLine () {
-    document.getElementById("dCrTypeTLine").style.display = "block";
-    document.getElementById("dCrTypeChart").style.display = "none";
-    let li = document.getElementById("dCrItemRoleMenu").querySelector("li[value='value']");
-    if (li) {
-        li.setAttribute("value", "label");
-        li.innerHTML = "Label";
-    }
-    showDialog("dialogCreate");
-}
-function dCrOpenAsChart () {
-    document.getElementById("dCrTypeTLine").style.display = "none";
-    document.getElementById("dCrTypeChart").style.display = "block";
-    let li = document.getElementById("dCrItemRoleMenu").querySelector("li[value='label']");
-    if (li) {
-        li.setAttribute("value", "value");
-        li.innerHTML = "Value";
+function dCrOpen (type) {
+    dCrLayerType = type;
+    document.getElementById("dCrTypeTLine").style.display = type === "TLine" ? "block" : "none";
+    document.getElementById("dCrTypeChart").style.display = type === "Chart" ? "block" : "none";
+    document.getElementById("dCrTypeBlank").style.display = type === "Blank" ? "block" : "none";
+    document.getElementById("dCrSource").style.display = type !== "Blank" ? "block" : "none";
+    document.getElementById("dCrItem").style.display = type !== "Blank" ? "block" : "none";
+    if (type !== "Blank") {
+        let li = document.getElementById("dCrdCrItemRoleValue");
+        li.setAttribute("value", type === "TLine" ? "label" : "value");
+        li.innerHTML = type === "TLine" ? "Label" : "Value";
     }
     showDialog("dialogCreate");
 }
@@ -442,11 +437,12 @@ function dCrClose () {
 }
 function dCrCreate (ev) {  // Layer生成
     ev.stopPropagation();
-    let layerType;
-    if (document.getElementById("dCrTypeChart").style.display === "block")
-        layerType = document.getElementById("dCrLayerType").value;
-    else
-        layerType = "TLine";
+    if (dCrLayerType === "Blank") {
+        dcCreateBlank();
+        return;
+    }
+    if (dCrLayerType === "Chart")
+        dCrLayerType = document.getElementById("dCrLayerType").value;
     let title = document.getElementById("dCrPanelTitle").value;
 
     // source
@@ -494,8 +490,8 @@ function dCrCreate (ev) {  // Layer生成
                 break;
         }
     }
-    if (!from || !to || (layerType !== "TLine" && values.length === 0) ||
-        (layerType === "TLine" && !label)) {     // item指定のエラー
+    if (!from || !to || (dCrLayerType !== "TLine" && values.length === 0) ||
+        (dCrLayerType === "TLine" && !label)) {     // item指定のエラー
         document.getElementById("statusBar").innerText = "Error: Required items are not specified.";
         dCrClose();
         return;
@@ -505,7 +501,7 @@ function dCrCreate (ev) {  // Layer生成
     let plotColor = [ "#ff6633", "#99ff00", "#3399ff", "#ffff66", "#cc99ff" ];
     let rs;
     let calendarOfSource = document.getElementById("calendarOfSource").value;
-    if (layerType === "TLine")
+    if (dCrLayerType === "TLine")
         if (calendarOfSource === "1.1")
             rs = new HuTime.TLineRecordset(source, from, to, label);
         else
@@ -530,7 +526,7 @@ function dCrCreate (ev) {  // Layer生成
 
     // Data Layer
     let dataLayer;
-    switch (layerType) {
+    switch (dCrLayerType) {
         case "TLine" :
             dataLayer = new HuTime.TLineLayer(rs, null, PanelTitleVBreadth, null);
             break;
@@ -555,14 +551,7 @@ function dCrCreate (ev) {  // Layer生成
     panel.appendLayer(dataLayer);
 
     // Title Layer
-    let titleLayer = new HuTime.Layer(NewLayerVBreadth + PanelTitleVBreadth);
-    titleLayer.fixedLayer = true;
-    titleLayer.name = "Annotation";
-    titleLayer.appendObject(new HuTime.String(
-        new HuTime.StringStyle(14, "#000000", "bold"),
-        new HuTime.XYPosition(5, 15), title));
-    titleLayer.zIndex = 120;
-    panel.appendLayer(titleLayer);
+    panel.appendLayer(dCrCreateTitleLayer(title));
 
     // 最初のパネルの場合は、時間範囲を取得してから描画
     if (hutime.panelCollections[0].panels.length === 0) {
@@ -589,14 +578,27 @@ function dCrCreate (ev) {  // Layer生成
     dCrClose();
 }
 function dcCreateBlank () {
-    let panel = new HuTime.TilePanel(NewLayerVBreadth);
-    let plainLayer = new HuTime.Layer();
+    let title = document.getElementById("dCrPanelTitle").value;
+    let panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
+    let plainLayer = new HuTime.Layer(null, PanelTitleVBreadth, null);
     panel.appendLayer(plainLayer);
+    panel.appendLayer(dCrCreateTitleLayer(title));
+    panel.name = title;
     hutime.panelCollections[0].appendPanel(panel);
     hutime.redraw();
     addBranch(document.getElementById("treeRoot"), panel);
     dCrResetItemList();
     closeDialog("dialogCreate");
+}
+function dCrCreateTitleLayer(title) {
+    let titleLayer = new HuTime.Layer(NewLayerVBreadth + PanelTitleVBreadth);
+    titleLayer.fixedLayer = true;
+    titleLayer.name = "Annotation";
+    titleLayer.appendObject(new HuTime.String(
+        new HuTime.StringStyle(14, "#000000", "bold"),
+        new HuTime.XYPosition(5, 15), title));
+    titleLayer.zIndex = 120;
+    return titleLayer;
 }
 
 // **** Preview ダイアログ (dialogSourcePreview => dSp) ****

@@ -45,9 +45,9 @@
             <!--li onclick="showDialog('dialogCreate')">Create</li-->
             <li>Create &raquo;
               <ul>
-                <li onclick="dCrOpenAsTLine()">Time Line</li>
-                <li onclick="dCrOpenAsChart()">Chart</li>
-                <li onclick="dcCreateBlank()">Blank</li>
+                <li onclick="dCrOpen('TLine')">Time Line</li>
+                <li onclick="dCrOpen('Chart')">Chart</li>
+                <li onclick="dCrOpen('Blank')">Blank</li>
               </ul>
             </li>
             <li>Save</li>
@@ -603,11 +603,14 @@
           </select>
           <label for="dCrLayerType"></label>
         </div>
+        <div id="dCrTypeBlank" class="dialogSubContainer" style="line-height: 20px; display: none;">
+          Blank
+        </div>
       </div>
     </div>
 
     <!-- Source -->
-    <div id="dCrSource" class="dialogContainer">
+    <div id="dCrSource" class="dialogContainer" style="display: block;">
       <div class="dialogContainerLabel" style="float: left;">Source:</div>
       <div class="dialogSubContainerGroupBorder">
 
@@ -652,7 +655,7 @@
     </div>
 
     <!-- Item -->
-    <div id="dCrItem" class="dialogContainer">
+    <div id="dCrItem" class="dialogContainer" style="display: block;">
       <div class="dialogContainerLabel" style="float: left;">Items:</div>
       <div class="dialogSubContainerGroupBorder">
 
@@ -712,7 +715,7 @@
         <li value="from">Time (from)</li>
         <li value="to">Time (to)</li>
         <li value="from/to">Time (from/to)</li>
-        <li value="value">Value</li>
+        <li id="dCrdCrItemRoleValue" value="value">Value</li>
         <li value="other">Other</li>
       </ul>
       <script type="text/javascript">
