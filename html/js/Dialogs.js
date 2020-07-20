@@ -175,19 +175,6 @@ function dCrLoadSource (ev) {    // ソースデータを読み込み、Item Lis
 }
 
 // *** Item 関係 ***
-/*
-function dCrSwitchItemDisabled (disabled) {  // Item全設定項目の利用可否設定
-    document.getElementById("createItem").querySelectorAll("input,textarea,select").forEach(e => {
-        if (e.id !== "dCrSourcePreview")
-            e.disabled = disabled;
-    });
-    let container = document.getElementById("createItem");
-    if (disabled)
-        container.className = (container.className + " dialogContainerDisabled").trim();
-    else
-        container.className = container.className.replace("dialogContainerDisabled", "").trim();
-}
-// */
 function dCrResetItemList () {  // Item選択リストのリセット
     // Listのクリア
     document.getElementById("dCrItemsInSource").querySelectorAll("tr").forEach(e => {
@@ -554,7 +541,18 @@ function dCrCreate (ev) {  // Layer生成
     panel.appendLayer(dCrCreateTitleLayer(title));
 
     // 最初のパネルの場合は、時間範囲を取得してから描画
-    if (hutime.panelCollections[0].panels.length === 0) {
+    function isInitRedraw () {
+        // 最初のPanel追加の場合、既存がBlankのみの場合は、Dataの時間範囲でredraw
+        hutime.panelCollections[0].panels.forEach(panel => {
+            panel.layers.forEach(layer => {
+                if (layer.constructor !== HuTime.Layer &&
+                    layer.constructor !== HuTime.PanelBorder)
+                    return false;   // 時間範囲を持ったデータLayerがあるとき
+            });
+        });
+        return true;
+    }
+    if (isInitRedraw()) {
         rs.onloadend = function () {
             let tMin, tMax;
             tMin = Number.POSITIVE_INFINITY;
@@ -567,7 +565,7 @@ function dCrCreate (ev) {  // Layer生成
             }
             hutime.panelCollections[0].appendPanel(panel);
             hutime.redraw(tMin, tMax);
-            rs.onloadend = HuTime.RecordBase.prototype.onloadend;
+            rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
         };
     }
     else {
