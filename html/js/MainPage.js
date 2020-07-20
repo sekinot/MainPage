@@ -23,7 +23,8 @@ const minHuTimeMainHeight = 50; // メインパネルの最小幅
 const HuTimeBackgroundColor = "#cccccc";    // メインパネルの背景色
 
 const NewLayerVBreadth = 150;           // 新規作成レイヤの既定の高さ
-const NewLayerScaleVBreadth = 50;    // 新規作成レイヤのスケールの既定の高さ
+const PanelTitleVBreadth = 20;          // パネルタイトルの高さ
+//const NewLayerScaleVBreadth = 50;    // 新規作成レイヤのスケールの既定の高さ
 
 function initialize () {    // 全体の初期化
     hutime = new HuTime("hutimeMain");

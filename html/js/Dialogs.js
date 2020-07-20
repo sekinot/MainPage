@@ -435,6 +435,7 @@ function dCrOpenAsChart () {
     showDialog("dialogCreate");
 }
 function dCrClose () {
+    document.getElementById("dCrPanelTitle").value = "";
     dCrResetItemList();
     closeDialog("dialogCreate");
     dSpClose();
@@ -446,6 +447,7 @@ function dCrCreate (ev) {  // Layer生成
         layerType = document.getElementById("dCrLayerType").value;
     else
         layerType = "TLine";
+    let title = document.getElementById("dCrPanelTitle").value;
 
     // source
     let source, sourceName;
@@ -522,25 +524,25 @@ function dCrCreate (ev) {  // Layer生成
             new HuTime.FigureStyle(plotColor[i % 5], plotColor[i % 5], 0),
             new HuTime.FigureStyle(null, "black", 1), i);
     }
-   for (let i = 0; i < others.length; ++i) {       // Otherの処理
+    for (let i = 0; i < others.length; ++i) {       // Otherの処理
         rs.recordSettings.appendDataSetting(new HuTime.RecordDataSetting(others[i]));
-   }
+    }
 
     // Data Layer
     let dataLayer;
     switch (layerType) {
         case "TLine" :
-            dataLayer = new HuTime.TLineLayer(rs);
+            dataLayer = new HuTime.TLineLayer(rs, null, PanelTitleVBreadth, null);
             break;
         case "LineChart" :
-            dataLayer = new HuTime.LineChartLayer(rs);
+            dataLayer = new HuTime.LineChartLayer(rs, null, PanelTitleVBreadth, null);
             break;
         case "BarChart" :
             rs.plotWidthType = 1;   // 可能範囲（pBegin - pEnd）で描画
-            dataLayer = new HuTime.BarChartLayer(rs);
+            dataLayer = new HuTime.BarChartLayer(rs, null, PanelTitleVBreadth, null);
             break;
         case "PlotChart" :
-            dataLayer = new HuTime.PlotChartLayer(rs);
+            dataLayer = new HuTime.PlotChartLayer(rs, null, PanelTitleVBreadth, null);
             break;
         default :
             return;
@@ -548,9 +550,19 @@ function dCrCreate (ev) {  // Layer生成
     dataLayer.name = sourceName + "_" + itemName
 
     // Panel
-    let panel = new HuTime.TilePanel(NewLayerVBreadth);
-    panel.name = sourceName + "_" + itemName
+    let panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
+    panel.name = title;
     panel.appendLayer(dataLayer);
+
+    // Title Layer
+    let titleLayer = new HuTime.Layer(NewLayerVBreadth + PanelTitleVBreadth);
+    titleLayer.fixedLayer = true;
+    titleLayer.name = "Annotation";
+    titleLayer.appendObject(new HuTime.String(
+        new HuTime.StringStyle(14, "#000000", "bold"),
+        new HuTime.XYPosition(5, 15), title));
+    titleLayer.zIndex = 120;
+    panel.appendLayer(titleLayer);
 
     // 最初のパネルの場合は、時間範囲を取得してから描画
     if (hutime.panelCollections[0].panels.length === 0) {
