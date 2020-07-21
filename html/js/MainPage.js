@@ -41,9 +41,26 @@ function initialize () {    // 全体の初期化
     document.getElementById("borderTree").addEventListener("mousedown", borderTreeMouseDown);
     initDialog();
 
+    appendTimeScale("101.1");
 
-    //importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
+    // 現在の前後1年を表示
+    let begin = new Date(Date.now());
+    begin.setFullYear(begin.getFullYear() - 1);
+    let end = new Date(Date.now());
+    end.setFullYear(end.getFullYear() + 1);
+    hutime.redraw(HuTime.isoToJd(begin.toISOString()), HuTime.isoToJd(end.toISOString()));
 
+}
+
+// 時間軸目盛り（暦）の追加
+const DefaultScaleVBreath = 55;
+function appendTimeScale(calendarId) {
+    let layer = new HuTime.CalendarScaleLayer(DefaultScaleVBreath, null, null, calendarId);
+    let panel = new HuTime.TilePanel(DefaultScaleVBreath);
+    panel.name = "Time Scale";
+    panel.resizable = false;
+    panel.appendLayer(layer);
+    hutime.panelCollections[0].appendPanel(panel);
 }
 /*
 function getScrollBarWidth () {

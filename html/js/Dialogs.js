@@ -543,14 +543,16 @@ function dCrCreate (ev) {  // Layer生成
     // 最初のパネルの場合は、時間範囲を取得してから描画
     function isInitRedraw () {
         // 最初のPanel追加の場合、既存がBlankのみの場合は、Dataの時間範囲でredraw
+        let result = true;
         hutime.panelCollections[0].panels.forEach(panel => {
             panel.layers.forEach(layer => {
                 if (layer.constructor !== HuTime.Layer &&
-                    layer.constructor !== HuTime.PanelBorder)
-                    return false;   // 時間範囲を持ったデータLayerがあるとき
+                    layer.constructor !== HuTime.PanelBorder &&
+                    layer.constructor !== HuTime.CalendarScaleLayer)
+                    result = false;     // 時間範囲を持ったデータLayerがあるとき
             });
         });
-        return true;
+        return result;
     }
     if (isInitRedraw()) {
         rs.onloadend = function () {
@@ -586,7 +588,7 @@ function dcCreateBlank () {
     hutime.redraw();
     addBranch(document.getElementById("treeRoot"), panel);
     dCrResetItemList();
-    closeDialog("dialogCreate");
+    dCrClose();
 }
 function dCrCreateTitleLayer(title) {
     let titleLayer = new HuTime.Layer(NewLayerVBreadth + PanelTitleVBreadth);
