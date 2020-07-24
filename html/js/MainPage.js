@@ -56,11 +56,13 @@ function initialize () {    // 全体の初期化
 const DefaultScaleVBreath = 55;
 function appendTimeScale(calendarId) {
     let layer = new HuTime.CalendarScaleLayer(DefaultScaleVBreath, null, null, calendarId);
+    layer.name ="Time Scale"
     let panel = new HuTime.TilePanel(DefaultScaleVBreath);
     panel.name = "Time Scale";
     panel.resizable = false;
     panel.appendLayer(layer);
     hutime.panelCollections[0].appendPanel(panel);
+    addBranch(document.getElementById("treeRoot"), panel)
 }
 /*
 function getScrollBarWidth () {
@@ -157,13 +159,75 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     // targetElement: 追加する先のli要素
     // hutimeObj: HuTimeオブジェクト (PanelCollection, Panel, Layer, Recordset)
 
-    if (hutimeObj instanceof HuTime.PanelBorder)    // パネル境界は対象にしない
+    let hutimeObjSettings = {
+        panelCollection: {
+            iconSrc: "img/panelCollection.png", iconAlt: "Panel Collection", menuType: "Root"},
+        tilePanel: {
+            iconSrc: "img/tilePanel.png", iconAlt: "Tile Panel", menuType: "Panel"},
+        overlayPanel: {
+            iconSrc: "img/other.png", iconAlt: "Overlay Panel", menuType: "Other"},
+        panelBorder: {
+            iconSrc: "img/other.png", iconAlt: "Panel Border", menuType: "Other"},
+
+        tlineLayer: {
+            iconSrc: "img/tlineLayer.png", iconAlt: "TLine Layer", menuType: "DataLayer"},
+        chartLayer: {
+            iconSrc: "img/chartLayer.png", iconAlt: "Chart Layer", menuType: "DataLayer"},
+        scaleLayer: {
+            iconSrc: "img/scaleLayer.png", iconAlt: "Tick Scale Layer", menuType: "ScaleLayer"},
+        blankLayer: {
+            iconSrc: "img/blankLayer.png", iconAlt: "Blank Layer", menuType: "BlankLayer"},
+
+        recordset: {
+            iconSrc: "img/recordset.png", iconAlt: "Recordset", menuType: "Recordset"},
+        string: {
+            iconSrc: "img/string.png", iconAlt: "String", menuType: "String"},
+        image: {
+            iconSrc: "img/image.png", iconAlt: "Image", menuType: "Image"},
+        shape: {
+            iconSrc: "img/shape.png", iconAlt: "Shape", menuType: "Shape"},
+        recordItem: {
+            iconSrc: "img/recordItem.png", iconAlt: "Record Item", menuType: "Item"}
+    };
+    function getObjType (obj) {
+        if (obj instanceof HuTime.PanelCollection)
+            return "panelCollection";
+        if (obj instanceof HuTime.TilePanel)
+            return "tilePanel";
+        if (obj instanceof HuTime.OverlayPanel)
+            return "overlayPanel";
+        if (obj instanceof HuTime.PanelBorder)
+            return "panelBorder";
+
+        if (obj instanceof HuTime.TLineLayer)
+            return "tlineLayer";
+        if (obj instanceof HuTime.RecordLayerBase)
+            return "chartLayer";    // TLine以外のRecordLayerBase
+        if (obj instanceof HuTime.TickScaleLayer)
+            return "scaleLayer";
+        if (obj instanceof HuTime.Layer)
+            return "blankLayer";    // 上記以外のLayer
+
+        if (obj instanceof HuTime.RecordsetBase)
+            return "recordset";
+        if (obj instanceof HuTime.String)
+            return "string";
+        if (obj instanceof HuTime.Image)
+            return "image";
+        if (obj instanceof HuTime.OnLayerObjectBase)
+            return "shape";     // 上記以外のOnLayerObjectBase
+        return "recordItem";
+    }
+
+    let hutimeObjType = getObjType(hutimeObj);
+    if (hutimeObjType === "panelBorder")    // パネル境界は対象にしない
         return;
 
     // li要素の追加
     let li = document.createElement("li");
     li.hutimeObject = hutimeObj;
     li.id = id;
+    li.objType = hutimeObjSettings[hutimeObjType].menuType;
     targetElement.querySelector("ul").appendChild(li);
 
     // ブランチを示すspan要素
@@ -205,59 +269,11 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     selectSpan.className = "branchSelectSpan";
 
     // アイコンのul要素の追加
-    let iconSettings = {
-        recordset: {src: "img/recordset.png", title: "Recordset"},
-        tlineLayer: {src: "img/tlineLayer.png", title: "TLine Layer"},
-        chartLayer: {src: "img/chartLayer.png", title: "Chart Layer"},
-        scaleLayer: {src: "img/scaleLayer.png", title: "Tick Scale Layer"},
-        generalLayer: {src: "img/layer.png", title: "General Layer"},
-        panelCollection: {src: "img/panelCollection.png", title: "Panel Collection"},
-        tilePanel: {src: "img/tilePanel.png", title: "Tile Panel"},
-        other: {src: "img/tilePanel.png", title: "Other"},
-        recordItem: {src: "img/recordItem.png", title: "Record Item"}
-    };
-    let setIcon = function setIcon (element, key) {
-        element.src = iconSettings[key].src;
-        element.alt = iconSettings[key].title;
-        element.title = iconSettings[key].title;
-    };
     let icon = document.createElement("img");
     icon.className = "branchIcon";
-    let childObj = [];
-
-    if (hutimeObj instanceof HuTime.RecordsetBase) {
-        setIcon(icon, "recordset");
-        if (hutimeObj instanceof HuTime.ChartRecordset)
-            childObj = hutimeObj._valueItems;
-        else if (hutimeObj instanceof HuTime.TLineRecordset)
-            childObj = [ hutimeObj.labelItem ];
-    }
-    else if (hutimeObj instanceof HuTime.RecordLayerBase) {
-        if (hutimeObj instanceof HuTime.TLineLayer)
-            setIcon(icon, "tlineLayer");
-        else
-            setIcon(icon, "chartLayer");
-        childObj = hutimeObj.recordsets;
-    }
-    else if (hutimeObj instanceof HuTime.Layer) {
-        if (hutimeObj instanceof HuTime.TickScaleLayer)
-            setIcon(icon, "scaleLayer");
-        else
-            setIcon(icon, "generalLayer");
-    }
-    else if (hutimeObj instanceof HuTime.ContainerBase) {
-        if (hutimeObj instanceof HuTime.PanelCollection)
-            setIcon(icon, "panelCollection");
-        else if (hutimeObj instanceof HuTime.TilePanel)
-            setIcon(icon, "tilePanel");
-        else
-            setIcon(icon, "other");
-        childObj = hutimeObj.contents;
-    }
-    else {
-        setIcon(icon, "recordItem");     // レコード項目
-        childObj = [];
-    }
+    icon.src = hutimeObjSettings[hutimeObjType].iconSrc;
+    icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
+    icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
     selectSpan.appendChild(icon);
 
     // ラベルの追加（span要素を含む）
@@ -279,6 +295,27 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     selectSpan.appendChild(labelSpan);
 
     // 子要素用のul要素の追加
+    let childObj = [];
+    switch (hutimeObjType) {
+        case "recordset":
+            if (hutimeObj instanceof HuTime.ChartRecordset)
+                childObj = hutimeObj._valueItems;
+            else if (hutimeObj instanceof HuTime.TLineRecordset)
+                childObj = [ hutimeObj.labelItem ];
+            break;
+        case "tlineLayer":
+        case "chartLayer":
+            childObj = hutimeObj.recordsets;
+            break;
+        case "blankLayer":
+            childObj = hutimeObj.objects;
+            break;
+        case "panelCollection":
+        case "tilePanel":
+        case "overlayPanel":
+            childObj = hutimeObj.contents;
+            break;
+    }
     if (knobImg.style.visibility === "hidden")
         return;     // treeの末尾の場合は子要素は無し
     li.appendChild(document.createElement("ul"));
@@ -338,8 +375,9 @@ function selectBranch (ev) {
 
 // ** レイヤツリーの右クリックメニュー操作 **
 let openedTreeMenus = [];       // ユーザによって開かれたメニュー
+let ContextMenuId = "";
 function initTreeMenu () {      // メニュー初期化
-    let liElements = document.getElementById("treeMenuTop").getElementsByTagName("li");
+    let liElements = document.getElementById("treeContextMenu").getElementsByTagName("li");
     for (let i = 0; i < liElements.length; ++i) {
         liElements[i].addEventListener("mouseover", operateTreeMenu);
         liElements[i].addEventListener("click", clickTreeMenu);
@@ -367,9 +405,16 @@ function treeContextMenu (ev) {     // 右クリックでの動作（開始時�
     menuContainer.style.left = (ev.clientX - mainPanel.offsetLeft) + "px";
     menuContainer.style.top = (ev.clientY - mainPanel.offsetTop)+ "px";
     menuContainer.style.display = "block";
-    let topMenu = document.getElementById("treeMenuTop");
+
+    // タイプに合わせてメニューを表示
+    menuContainer.querySelectorAll("ul.treeMenu").forEach(ul => {
+        ul.style.display = "none";      // いったんすべてのメニューを非表示
+    })
+    let objType = ev.target.closest("li").objType;
+    let topMenu = document.getElementById("treeContextMenu" + objType);
     topMenu.style.display = "block";
     openedTreeMenus.push(topMenu);
+
 }
 function clickTreeMenu (ev) {   // clickでの動作/
     ev.preventDefault();
@@ -378,7 +423,7 @@ function clickTreeMenu (ev) {   // clickでの動作/
         return;
 
     // メニュー操作継続 (操作終了場所以外（子メニューのある項目）のクリック)
-    if (ev.target.closest("#treeMenuTop") && ev.target.querySelector("ul"))
+    if (ev.target.closest("#treeContextMenuRoot") && ev.target.querySelector("ul"))
         return;
 
     // メニュー操作終了 (メニューの外、または、子メニューの無い項目のクリック)

@@ -50,8 +50,8 @@
                 <li onclick="dCrOpen('Blank')">Blank</li>
               </ul>
             </li>
-            <li>Save</li>
-            <li>Load</li>
+            <li onclick="showDialog('dialogSave')">Save</li>
+            <li onclick="showDialog('dialogLoad')">Load</li>
 
             <!--li>Clear</li-->
             <li>Export &raquo;
@@ -124,18 +124,93 @@
 
       <!-- *** Layer Tree Context Menu *** -->
       <div id="treeContextMenu">
-        <ul id="treeMenuTop" class="treeMenu">
+        <ul id="treeContextMenuRoot" class="treeMenu">
           <li>Rename</li>
-          <li>Append &raquo;
+          <li>Append Panel &raquo;
             <ul>
               <li>Create</li>
               <li>Import</li>
             </ul>
           </li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="treeContextMenuPanel" class="treeMenu">
+          <li>Rename</li>
           <li>Export</li>
+          <li>Append Layer &raquo;
+            <ul>
+              <li>Create</li>
+              <li>Import</li>
+            </ul>
+          </li>
+          <li>Remove</li>
           <li onclick="showPanelPreferences()">Preferences</li>
         </ul>
+
+
+
+        <ul id="treeContextMenuDataLayer" class="treeMenu">
+          <li>datalayer</li>
+          <li>Rename</li>
+          <li>Append Recordset &raquo;
+            <ul>
+              <li>Create</li>
+              <li>Import</li>
+            </ul>
+          </li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="treeContextMenuRecordset" class="treeMenu">
+          <li>recordset</li>
+          <li>Rename</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="treeContextMenuItem" class="treeMenu">
+          <li>item</li>
+          <li>Rename</li>
+          <li>Preferences</li>
+        </ul>
+
+
+        <ul id="treeContextMenuBlankLayer" class="treeMenu">
+          <li>blanklayer</li>
+          <li>Rename</li>
+          <li>Append Object &raquo;
+            <ul>
+              <li>Shape</li>
+              <li>String</li>
+            </ul>
+          </li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="treeContextMenuFigure" class="treeMenu">
+          <li>figure</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="treeContextMenuString" class="treeMenu">
+          <li>string</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+
+        <ul id="treeContextMenuScaleLayer" class="treeMenu">
+          <li>scalelayer</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+
+
       </div>
+
+
+
 
       <!-- *** Border between Layer Tree and Main Panel *** -->
       <div id="borderTree"></div>
@@ -765,6 +840,34 @@
   </script>
 </div>
 <!-- End of Create Source Data Preview -->
+
+<!-- **** Save Dialog **** -->
+<div id="dialogSave" class="dialog" style="width: 500px; left: 150px; top: 30px;">
+  <div class="dialogTitle">
+    Save<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <!--
+    メインパネルとツリーの保存
+    データコレクションの保存（オプション？）
+      自分で保存したデータ（ブックマークに相当）
+    -->
+  </div>
+</div>
+<!-- End of Save Dialog -->
+
+<!-- **** Load Dialog **** -->
+<div id="dialogLoad" class="dialog" style="width: 500px; left: 150px; top: 30px;">
+  <div class="dialogTitle">
+    Load<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <!--
+    メインパネルとツリーの読み込み
+    -->
+  </div>
+</div>
+<!-- End of Load Dialog -->
 
 
 

@@ -610,6 +610,16 @@ function dSpClose () {
     closeDialog("dialogSourcePreview");
 }
 
+// **** Save ダイアログ（dialogSave => dSv）****
+
+// **** Load ダイアログ（dialogLoad => dLd）****
+
+
+
+
+
+
+
 
 /**** 整理中 ****/
 // *** タブ ***
