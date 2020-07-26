@@ -1,0 +1,202 @@
+<!-- ****** HuTime Panel ****** -->
+  <div id="hutime" oncontextmenu="return false;">
+
+<!-- **** Menu Bar **** -->
+    <div id="menuBar">
+      <ul class="menu" id="menuTop">
+
+        <!-- ** File Menu ** -->
+        <li>File
+          <ul>
+            <!--li onclick="showDialog('dialogCreate')">Create</li-->
+            <li>Create &raquo;
+              <ul>
+                <li onclick="dCrOpen('TLine')">Time Line</li>
+                <li onclick="dCrOpen('Chart')">Chart</li>
+                <li onclick="dCrOpen('Blank')">Blank</li>
+              </ul>
+            </li>
+            <li onclick="showDialog('dialogSave')">Save</li>
+            <li onclick="showDialog('dialogLoad')">Load</li>
+
+            <!--li>Clear</li-->
+            <li>Export &raquo;
+              <ul>
+                <li>Image</li>
+                <li>Embedding Code</li>
+              </ul>
+            </li>
+            <li>Preferences</li>
+          </ul>
+        </li>
+
+        <!-- ** Data Menu ** -->
+        <li>Data
+          <ul>
+            <li onclick="showDialog('dialogImportRemote')">Import Data</li>
+            <li>Time Scales</li>
+            <li>Repository</li>
+            <!-- Project Data -->
+            <li>Import Collection</li>
+            <li class="importedCollection">Project A &raquo;
+              <ul>
+                <li>Data 1</li>
+                <li>Data 2</li>
+                <li>Data 3</li>
+              </ul>
+            </li>
+            <li class="importedCollection">Project B</li>
+          </ul>
+        </li>
+
+        <!--li onclick="showDialog('dialogImportLocal')">Export</li-->
+        <!-- ** Analysis Menu ** -->
+        <!--li title="Analysis Menu">Analysis
+          <ul>
+            <li>Search &raquo;
+              <ul>
+                <li>Text</li>
+                <li>Value</li>
+              </ul>
+            </li>
+            <li>Record Extraction &raquo;
+              <ul>
+                <li>Other</li>
+              </ul>
+            </li>
+            <li>Mask</li>
+          </ul>
+        </li-->
+
+        <!-- ** About Menu ** -->
+        <li>Help
+          <ul>
+            <li>About</li>
+          </ul>
+        </li>
+
+      </ul>
+    </div>
+<!-- End of Menu Bar -->
+
+<!-- **** Main Panel ****-->
+    <div id="mainPanel">
+
+      <!-- *** Layer Tree *** -->
+      <div id="layerTree">
+        <ul class="tree">
+        </ul>
+      </div>
+
+      <!-- *** Layer Tree Context Menu *** -->
+      <div id="treeContextMenu">
+        <ul id="tCMRoot" class="treeMenu">
+          <li>Rename</li>
+          <li>Append Panel &raquo;
+            <ul>
+              <li>Create</li>
+              <li>Import</li>
+            </ul>
+          </li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMPanel" class="treeMenu">
+          <li>Rename</li>
+          <li>Export</li>
+          <li>Append Layer &raquo;
+            <ul>
+              <li>Create</li>
+              <li>Import</li>
+            </ul>
+          </li>
+          <li>Remove</li>
+          <li onclick="showPanelPreferences()">Preferences</li>
+        </ul>
+
+        <ul id="tCMTLineLayer" class="treeMenu">
+          <li>tlinelayer</li>
+          <li>Rename</li>
+          <li>Append Recordset</li>
+          <li>Remove</li>
+          <li onclick="">Preferences</li>
+        </ul>
+        <ul id="tCMChartLayer" class="treeMenu">
+          <li>chartlayer</li>
+          <li>Rename</li>
+          <li>Append Recordset</li>
+          <li>Remove</li>
+          <li onclick="showDialog('dialogPreferencesChartLayer')">Preferences</li>
+        </ul>
+        <ul id="tCMScaleLayer" class="treeMenu">
+          <li>scalelayer</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMBlankLayer" class="treeMenu">
+          <li>blanklayer</li>
+          <li>Rename</li>
+          <li>Append Object &raquo;
+            <ul>
+              <li>Shape</li>
+              <li>String</li>
+            </ul>
+          </li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+
+        <ul id="tCMRecordset" class="treeMenu">
+          <li>recordset</li>
+          <li>Rename</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMString" class="treeMenu">
+          <li>string</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMImage" class="treeMenu">
+          <li>string</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMShape" class="treeMenu">
+          <li>figure</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMItem" class="treeMenu">
+          <li>item</li>
+          <li>Rename</li>
+          <li>Preferences</li>
+        </ul>
+
+        <ul id="tCMOther" class="treeMenu">
+        </ul>
+      </div>
+
+      <!-- *** Border between Layer Tree and Main Panel *** -->
+      <div id="borderTree"></div>
+
+      <!-- *** HuTime Main *** -->
+      <div id="hutimeMain"></div>
+
+    </div>
+<!-- End of Main Panel -->
+
+<!-- **** Border for Status Bar **** -->
+    <div id="borderStatusBar"></div>
+
+<!-- **** Status Bar **** -->
+    <div id="statusBar">
+      &nbsp;
+    </div>
+
+  </div>
+<!-- End of HuTime Panel -->
+

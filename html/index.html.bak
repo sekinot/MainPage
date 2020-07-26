@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>Web HuTime</title>
+  <link href="main.css" rel="stylesheet" type="text/css" />
+  <link href="dialogs.css" rel="stylesheet" type="text/css" />
+  <!--script type="text/javascript" src="http://web.hutime.org/js/HuTime.min.js"></script-->
+  <script type="text/javascript" src="../../debug.js"></script>
+
+  <script type="text/javascript" src="js/common.js"></script>
+  <script type="text/javascript" src="js/Operations.js"></script>
+  <script type="text/javascript" src="js/_inCorrection.js"></script>
+</head>
+<body id="body" onload="initialize()">
+
+<div id="container">
+
+  <div id="header">
+    <div style="height:30px; float:left;">
+      <a href="http://web.hutime.org/">
+        <img src="http://www.hutime.org/common/img/toplogo.gif" alt="HuTime" height="30px" /></a>
+    </div>
+
+    <div id="language">
+      <label for="selectLanguage">
+        <select id="selectLanguage" title="language" name="language">
+          <option>English</option>
+          <!--option>Japanese</option-->
+        </select>
+      </label>
+    </div>
+  </div>
+
+<!-- ****** HuTime Panel ****** -->
+  <div id="hutime" oncontextmenu="return false;">
+
+<!-- **** Menu Bar **** -->
+    <div id="menuBar">
+      <ul class="menu" id="menuTop">
+
+        <!-- ** File Menu ** -->
+        <li>File
+          <ul>
+            <!--li onclick="showDialog('dialogCreate')">Create</li-->
+            <li>Create &raquo;
+              <ul>
+                <li onclick="dCrOpen('TLine')">Time Line</li>
+                <li onclick="dCrOpen('Chart')">Chart</li>
+                <li onclick="dCrOpen('Blank')">Blank</li>
+              </ul>
+            </li>
+            <li onclick="showDialog('dialogSave')">Save</li>
+            <li onclick="showDialog('dialogLoad')">Load</li>
+
+            <!--li>Clear</li-->
+            <li>Export &raquo;
+              <ul>
+                <li>Image</li>
+                <li>Embedding Code</li>
+              </ul>
+            </li>
+            <li>Preferences</li>
+          </ul>
+        </li>
+
+        <!-- ** Data Menu ** -->
+        <li>Data
+          <ul>
+            <li onclick="showDialog('dialogImportRemote')">Import Data</li>
+            <li>Time Scales</li>
+            <li>Repository</li>
+            <!-- Project Data -->
+            <li>Import Collection</li>
+            <li class="importedCollection">Project A &raquo;
+              <ul>
+                <li>Data 1</li>
+                <li>Data 2</li>
+                <li>Data 3</li>
+              </ul>
+            </li>
+            <li class="importedCollection">Project B</li>
+          </ul>
+        </li>
+
+        <!--li onclick="showDialog('dialogImportLocal')">Export</li-->
+        <!-- ** Analysis Menu ** -->
+        <!--li title="Analysis Menu">Analysis
+          <ul>
+            <li>Search &raquo;
+              <ul>
+                <li>Text</li>
+                <li>Value</li>
+              </ul>
+            </li>
+            <li>Record Extraction &raquo;
+              <ul>
+                <li>Other</li>
+              </ul>
+            </li>
+            <li>Mask</li>
+          </ul>
+        </li-->
+
+        <!-- ** About Menu ** -->
+        <li>Help
+          <ul>
+            <li>About</li>
+          </ul>
+        </li>
+
+      </ul>
+    </div>
+<!-- End of Menu Bar -->
+
+<!-- **** Main Panel ****-->
+    <div id="mainPanel">
+
+      <!-- *** Layer Tree *** -->
+      <div id="layerTree">
+        <ul class="tree">
+        </ul>
+      </div>
+
+      <!-- *** Layer Tree Context Menu *** -->
+      <div id="treeContextMenu">
+        <ul id="tCMRoot" class="treeMenu">
+          <li>Rename</li>
+          <li>Append Panel &raquo;
+            <ul>
+              <li>Create</li>
+              <li>Import</li>
+            </ul>
+          </li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMPanel" class="treeMenu">
+          <li>Rename</li>
+          <li>Export</li>
+          <li>Append Layer &raquo;
+            <ul>
+              <li>Create</li>
+              <li>Import</li>
+            </ul>
+          </li>
+          <li>Remove</li>
+          <li onclick="showPanelPreferences()">Preferences</li>
+        </ul>
+
+        <ul id="tCMTLineLayer" class="treeMenu">
+          <li>tlinelayer</li>
+          <li>Rename</li>
+          <li>Append Recordset</li>
+          <li>Remove</li>
+          <li onclick="">Preferences</li>
+        </ul>
+        <ul id="tCMChartLayer" class="treeMenu">
+          <li>chartlayer</li>
+          <li>Rename</li>
+          <li>Append Recordset</li>
+          <li>Remove</li>
+          <li onclick="showDialog('dialogPreferencesChartLayer')">Preferences</li>
+        </ul>
+        <ul id="tCMScaleLayer" class="treeMenu">
+          <li>scalelayer</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMBlankLayer" class="treeMenu">
+          <li>blanklayer</li>
+          <li>Rename</li>
+          <li>Append Object &raquo;
+            <ul>
+              <li>Shape</li>
+              <li>String</li>
+            </ul>
+          </li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+
+        <ul id="tCMRecordset" class="treeMenu">
+          <li>recordset</li>
+          <li>Rename</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMString" class="treeMenu">
+          <li>string</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMImage" class="treeMenu">
+          <li>string</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMShape" class="treeMenu">
+          <li>figure</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMItem" class="treeMenu">
+          <li>item</li>
+          <li>Rename</li>
+          <li>Preferences</li>
+        </ul>
+
+        <ul id="tCMOther" class="treeMenu">
+        </ul>
+      </div>
+
+      <!-- *** Border between Layer Tree and Main Panel *** -->
+      <div id="borderTree"></div>
+
+      <!-- *** HuTime Main *** -->
+      <div id="hutimeMain"></div>
+
+    </div>
+<!-- End of Main Panel -->
+
+<!-- **** Border for Status Bar **** -->
+    <div id="borderStatusBar"></div>
+
+<!-- **** Status Bar **** -->
+    <div id="statusBar">
+      &nbsp;
+    </div>
+
+  </div>
+<!-- End of HuTime Panel -->
+
+  <div id="information">
+    <table style="margin: 0 auto; width: 500px;">
+      <tr>
+        <td>News</td>
+        <td>Samples</td>
+        <td>API</td>
+        <td>HuTime Project</td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="footer">
+    <p>Copyright &copy; 2012-2020 Tatsuki Sekino. All rights reserved.</p>
+  </div>
+
+</div>
+<!-- End of Container -->
+
+<!-- ****** Dialogs ****** -->
+<!-- **** Select import data from remote **** -->
+<div id="dialogImportRemote" class="dialog" style="height: 130px; width: 420px;">
+  <div class="dialogTitle">
+    Import Remote<span class="dialogCloseButton"></span>
+  </div>
+
+  <div class="dialogBody">
+    <form id="dialogImportRemoteForm" name="dialogImportRemoteForm">
+      <div class="dialogContainer">
+        <label class="dialogContainerLabel" for="dialogImportRemoteUrl" style="float: left;">URL:</label>
+        <div style="float: left; width: 90%;">
+          <div>
+            <input id="dialogImportRemoteUrl" type="text" name="url" style="width: 100%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
+          </div>
+          <div style="margin-top: 5px;">
+            <input id="dialogImportRemoteJson" type="radio" name="fileType" checked="checked" /> <label class="dialogSubContainerLabel" for="dialogImportRemoteJson"> JSON</label>
+            <input id="dialogImportRemoteGts" class="dialogSubContainerLabel" type="radio" name="fileType" /> <label for="dialogImportRemoteGts"> GTS/GTM</label>
+          </div>
+        </div>
+      </div>
+      <div class="dialogContainer">
+        <input type="button" name="import" value="import" onclick="dialogImportRemote_Import()" style="float:right;" />
+        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportRemote')" style="float:right;" />
+      </div>
+    </form>
+  </div>
+
+  <div class="dialogResizeHandle" style="cursor: ew-resize;"></div>
+</div>
+
+<!-- **** Select import data from local **** -->
+<div id="dialogImportLocal" class="dialog" style="height: 100px; width: 520px;">
+  <div class="dialogTitle">
+    Import Remote<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <form id="dialogImportLocalForm" name="dialogImportLocalForm">
+      File <input type="file" name="file" style="overflow: hidden; width: 100%;"/>
+      <div style="padding: 10px 0;">
+        <input id="dialogImportLocalJson" type="radio" name="fileType" title="JSON" checked="checked" /> <label for="dialogImportLocalJson">JSON</label>
+        <input id="dialogImportLocalGts" type="radio" name="fileType" title="GTS/GTM"/> <label for="dialogImportLocalGts">GTS/GTM</label>
+        <input type="button" name="import" value="import" onclick="dialogImportLocal_Import()" style="float:right;" />
+        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportLocal')" style="float:right; margin-right: 10px;" />
+      </div>
+    </form>
+  </div>
+  <div class="dialogResizeHandle"></div>
+</div>
+
+<!-- **** Preferences **** -->
+<div id="dialogPreferences" class="dialog" style="width: 510px; height: 400px;">
+  <div class="dialogTitle">
+    Append Layer<span class="dialogCloseButton"></span>
+  </div>
+
+  <div class="dialogBody">
+
+      <div class="tabContainer">
+        <label id="tabRootLabel" class="tabLabel tabLabelSelected" for="tabRoot" onclick="clickTabLabel(event)" >Root</label>
+        <label id="tabPanelLabel" class="tabLabel" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
+        <label id="tabLayerLabel" class="tabLabel" for="tabLayer" onclick="clickTabLabel(event)">Layer</label>
+        <label id="tabRecordsetLabel" class="tabLabel" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
+        <label id="tabRecordItemLabel" class="tabLabel" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
+        <label id="tabObjectLabel" class="tabLabel" for="tabObject" onclick="clickTabLabel(event)">Object</label>
+        <label id="tabVScaleLabel" class="tabLabel" for="tabVScale" onclick="clickTabLabel(event)">Value Scale</label>
+
+        <!-- *** Preferences of Panel Collection *** -->
+        <div id="tabRoot" class="tab tabSelected">
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="rootNameText" style="float: left;">Name:</label><input id="rootNameText" type="text" style="width: 250px;" />
+          </div>
+
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="rootBackgroundColor">Background Color:</label><input id="rootBackgroundColor" type="text" value="#cccccc" style="width: 55px;" />
+          </div>
+        </div>
+
+
+        <!-- *** Preferences of Panel *** -->
+        <div id="tabPanel" class="tab">
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="panelNameText" style="float: left;">Name:</label><input id="panelNameText" type="text" style="width: 250px;" />
+          </div>
+
+          <div id="panelType" class="dialogContainer">
+            <span class="dialogContainerLabel">Type:</span>
+            <input id="panelTypeTile" type="radio" value="tile" name="panelType" checked="checked" /><label class="dialogSubContainerLabel" for="panelTypeTile">Tile</label>
+            <input id="panelTypeOverlay" type="radio" value="overlay" name="panelType" /><label class="dialogSubContainerLabel" for="panelTypeOverlay">Overlay</label>
+          </div>
+
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="panelHeight">Height:</label><input id="panelHeight" type="text" style="width:30px; text-align: right;" /> px
+            <label class="dialogContainerLabel" for="panelTop" style="margin-left:15px;">Top:</label><input id="panelTop" class="readonlyInputText" type="text" style="width:30px; text-align: right;"/> px
+          </div>
+
+          <div class="dialogContainer">
+            <div class="dialogContainerLabel" style="float: left;">Layers:</div>
+            <div id="layersInPanel" class="partsList" style="height: 57px;">
+              <table>
+                <tr><td>Layer 1</td></tr>
+                <tr><td>Layer 2</td></tr>
+                <tr><td>Layer 3</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="panelBackgroundColor">Background Color:</label><input id="panelBackgroundColor" type="text" value="#cccccc" style="width: 55px;" />
+            <label class="dialogContainerLabel" for="panelTRatio" style="margin-left: 15px;">T Ratio:</label><input id="panelTRatio" type="text" value="1.0" style="width: 30px; text-align: right;" />
+          </div>
+
+          <div class="dialogContainer">
+            <span class="dialogContainerLabel">Operation:</span>
+            <input id="panelResizable" type="checkbox" checked="checked"/><label class="dialogSubContainerLabel" for="panelResizable">Resizable</label>
+            <input id="panelRepositionable" type="checkbox" checked="checked" style="margin-left:15px;" /><label class="dialogSubContainerLabel" for="panelRepositionable" >Repositionable</label>
+          </div>
+
+
+        </div>
+
+
+<!-- *** Preferences of Recordset *** -->
+        <div id="tabRecordset" class="tab">
+<!--
+          <div class="dialogParts">
+            <label class="dialogPartsLabel" for="recordsetNameText">Name:</label><input id="recordsetNameText" type="text" style="width: 250px;" value=""/>
+          </div>
+
+          <div class="dialogParts">
+            <div class="dialogPartsLabel" style="float: left;">Source:</div>
+            <div style="float: left;">
+              <input id="sourceRemote" type="radio" name="recordsetLocationType" value="remote" checked="checked" onclick="dCrSwitchSourceLocationType(event)"/><label class="dialogPartsSubLabel" for="sourceRemote">Remote</label>
+              <input id="sourceLocal" type="radio" name="recordsetLocationType" value="local" onclick="dCrSwitchSourceLocationType(event)" style="margin-left: 10px;" /><label class="dialogPartsSubLabel" for="sourceLocal" >Local</label><br />
+
+              <span id="sourceURLSettings" style="display: block; height: 25px;"><label for="sourceURL">URL </label><input id="sourceURL" type="text" style="width: 300px;"/></span>
+              <span id="sourceFileSettings" style="display: none; height: 25px;"><label for="sourceFile">File </label><input id="sourceFile" type="file" style="width: 300px;" /></span>
+            </div>
+          </div>
+          <div class="dialogParts">
+            <span class="dialogPartsLabel">Source Type:</span>
+            <input id="sourceCsv" type="radio" name="recordsetSourceType" value="csv" checked="checked" /><label class="dialogPartsSubLabel" for="sourceCsv">CSV</label> (<input id="sourceHeading" type="checkbox" checked="checked" /><label class="dialogPartsSubLabel" for="sourceHeading">Headers</label>)
+            <input id="sourceJson" type="radio" name="recordsetSourceType" value="json" style="margin-left: 10px;" /><label class="dialogPartsSubLabel" for="sourceJson" >JSON</label>
+          </div>
+
+
+          <div class="dialogParts">
+            <div class="dialogPartsLabel" style="float: left; margin-right: 8px;">Items:</div>
+
+
+            <div style="float: left; margin-top:4px;">
+              <div style="font-weight: bold;">Loaded</div>
+              <div id="itemsLoadedFromRecordset" class="itemList" style="width: 138px;">
+                <table style="float: left; width:120px;">
+                  <tr><td class="itemName"><div>Item 1223</div></td></tr>
+                  <tr><td class="itemName"><div>Item 222222222222222222</div></td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                  <tr><td class="itemName">Item 3</td></tr>
+                </table>
+              </div>
+            </div>
+
+            <div style="float: left; width: 60px;text-align: center; vertical-align: bottom;">
+              <div style="font-weight: bold;">&nbsp;</div>
+              <img class="itemImageButton" src="img/arrowR.png" alt="Select Item" onclick="dCrMoveItemToRecordset(event)" style="margin-top: 15px;"/>
+              <img class="itemImageButton" src="img/arrowL.png" alt="Deselect Item" />
+
+              <input class="itemButton" type="button" value="Reload" style="margin-top: 10px;"/>
+            </div>
+
+            <div style="float: left; margin-top:4px;">
+              <div style="font-weight: bold;">Selected</div>
+              <div id="itemsInRecordset" class="itemList" style="width: 188px;">
+                <table style="width:170px;">
+                  <tr><td class="itemName"><div>Item 123888888999999988</div></td><td class="itemIcon" style=""><span >from/to</span></td></tr>
+                  <tr><td class="itemName"><div>Item 222</div></td><td class="itemIcon"><span >from</span></td></tr>
+                  <tr><td class="itemName"><div>Item 333</div></td><td class="itemIcon"><span>to</span></td></tr>
+                  <tr><td class="itemName"><div>Item 444</div></td><td class="itemIcon"><span>label</span></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                  <tr><td class="itemName">Item 2</td><td  class="itemIcon"></td></tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+-->
+          <!-- Itemの役割メニュ -->
+<!--
+          <div id="itemSelectMenu" class="itemSelectMenu">
+              <ul>
+                <li onclick="dCrSelectItemRole(event)">Time (from/to)</li>
+                <li>Time (from)</li>
+                <li>Time (to)</li>
+                <li>Value</li>
+                <li>Other</li>
+                <li class="itemSelectMenuCancel">Cancel</li>
+            </ul>
+          </div>
+-->
+        </div>
+
+
+<!-- *** Preferences of Record Item *** -->
+        <div id="tabRecordItem" class="tab">
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="itemRecordsetNameText">Name in Recordset:</label><input id="itemRecordsetNameText" class="readonlyInputText" type="text" readonly="readonly" style="width: 250px;" value="name in recordset"/>
+          </div>
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" for="itemNameText">Name:</label><input id="itemNameText" type="text" style="width: 250px;" value=""/>
+          </div>
+
+          <!-- for TLine -->
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel">Period Bar:</label>
+            <label class="dialogSubContainerLabel" for="barColor">Color</label><input id="barColor" type="text" style="width: 70px;" value=""/>
+          </div>
+
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" style="float: left;">Label:</label>
+            <div style="float: left;">
+              <div>
+                <label class="dialogSubContainerLabel" for="labelFont">Font Family </label><input id="labelFont" type="text" style="width: 120px;" value=""/>
+                <label class="dialogSubContainerLabel" for="labelDecoration" style="margin-left: 10px;">Decoration </label>
+                <select id="labelDecoration" style="width: 90px;" name="labelDecoration">
+                  <option selected="selected">None</option>
+                  <option>Bold</option>
+                  <option>Italic</option>
+                  <option>Italic/Bold</option>
+                </select>
+              </div>
+              <div style="margin-top: 5px;">
+                <label class="dialogSubContainerLabel" for="labelColor">Color </label><input id="labelColor" type="text" style="width: 70px;" value="#000000"/>
+                <label class="dialogSubContainerLabel" for="labelSize" style="margin-left: 10px;">Size</label><input id="labelSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+              </div>
+            </div>
+          </div>
+
+          <!-- for Line Chart -->
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel">Line:</label>
+            <label class="dialogSubContainerLabel" for="lineColor">Color </label><input id="lineColor" type="text" style="width: 50px;" value=""/>
+            <label class="dialogSubContainerLabel" for="lineWidth" style="margin-left: 10px;">Size </label><input id="lineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+          </div>
+
+          <!-- for Line and Plot Chart -->
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel" style="float: left;">Plot:</label>
+            <div style="float: left;">
+              <div>
+                <label class="dialogSubContainerLabel" for="plotType">Type</label>
+                <select id="plotType">
+                  <option selected="selected" style="width: 50px;">Circle</option>
+                  <option>Square</option>
+                  <option>Triangle</option>
+                  <option>Cross</option>
+                </select>
+                <label class="dialogSubContainerLabel" for="plotSize" style="margin-left: 10px;">Size </label><input id="plotSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+                <label class="dialogSubContainerLabel" for="plotFillColor" style="margin-left: 10px;">Fill Color </label><input id="plotFillColor" type="text" style="width: 50px;" value=""/>
+              </div>
+              <div style="margin-top: 5px;">
+                <label class="dialogSubContainerLabel" for="plotLinelColor">Line Color </label><input id="plotLinelColor" type="text" style="width: 50px;" value=""/>
+                <label class="dialogSubContainerLabel" for="plotLineWidth" style="margin-left: 10px;">width </label><input id="plotLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+              </div>
+            </div>
+          </div>
+
+          <!-- for Bar Chart -->
+          <div class="dialogContainer">
+            <label class="dialogContainerLabel">Bar:</label>
+            <label class="dialogSubContainerLabel" for="barFillColor">Fill Color </label><input id="barFillColor" type="text" style="width: 50px;" value=""/>
+            <label class="dialogSubContainerLabel" for="barLinelColor" style="margin-left: 10px;">Line Color </label><input id="barLinelColor" type="text" style="width: 50px;" value=""/>
+            <label class="dialogSubContainerLabel" for="barLineWidth" style="margin-left: 10px;">width </label><input id="barLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+          </div>
+
+        </div>
+
+        <div id="tabObject" class="tab">
+          55555
+        </div>
+
+        <div id="tabVScale" class="tab">
+          66666
+        </div>
+
+      </div>
+    <input id="applyPreference" type="button" value="Apply" onclick="applyPreference()" />
+  </div>
+
+  <div class="dialogResizeHandle"></div>
+</div>
+
+<!-- **** Preferences **** -->
+<!-- *** Preferences of Chart Layer *** -->
+<div id="dialogPreferencesChartLayer" class="dialog" style="width: 420px; left: 200px; top: 100px; display: block;">
+  <div class="dialogTitle">
+    Preferences (Chart Layer)<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPCLName" style="float: left;">Title:</label>
+      <div style="margin-left: 65px;"><input id="dPCLName" type="text" style="width: 300px;" /></div>
+    </div>
+
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPCLType" style="float: left;">Type:</label>
+      <div style="margin-left: 65px;">
+        <select id="dPCLType" style="width: 120px;">
+          <option value="LineChart">Line Chart</option>
+          <option value="BarChart">Bar Chart</option>
+          <option value="PlotChart">Plot Chart</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Position:</div>
+      <div style="margin-left: 65px;">
+        <label class="dialogSubContainerLabel" for="dPCLHeight">Height</label>
+        <input id="dPCLHeight" type="text" value="" style="width:30px; text-align: right;" /> px
+        <label for="dPCLMarginTop" style="margin-left: 15px;">Top</label>
+        <input id="dPCLMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
+        <label for="dPCLMarginBottom" style="margin-left: 15px;">Bottom</label>
+        <input id="dPCLMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Value:</div>
+      <div style="margin-left: 65px;">
+        <label for="dPCLVTop">Top</label>
+        <input id="dPCLVTop" type="text" value="100" style="width: 40px; text-align: right;" />
+        <label for="dPCLVBottom" style="margin-left: 15px;">Bottom</label>
+        <input id="dPCLVBottom" type="text" value="0" style="width: 40px; text-align: right;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPCLBackgroundColor">Color</label>
+        <input id="dPCLBackgroundColor" type="text" value="#cccccc" style="width: 60px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;" />
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- **** Create Dialog **** -->
+<div id="dialogCreate" class="dialog" style="width: 520px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    Create<span class="dialogCloseButton"></span>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("dialogCreate").
+      querySelector("span.dialogCloseButton").addEventListener("click", dCrClose);
+  </script>
+  <div class="dialogBody">
+
+    <!-- Title -->
+    <div id="dCrAnnotation" class="dialogSubContainer">
+      <div class="dialogContainerLabel" style="float:left;">Title:</div>
+      <div class="dialogSubContainerGroup">
+        <div class="dialogSubContainer">
+          <input id="dCrPanelTitle" type="text" style="width: 300px;" /><label for="dCrPanelTitle"></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer -->
+    <div id="dCrLayer" class="dialogContainer">
+      <div class="dialogContainerLabel" style="float:left;">Layer:</div>
+      <div class="dialogSubContainerGroup">
+        <!-- Layer Type -->
+        <div id="dCrTypeTLine" class="dialogSubContainer" style="line-height: 20px; display: none;">
+          Time Line
+        </div>
+        <div id="dCrTypeChart" class="dialogSubContainer" style="display: block;">
+          <select id="dCrLayerType" style="width: 120px;">
+            <option value="LineChart">Line Chart</option>
+            <option value="BarChart">Bar Chart</option>
+            <option value="PlotChart">Plot Chart</option>
+          </select>
+          <label for="dCrLayerType"></label>
+        </div>
+        <div id="dCrTypeBlank" class="dialogSubContainer" style="line-height: 20px; display: none;">
+          Blank
+        </div>
+      </div>
+    </div>
+
+    <!-- Source -->
+    <div id="dCrSource" class="dialogContainer" style="display: block;">
+      <div class="dialogContainerLabel" style="float: left;">Source:</div>
+      <div class="dialogSubContainerGroupBorder">
+
+        <!-- location of the source (Remote | Local) -->
+        <div class="dialogSubContainer">
+          <input id="dCrSourceRemoteType" type="radio" name="dCrSourceLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceRemoteType">Remote</label>
+          <input id="dCrSourceLocalType" type="radio" name="dCrSourceLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="dCrSourceLocalType" >Local</label>
+          <script type="text/javascript">
+            document.getElementById("dCrSourceRemoteType").addEventListener("click", dCrSwitchSourceLocationType);
+            document.getElementById("dCrSourceLocalType").addEventListener("click", dCrSwitchSourceLocationType);
+          </script>
+        </div>
+
+        <!-- Type of the source -->
+        <div class="dialogSubContainer">
+          <span class="dialogSubContainerLabel">Type</span>
+          <input id="dCrSourceCsv" type="radio" name="recordsetSourceType" value="csv" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceCsv">CSV</label> (<input id="dCrSourceHeading" type="checkbox" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceHeading">Headers</label>)
+          <!--input id="dCrSourceJson" type="radio" name="recordsetSourceType" value="json" style="margin-left: 10pxs;" /><label class="dialogPartsSubLabel" for="sourceJson" >JSON</label-->
+        </div>
+
+        <!-- URL or path of the source -->
+        <div class="dialogSubContainer">
+          <div style="float: left;">
+            <span id="dCrSourceRemoteFile" style="display: block;">
+              <label class="dialogSubContainerLabel" for="dCrSourceURL">URL</label>
+              <textarea id="dCrSourceURL" style="width: 325px; height: 27px; resize: vertical;"></textarea>
+            </span>
+            <span id="dCrSourceLocalFile" style="display: none; height: 27px;">
+              <label class="dialogSubContainerLabel" for="dCrSourceFile">File</label>
+              <input id="dCrSourceFile" type="file" style="width: 325px;" />
+            </span>
+          </div>
+          <div style="float: right;">
+            <input id="dCrSourceLoad" type="button" value="Load" style="width:60px; height: 25px;"/>
+          </div>
+          <script type="text/javascript">
+            document.getElementById("dCrSourceURL").value = dCrSourceURLDefault;
+            document.getElementById("dCrSourceLoad").addEventListener("click", dCrLoadSource);
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item -->
+    <div id="dCrItem" class="dialogContainer" style="display: block;">
+      <div class="dialogContainerLabel" style="float: left;">Items:</div>
+      <div class="dialogSubContainerGroupBorder">
+
+        <!-- Lists and operation buttons -->
+        <div class="dialogSubContainer">
+
+          <!-- Item list of source -->
+          <div style="float: left;">
+            <div>Source</div>
+            <div id="dCrItemsInSource" class="itemList" style="width: 150px;">
+              <table style="width:130px;">
+              </table>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div style="float: left; width: 76px; text-align: center; vertical-align: bottom;">
+            <input id="dCrItemMoveToRecordset" class="itemImageButton" type="image" src="img/arrowR.png" alt="Select Item" style="margin-top: 25px;" />
+            <input id="dCrItemMoveToSource" class="itemImageButton" type="image" src="img/arrowL.png" alt="Deselect Item" />
+            <input id="dCrSourcePreview" class="itemButton" type="button" value="Preview" disabled="disabled" style="margin-top: 10px;" />
+          </div>
+
+          <!-- Selected item list for recordset -->
+          <div style="float: right;">
+            <div>Recordset</div>
+            <div id="dCrItemsInRecordset" class="itemList" style="width: 200px;">
+              <table style="width:180px;">
+              </table>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+            document.getElementById("dCrItemMoveToRecordset").addEventListener("click", dCrMoveItemToRecordset);
+            document.getElementById("dCrItemMoveToSource").addEventListener("click", dCrMoveItemToSource);
+            document.getElementById("dCrSourcePreview").addEventListener("click", dCrSourcePreview);
+          </script>
+       </div>
+
+        <!-- Calendar on which temporal data in the source is based -->
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="calendarOfSource">Calendar of Source </label>
+          <select id="calendarOfSource" style="width: 300px;">
+            <option selected="selected" value="101.1">Julian / Gregorian Calendar (modified in 1582)</option>
+            <option value="101.2">Julian / Gregorian Calendar (modified in 1752)</option>
+            <option value="2.1">Gregorian Calendar</option>
+            <option value="1.1">Julian date (real number)</option>
+            <option value="1001.1">Japanese Calendar</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Context menu to select role of an item -->
+    <div id="dCrItemRoleMenu" class="itemRoleMenu">
+      <ul>
+        <li value="from">Time (from)</li>
+        <li value="to">Time (to)</li>
+        <li value="from/to">Time (from/to)</li>
+        <li id="dCrdCrItemRoleValue" value="value">Value</li>
+        <li value="other">Other</li>
+      </ul>
+      <script type="text/javascript">
+        document.getElementById("dCrItemRoleMenu").querySelectorAll("li").forEach(e => {
+            e.addEventListener("click", function (ev) {
+                dCrSelectItemRole(ev, e.getAttribute("value"));
+            })
+        });
+      </script>
+    </div>
+
+    <!-- Operation buttons -->
+    <div class="dialogContainer">
+      <input id="dCrLayerButton" type="button" value="Create" style="width:80px; height: 30px; float: right;" />
+      <input id="dCrCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+
+      <script type="text/javascript">
+        document.getElementById("dCrLayerButton").addEventListener("click", dCrCreate);
+        document.getElementById("dCrCancelButton").addEventListener("click", dCrClose);
+      </script>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    document.getElementById("dCrSourceRemoteType").checked = true;
+    document.getElementById("dCrSourceLocalType").checked = false;
+    dCrSwitchSourceLocationType();
+
+  </script>
+</div>
+<!-- End of Create Dialog -->
+
+<!-- *** Create Source Data Preview *** -->
+<div id="dialogSourcePreview" class="dialog" style="width:300px; height:200px; left: 150px; top: 30px;">
+  <div class="dialogTitle">
+    Source Preview<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody" style="height: 156px;">
+    <table>
+    </table>
+  </div>
+  <div class="dialogResizeHandle" style="cursor: se-resize;"></div>
+
+  <script type="text/javascript">
+    document.getElementById("dialogSourcePreview").querySelector("span.dialogCloseButton").
+        addEventListener("click", dSpClose)
+  </script>
+</div>
+<!-- End of Create Source Data Preview -->
+
+<!-- **** Save Dialog **** -->
+<div id="dialogSave" class="dialog" style="width: 500px; left: 150px; top: 30px;">
+  <div class="dialogTitle">
+    Save<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <!--
+    メインパネルとツリーの保存
+    データコレクションの保存（オプション？）
+      自分で保存したデータ（ブックマークに相当）
+    -->
+  </div>
+</div>
+<!-- End of Save Dialog -->
+
+<!-- **** Load Dialog **** -->
+<div id="dialogLoad" class="dialog" style="width: 500px; left: 150px; top: 30px;">
+  <div class="dialogTitle">
+    Load<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <!--
+    メインパネルとツリーの読み込み
+    -->
+  </div>
+</div>
+<!-- End of Load Dialog -->
+
+
+
+</body>
+</html>

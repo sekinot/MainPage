@@ -1,0 +1,200 @@
+<!-- **** Create Dialog **** -->
+<div id="dialogCreate" class="dialog" style="width: 520px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    Create<span class="dialogCloseButton"></span>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("dialogCreate").
+      querySelector("span.dialogCloseButton").addEventListener("click", dCrClose);
+  </script>
+  <div class="dialogBody">
+
+    <!-- Title -->
+    <div id="dCrAnnotation" class="dialogSubContainer">
+      <div class="dialogContainerLabel" style="float:left;">Title:</div>
+      <div class="dialogSubContainerGroup">
+        <div class="dialogSubContainer">
+          <input id="dCrPanelTitle" type="text" style="width: 300px;" /><label for="dCrPanelTitle"></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer -->
+    <div id="dCrLayer" class="dialogContainer">
+      <div class="dialogContainerLabel" style="float:left;">Layer:</div>
+      <div class="dialogSubContainerGroup">
+        <!-- Layer Type -->
+        <div id="dCrTypeTLine" class="dialogSubContainer" style="line-height: 20px; display: none;">
+          Time Line
+        </div>
+        <div id="dCrTypeChart" class="dialogSubContainer" style="display: block;">
+          <select id="dCrLayerType" style="width: 120px;">
+            <option value="LineChart">Line Chart</option>
+            <option value="BarChart">Bar Chart</option>
+            <option value="PlotChart">Plot Chart</option>
+          </select>
+          <label for="dCrLayerType"></label>
+        </div>
+        <div id="dCrTypeBlank" class="dialogSubContainer" style="line-height: 20px; display: none;">
+          Blank
+        </div>
+      </div>
+    </div>
+
+    <!-- Source -->
+    <div id="dCrSource" class="dialogContainer" style="display: block;">
+      <div class="dialogContainerLabel" style="float: left;">Source:</div>
+      <div class="dialogSubContainerGroupBorder">
+
+        <!-- location of the source (Remote | Local) -->
+        <div class="dialogSubContainer">
+          <input id="dCrSourceRemoteType" type="radio" name="dCrSourceLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceRemoteType">Remote</label>
+          <input id="dCrSourceLocalType" type="radio" name="dCrSourceLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="dCrSourceLocalType" >Local</label>
+          <script type="text/javascript">
+            document.getElementById("dCrSourceRemoteType").addEventListener("click", dCrSwitchSourceLocationType);
+            document.getElementById("dCrSourceLocalType").addEventListener("click", dCrSwitchSourceLocationType);
+          </script>
+        </div>
+
+        <!-- Type of the source -->
+        <div class="dialogSubContainer">
+          <span class="dialogSubContainerLabel">Type</span>
+          <input id="dCrSourceCsv" type="radio" name="recordsetSourceType" value="csv" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceCsv">CSV</label> (<input id="dCrSourceHeading" type="checkbox" checked="checked" /><label class="dialogSubContainerLabel" for="dCrSourceHeading">Headers</label>)
+          <!--input id="dCrSourceJson" type="radio" name="recordsetSourceType" value="json" style="margin-left: 10pxs;" /><label class="dialogPartsSubLabel" for="sourceJson" >JSON</label-->
+        </div>
+
+        <!-- URL or path of the source -->
+        <div class="dialogSubContainer">
+          <div style="float: left;">
+            <span id="dCrSourceRemoteFile" style="display: block;">
+              <label class="dialogSubContainerLabel" for="dCrSourceURL">URL</label>
+              <textarea id="dCrSourceURL" style="width: 325px; height: 27px; resize: vertical;"></textarea>
+            </span>
+            <span id="dCrSourceLocalFile" style="display: none; height: 27px;">
+              <label class="dialogSubContainerLabel" for="dCrSourceFile">File</label>
+              <input id="dCrSourceFile" type="file" style="width: 325px;" />
+            </span>
+          </div>
+          <div style="float: right;">
+            <input id="dCrSourceLoad" type="button" value="Load" style="width:60px; height: 25px;"/>
+          </div>
+          <script type="text/javascript">
+            document.getElementById("dCrSourceURL").value = dCrSourceURLDefault;
+            document.getElementById("dCrSourceLoad").addEventListener("click", dCrLoadSource);
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <!-- Item -->
+    <div id="dCrItem" class="dialogContainer" style="display: block;">
+      <div class="dialogContainerLabel" style="float: left;">Items:</div>
+      <div class="dialogSubContainerGroupBorder">
+
+        <!-- Lists and operation buttons -->
+        <div class="dialogSubContainer">
+
+          <!-- Item list of source -->
+          <div style="float: left;">
+            <div>Source</div>
+            <div id="dCrItemsInSource" class="itemList" style="width: 150px;">
+              <table style="width:130px;">
+              </table>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div style="float: left; width: 76px; text-align: center; vertical-align: bottom;">
+            <input id="dCrItemMoveToRecordset" class="itemImageButton" type="image" src="img/arrowR.png" alt="Select Item" style="margin-top: 25px;" />
+            <input id="dCrItemMoveToSource" class="itemImageButton" type="image" src="img/arrowL.png" alt="Deselect Item" />
+            <input id="dCrSourcePreview" class="itemButton" type="button" value="Preview" disabled="disabled" style="margin-top: 10px;" />
+          </div>
+
+          <!-- Selected item list for recordset -->
+          <div style="float: right;">
+            <div>Recordset</div>
+            <div id="dCrItemsInRecordset" class="itemList" style="width: 200px;">
+              <table style="width:180px;">
+              </table>
+            </div>
+          </div>
+
+          <script type="text/javascript">
+            document.getElementById("dCrItemMoveToRecordset").addEventListener("click", dCrMoveItemToRecordset);
+            document.getElementById("dCrItemMoveToSource").addEventListener("click", dCrMoveItemToSource);
+            document.getElementById("dCrSourcePreview").addEventListener("click", dCrSourcePreview);
+          </script>
+       </div>
+
+        <!-- Calendar on which temporal data in the source is based -->
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="calendarOfSource">Calendar of Source </label>
+          <select id="calendarOfSource" style="width: 300px;">
+            <option selected="selected" value="101.1">Julian / Gregorian Calendar (modified in 1582)</option>
+            <option value="101.2">Julian / Gregorian Calendar (modified in 1752)</option>
+            <option value="2.1">Gregorian Calendar</option>
+            <option value="1.1">Julian date (real number)</option>
+            <option value="1001.1">Japanese Calendar</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Context menu to select role of an item -->
+    <div id="dCrItemRoleMenu" class="itemRoleMenu">
+      <ul>
+        <li value="from">Time (from)</li>
+        <li value="to">Time (to)</li>
+        <li value="from/to">Time (from/to)</li>
+        <li id="dCrdCrItemRoleValue" value="value">Value</li>
+        <li value="other">Other</li>
+      </ul>
+      <script type="text/javascript">
+        document.getElementById("dCrItemRoleMenu").querySelectorAll("li").forEach(e => {
+            e.addEventListener("click", function (ev) {
+                dCrSelectItemRole(ev, e.getAttribute("value"));
+            })
+        });
+      </script>
+    </div>
+
+    <!-- Operation buttons -->
+    <div class="dialogContainer">
+      <input id="dCrLayerButton" type="button" value="Create" style="width:80px; height: 30px; float: right;" />
+      <input id="dCrCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+
+      <script type="text/javascript">
+        document.getElementById("dCrLayerButton").addEventListener("click", dCrCreate);
+        document.getElementById("dCrCancelButton").addEventListener("click", dCrClose);
+      </script>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    document.getElementById("dCrSourceRemoteType").checked = true;
+    document.getElementById("dCrSourceLocalType").checked = false;
+    dCrSwitchSourceLocationType();
+
+  </script>
+</div>
+<!-- End of Create Dialog -->
+
+<!-- *** Create Source Data Preview *** -->
+<div id="dialogSourcePreview" class="dialog" style="width:300px; height:200px; left: 150px; top: 30px;">
+  <div class="dialogTitle">
+    Source Preview<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody" style="height: 156px;">
+    <table>
+    </table>
+  </div>
+  <div class="dialogResizeHandle" style="cursor: se-resize;"></div>
+
+  <script type="text/javascript">
+    document.getElementById("dialogSourcePreview").querySelector("span.dialogCloseButton").
+        addEventListener("click", dSpClose)
+  </script>
+</div>
+<!-- End of Create Source Data Preview -->
+

@@ -7,15 +7,12 @@
   <link href="dialogs.css" rel="stylesheet" type="text/css" />
   <!--script type="text/javascript" src="http://web.hutime.org/js/HuTime.min.js"></script-->
   <script type="text/javascript" src="../../debug.js"></script>
-
-  <script type="text/javascript" src="js/MainPage.js"></script>
-  <script type="text/javascript" src="js/Operations.js"></script>
-  <script type="text/javascript" src="js/Dialogs.js"></script>
+  <!--script type="text/javascript" src="js/MainPage.js"></script-->
+  <script type="text/javascript" src="../debug/debug.js"></script>
 </head>
 <body id="body" onload="initialize()">
-
 <div id="container">
-
+<!-- ****** Header ****** -->
   <div id="header">
     <div style="height:30px; float:left;">
       <a href="http://web.hutime.org/">
@@ -124,7 +121,7 @@
 
       <!-- *** Layer Tree Context Menu *** -->
       <div id="treeContextMenu">
-        <ul id="treeContextMenuRoot" class="treeMenu">
+        <ul id="tCMRoot" class="treeMenu">
           <li>Rename</li>
           <li>Append Panel &raquo;
             <ul>
@@ -135,7 +132,7 @@
           <li>Remove</li>
           <li>Preferences</li>
         </ul>
-        <ul id="treeContextMenuPanel" class="treeMenu">
+        <ul id="tCMPanel" class="treeMenu">
           <li>Rename</li>
           <li>Export</li>
           <li>Append Layer &raquo;
@@ -148,33 +145,27 @@
           <li onclick="showPanelPreferences()">Preferences</li>
         </ul>
 
-
-
-        <ul id="treeContextMenuDataLayer" class="treeMenu">
-          <li>datalayer</li>
+        <ul id="tCMTLineLayer" class="treeMenu">
+          <li>tlinelayer</li>
           <li>Rename</li>
-          <li>Append Recordset &raquo;
-            <ul>
-              <li>Create</li>
-              <li>Import</li>
-            </ul>
-          </li>
+          <li>Append Recordset</li>
+          <li>Remove</li>
+          <li onclick="">Preferences</li>
+        </ul>
+        <ul id="tCMChartLayer" class="treeMenu">
+          <li>chartlayer</li>
+          <li>Rename</li>
+          <li>Append Recordset</li>
+          <li>Remove</li>
+          <li onclick="showDialog('dialogPreferencesChartLayer')">Preferences</li>
+        </ul>
+        <ul id="tCMScaleLayer" class="treeMenu">
+          <li>scalelayer</li>
+          <li>Rename</li>
           <li>Remove</li>
           <li>Preferences</li>
         </ul>
-        <ul id="treeContextMenuRecordset" class="treeMenu">
-          <li>recordset</li>
-          <li>Rename</li>
-          <li>Preferences</li>
-        </ul>
-        <ul id="treeContextMenuItem" class="treeMenu">
-          <li>item</li>
-          <li>Rename</li>
-          <li>Preferences</li>
-        </ul>
-
-
-        <ul id="treeContextMenuBlankLayer" class="treeMenu">
+        <ul id="tCMBlankLayer" class="treeMenu">
           <li>blanklayer</li>
           <li>Rename</li>
           <li>Append Object &raquo;
@@ -186,31 +177,39 @@
           <li>Remove</li>
           <li>Preferences</li>
         </ul>
-        <ul id="treeContextMenuFigure" class="treeMenu">
-          <li>figure</li>
+
+        <ul id="tCMRecordset" class="treeMenu">
+          <li>recordset</li>
           <li>Rename</li>
-          <li>Remove</li>
           <li>Preferences</li>
         </ul>
-        <ul id="treeContextMenuString" class="treeMenu">
+        <ul id="tCMString" class="treeMenu">
           <li>string</li>
           <li>Rename</li>
           <li>Remove</li>
           <li>Preferences</li>
         </ul>
-
-        <ul id="treeContextMenuScaleLayer" class="treeMenu">
-          <li>scalelayer</li>
+        <ul id="tCMImage" class="treeMenu">
+          <li>string</li>
           <li>Rename</li>
           <li>Remove</li>
           <li>Preferences</li>
         </ul>
+        <ul id="tCMShape" class="treeMenu">
+          <li>figure</li>
+          <li>Rename</li>
+          <li>Remove</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMItem" class="treeMenu">
+          <li>item</li>
+          <li>Rename</li>
+          <li>Preferences</li>
+        </ul>
 
-
+        <ul id="tCMOther" class="treeMenu">
+        </ul>
       </div>
-
-
-
 
       <!-- *** Border between Layer Tree and Main Panel *** -->
       <div id="borderTree"></div>
@@ -246,60 +245,10 @@
   <div id="footer">
     <p>Copyright &copy; 2012-2020 Tatsuki Sekino. All rights reserved.</p>
   </div>
-
 </div>
 <!-- End of Container -->
 
 <!-- ****** Dialogs ****** -->
-<!-- **** Select import data from remote **** -->
-<div id="dialogImportRemote" class="dialog" style="height: 130px; width: 420px;">
-  <div class="dialogTitle">
-    Import Remote<span class="dialogCloseButton"></span>
-  </div>
-
-  <div class="dialogBody">
-    <form id="dialogImportRemoteForm" name="dialogImportRemoteForm">
-      <div class="dialogContainer">
-        <label class="dialogContainerLabel" for="dialogImportRemoteUrl" style="float: left;">URL:</label>
-        <div style="float: left; width: 90%;">
-          <div>
-            <input id="dialogImportRemoteUrl" type="text" name="url" style="width: 100%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
-          </div>
-          <div style="margin-top: 5px;">
-            <input id="dialogImportRemoteJson" type="radio" name="fileType" checked="checked" /> <label class="dialogSubContainerLabel" for="dialogImportRemoteJson"> JSON</label>
-            <input id="dialogImportRemoteGts" class="dialogSubContainerLabel" type="radio" name="fileType" /> <label for="dialogImportRemoteGts"> GTS/GTM</label>
-          </div>
-        </div>
-      </div>
-      <div class="dialogContainer">
-        <input type="button" name="import" value="import" onclick="dialogImportRemote_Import()" style="float:right;" />
-        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportRemote')" style="float:right;" />
-      </div>
-    </form>
-  </div>
-
-  <div class="dialogResizeHandle" style="cursor: ew-resize;"></div>
-</div>
-
-<!-- **** Select import data from local **** -->
-<div id="dialogImportLocal" class="dialog" style="height: 100px; width: 520px;">
-  <div class="dialogTitle">
-    Import Remote<span class="dialogCloseButton"></span>
-  </div>
-  <div class="dialogBody">
-    <form id="dialogImportLocalForm" name="dialogImportLocalForm">
-      File <input type="file" name="file" style="overflow: hidden; width: 100%;"/>
-      <div style="padding: 10px 0;">
-        <input id="dialogImportLocalJson" type="radio" name="fileType" title="JSON" checked="checked" /> <label for="dialogImportLocalJson">JSON</label>
-        <input id="dialogImportLocalGts" type="radio" name="fileType" title="GTS/GTM"/> <label for="dialogImportLocalGts">GTS/GTM</label>
-        <input type="button" name="import" value="import" onclick="dialogImportLocal_Import()" style="float:right;" />
-        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportLocal')" style="float:right; margin-right: 10px;" />
-      </div>
-    </form>
-  </div>
-  <div class="dialogResizeHandle"></div>
-</div>
-
 <!-- **** Preferences **** -->
 <div id="dialogPreferences" class="dialog" style="width: 510px; height: 400px;">
   <div class="dialogTitle">
@@ -307,7 +256,6 @@
   </div>
 
   <div class="dialogBody">
-    <form id="dialogAppendLayerForm" name="dialogAppendLayerForm">
 
       <div class="tabContainer">
         <label id="tabRootLabel" class="tabLabel tabLabelSelected" for="tabRoot" onclick="clickTabLabel(event)" >Root</label>
@@ -372,92 +320,6 @@
 
         </div>
 
-<!-- *** Preferences of Layer *** -->
-        <div id="tabLayer" class="tab">
-
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel" for="layerNameText">Name:</label><input id="layerNameText" type="text" style="width: 250px;" value=""/>
-          </div>
-
-          <div id="layerType" class="dialogContainer">
-            <span class="dialogContainerLabel" style="float: left;">Type:</span>
-            <span style="float: left">
-              <input id="layerTypeTLine" type="radio" value="tLine" name="layerType" checked="checked" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypeTLine">Time Line</label>
-              <input id="layerTypeLineChart" type="radio" value="lineChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypeLineChart">Line Chart</label>
-              <input id="layerTypeBarChart" type="radio" value="barChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypeBarChart">Bar Chart</label>
-              <input id="layerTypePlotChart" type="radio" value="plotChart" name="layerType" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypePlotChart">Plot Chart</label><br/>
-
-              <input id="layerTypeScale" type="radio" value="tScale" name="layerType" onclick="changeLayerType(event)"/><label class="dialogSubContainerLabel" for="layerTypeScale">Time Scale</label>
-              <input id="layerTypePlain" type="radio" value="plain" name="layerType" onclick="changeLayerType(event)" /><label class="dialogSubContainerLabel" for="layerTypePlain">Plain</label>
-              (<input id="layerFixed" type="checkbox" /><label id="layerFixedLabel" for="layerFixed" class="dialogSubContainerLabel">Fixed Layer</label>)</span>
-          </div>
-
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel" for="layerHeight">Height:</label><input id="layerHeight" type="text" value="" style="width:30px; text-align: right;" /> px
-            <span class="dialogContainerLabel" style="margin-left: 10px;">Margin:</span>
-            <label for="layerMarginTop">Top </label><input id="layerMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
-            <label for="layerMarginBottom" style="margin-left: 10px;">Bottom </label><input id="layerMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
-          </div>
-
-          <!-- for TLine and Charts -->
-          <div id="recordsetSettings" class="dialogContainer" style="display: block;">
-            <div class="dialogContainerLabel" style="float: left;">Recordsets:</div>
-            <div id="recordsetsInLayer" class="partsList" style="height: 38px; float: left;">
-              <table style="user-select: none;">
-                <tr><td oncontextmenu="partsListContextMenu(event)">Recordset 1</td></tr>
-                <tr><td oncontextmenu="partsListContextMenu(event)">Recordset 2</td></tr>
-                <tr><td oncontextmenu="partsListContextMenu(event)">Recordset 3</td></tr>
-              </table>
-            </div>
-            <!--div>
-              <input type="button" value="append" style="font-size: 12px; margin-left: 10px;" />
-              <input type="button" value="remove" style="font-size: 12px; margin-left: 10px;" />
-            </div-->
-          </div>
-
-          <div id="vSettings" class="dialogContainer" style="display: block;">
-            <div style="float: left;">
-            <span class="dialogContainerLabel">Value:</span>
-            <label for="layerVTop">Top </label><input id="layerVTop" type="text" value="100" style="width: 30px; text-align: right;" />
-            <label for="layerVBottom" style="margin-left: 10px;">Bottom </label><input id="layerVBottom" type="text" value="0" style="width: 30px; text-align: right;" />
-            </div>
-            <div class="dialogSubContainerLabel" style="float: left; margin-left: 15px;">Scales</div>
-            <div id="vScales" class="partsList" style="height: 38px; width: 100px; float: left;">
-              <table>
-                <tr><td>Scale 1</td></tr>
-              </table>
-            </div>
-          </div>
-
-          <!-- for Time Scale -->
-          <div id="tScaleSettings" class="dialogContainer" style="display: none;">
-            <label class="dialogContainerLabel" for="calendarOfScale">Calendar</label>
-            <select id="calendarOfScale" style="width: 300px;">
-              <option value="2.1">Gregorian Calendar (proleptic)</option>
-              <option value="102.1">Julian Calendar</option>
-              <option value="101.1" selected="selected">Julian/Gregorian Calendar (reformed in 1582)</option>
-              <option value="101.2">Julian/Gregorian Calendar (reformed in 1752)</option>
-              <option value="1001.1">Japanese Calendar</option>
-            </select>
-          </div>
-
-          <!-- for plain Layer -->
-          <div id="objectSettings" class="dialogContainer" style="display: block;">
-            <div class="dialogContainerLabel" style="float: left;">Objects:</div>
-            <div id="objectsInLayer" class="partsList" style="height: 38px;">
-              <table>
-                <tr><td>Object 1</td></tr>
-                <tr><td>Object 2</td></tr>
-                <tr><td>Object 3</td></tr>
-              </table>
-            </div>
-          </div>
-
-
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel" for="layerBackgroundColor">Background Color:</label><input id="layerBackgroundColor" type="text" value="#cccccc" style="width: 60px;" />
-          </div>
-        </div>
 
 <!-- *** Preferences of Recordset *** -->
         <div id="tabRecordset" class="tab">
@@ -629,16 +491,71 @@
         </div>
 
       </div>
-
-
-    </form>
-
     <input id="applyPreference" type="button" value="Apply" onclick="applyPreference()" />
-
-
   </div>
 
   <div class="dialogResizeHandle"></div>
+</div>
+
+<!-- **** Preferences **** -->
+<!-- *** Preferences of Chart Layer *** -->
+<div id="dialogPreferencesChartLayer" class="dialog" style="width: 420px; left: 200px; top: 100px; display: block;">
+  <div class="dialogTitle">
+    Preferences (Chart Layer)<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPCLName" style="float: left;">Title:</label>
+      <div style="margin-left: 65px;"><input id="dPCLName" type="text" style="width: 300px;" /></div>
+    </div>
+
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPCLType" style="float: left;">Type:</label>
+      <div style="margin-left: 65px;">
+        <select id="dPCLType" style="width: 120px;">
+          <option value="LineChart">Line Chart</option>
+          <option value="BarChart">Bar Chart</option>
+          <option value="PlotChart">Plot Chart</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Position:</div>
+      <div style="margin-left: 65px;">
+        <label class="dialogSubContainerLabel" for="dPCLHeight">Height</label>
+        <input id="dPCLHeight" type="text" value="" style="width:30px; text-align: right;" /> px
+        <label for="dPCLMarginTop" style="margin-left: 15px;">Top</label>
+        <input id="dPCLMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
+        <label for="dPCLMarginBottom" style="margin-left: 15px;">Bottom</label>
+        <input id="dPCLMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Value:</div>
+      <div style="margin-left: 65px;">
+        <label for="dPCLVTop">Top</label>
+        <input id="dPCLVTop" type="text" value="100" style="width: 40px; text-align: right;" />
+        <label for="dPCLVBottom" style="margin-left: 15px;">Bottom</label>
+        <input id="dPCLVBottom" type="text" value="0" style="width: 40px; text-align: right;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPCLBackgroundColor">Color</label>
+        <input id="dPCLBackgroundColor" type="text" value="#cccccc" style="width: 60px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;" />
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+    </div>
+  </div>
 </div>
 
 <!-- **** Create Dialog **** -->
@@ -868,8 +785,6 @@
   </div>
 </div>
 <!-- End of Load Dialog -->
-
-
 
 </body>
 </html>

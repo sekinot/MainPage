@@ -1,0 +1,51 @@
+<!-- ****** Dialogs ****** -->
+<!-- **** Select import data from remote **** -->
+<div id="dialogImportRemote" class="dialog" style="height: 130px; width: 420px;">
+  <div class="dialogTitle">
+    Import Remote<span class="dialogCloseButton"></span>
+  </div>
+
+  <div class="dialogBody">
+    <form id="dialogImportRemoteForm" name="dialogImportRemoteForm">
+      <div class="dialogContainer">
+        <label class="dialogContainerLabel" for="dialogImportRemoteUrl" style="float: left;">URL:</label>
+        <div style="float: left; width: 90%;">
+          <div>
+            <input id="dialogImportRemoteUrl" type="text" name="url" style="width: 100%;" value="http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"/>
+          </div>
+          <div style="margin-top: 5px;">
+            <input id="dialogImportRemoteJson" type="radio" name="fileType" checked="checked" /> <label class="dialogSubContainerLabel" for="dialogImportRemoteJson"> JSON</label>
+            <input id="dialogImportRemoteGts" class="dialogSubContainerLabel" type="radio" name="fileType" /> <label for="dialogImportRemoteGts"> GTS/GTM</label>
+          </div>
+        </div>
+      </div>
+      <div class="dialogContainer">
+        <input type="button" name="import" value="import" onclick="dialogImportRemote_Import()" style="float:right;" />
+        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportRemote')" style="float:right;" />
+      </div>
+    </form>
+  </div>
+
+  <div class="dialogResizeHandle" style="cursor: ew-resize;"></div>
+</div>
+
+<!-- **** Select import data from local **** -->
+<div id="dialogImportLocal" class="dialog" style="height: 100px; width: 520px;">
+  <div class="dialogTitle">
+    Import Remote<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <form id="dialogImportLocalForm" name="dialogImportLocalForm">
+      File <input type="file" name="file" style="overflow: hidden; width: 100%;"/>
+      <div style="padding: 10px 0;">
+        <input id="dialogImportLocalJson" type="radio" name="fileType" title="JSON" checked="checked" /> <label for="dialogImportLocalJson">JSON</label>
+        <input id="dialogImportLocalGts" type="radio" name="fileType" title="GTS/GTM"/> <label for="dialogImportLocalGts">GTS/GTM</label>
+        <input type="button" name="import" value="import" onclick="dialogImportLocal_Import()" style="float:right;" />
+        <input type="button" name="cancel" value="cancel" onclick="closeDialog('dialogImportLocal')" style="float:right; margin-right: 10px;" />
+      </div>
+    </form>
+  </div>
+  <div class="dialogResizeHandle"></div>
+</div>
+
+
