@@ -384,7 +384,8 @@ function dCrCreate (ev) {  // Layer生成
             dataLayer = new HuTime.LineChartLayer(rs, null, PanelTitleVBreadth, null);
             break;
         case "BarChart" :
-            rs.plotWidthType = 1;   // 可能範囲（pBegin - pEnd）で描画
+            // plotWidthType: 可能範囲（pBegin - pEnd）で描画（rBegin - rEndだと、from/toが同じ日付だと逆転する）
+            rs.plotWidthType = 1;
             dataLayer = new HuTime.BarChartLayer(rs, null, PanelTitleVBreadth, null);
             break;
         case "PlotChart" :

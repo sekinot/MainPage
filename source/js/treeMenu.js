@@ -269,6 +269,7 @@ function treeContextMenu (ev) {     // 右クリックでの動作（開始時�
     menuContainer.style.left = (ev.clientX - mainPanel.offsetLeft) + "px";
     menuContainer.style.top = (ev.clientY - mainPanel.offsetTop)+ "px";
     menuContainer.style.display = "block";
+    menuContainer.treeBranch = ev.target.closest("li");
 
     // タイプに合わせてメニューを表示
     menuContainer.querySelectorAll("ul.treeMenu").forEach(ul => {

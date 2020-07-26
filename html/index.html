@@ -142,7 +142,7 @@
             </ul>
           </li>
           <li>Remove</li>
-          <li onclick="showPanelPreferences()">Preferences</li>
+          <li>Preferences</li>
         </ul>
 
         <ul id="tCMTLineLayer" class="treeMenu">
@@ -157,7 +157,11 @@
           <li>Rename</li>
           <li>Append Recordset</li>
           <li>Remove</li>
-          <li onclick="showDialog('dialogPreferencesChartLayer')">Preferences</li>
+          <li id="tCMChartLayerPreferences">Preferences</li>
+          <script type="text/javascript">
+            document.getElementById("tCMChartLayerPreferences").
+              addEventListener("click", dPCLOpen);
+          </script>
         </ul>
         <ul id="tCMScaleLayer" class="treeMenu">
           <li>scalelayer</li>
@@ -250,6 +254,68 @@
 
 <!-- ****** Dialogs ****** -->
 <!-- **** Preferences **** -->
+<!-- *** Preferences of Chart Layer *** -->
+<div id="dialogPreferencesChartLayer" class="dialog" style="width: 420px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    Preferences (Chart Layer)<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPCLName" style="float: left;">Name:</label>
+      <div style="margin-left: 65px;"><input id="dPCLName" type="text" style="width: 300px;" /></div>
+    </div>
+
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPCLType" style="float: left;">Type:</label>
+      <div style="margin-left: 65px;">
+        <select id="dPCLType" style="width: 120px;">
+          <option value="LineChart">Line Chart</option>
+          <option value="BarChart">Bar Chart</option>
+          <option value="PlotChart">Plot Chart</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Position:</div>
+      <div style="margin-left: 65px;">
+        <label class="dialogSubContainerLabel" for="dPCLHeight">Height</label>
+        <input id="dPCLHeight" type="text" value="" style="width:30px; text-align: right;" /> px
+        <label for="dPCLMarginTop" style="margin-left: 15px;">Top</label>
+        <input id="dPCLMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
+        <label for="dPCLMarginBottom" style="margin-left: 15px;">Bottom</label>
+        <input id="dPCLMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Value:</div>
+      <div style="margin-left: 65px;">
+        <label for="dPCLVTop">Top</label>
+        <input id="dPCLVTop" type="text" value="100" style="width: 40px; text-align: right;" />
+        <label for="dPCLVBottom" style="margin-left: 15px;">Bottom</label>
+        <input id="dPCLVBottom" type="text" value="0" style="width: 40px; text-align: right;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPCLBackgroundColor">Color</label>
+        <input id="dPCLBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPCLClose()"/>
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPCLApply()" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesChartLayer')" />
+    </div>
+  </div>
+</div>
+
+
+<!-- **** Preferences **** -->
 <div id="dialogPreferences" class="dialog" style="width: 510px; height: 400px;">
   <div class="dialogTitle">
     Append Layer<span class="dialogCloseButton"></span>
@@ -260,7 +326,7 @@
       <div class="tabContainer">
         <label id="tabRootLabel" class="tabLabel tabLabelSelected" for="tabRoot" onclick="clickTabLabel(event)" >Root</label>
         <label id="tabPanelLabel" class="tabLabel" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
-        <label id="tabLayerLabel" class="tabLabel" for="tabLayer" onclick="clickTabLabel(event)">Layer</label>
+        <label id="tabLayerLabel" class="tabLabel" onclick="clickTabLabel(event)">Layer</label>
         <label id="tabRecordsetLabel" class="tabLabel" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
         <label id="tabRecordItemLabel" class="tabLabel" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
         <label id="tabObjectLabel" class="tabLabel" for="tabObject" onclick="clickTabLabel(event)">Object</label>
@@ -495,67 +561,6 @@
   </div>
 
   <div class="dialogResizeHandle"></div>
-</div>
-
-<!-- **** Preferences **** -->
-<!-- *** Preferences of Chart Layer *** -->
-<div id="dialogPreferencesChartLayer" class="dialog" style="width: 420px; left: 200px; top: 100px; display: block;">
-  <div class="dialogTitle">
-    Preferences (Chart Layer)<span class="dialogCloseButton"></span>
-  </div>
-  <div class="dialogBody">
-    <div class="dialogContainer">
-      <label class="dialogContainerLabel" for="dPCLName" style="float: left;">Title:</label>
-      <div style="margin-left: 65px;"><input id="dPCLName" type="text" style="width: 300px;" /></div>
-    </div>
-
-    <div class="dialogContainer">
-      <label class="dialogContainerLabel" for="dPCLType" style="float: left;">Type:</label>
-      <div style="margin-left: 65px;">
-        <select id="dPCLType" style="width: 120px;">
-          <option value="LineChart">Line Chart</option>
-          <option value="BarChart">Bar Chart</option>
-          <option value="PlotChart">Plot Chart</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="dialogContainer">
-      <div class="dialogContainerLabel" style="float: left;">Position:</div>
-      <div style="margin-left: 65px;">
-        <label class="dialogSubContainerLabel" for="dPCLHeight">Height</label>
-        <input id="dPCLHeight" type="text" value="" style="width:30px; text-align: right;" /> px
-        <label for="dPCLMarginTop" style="margin-left: 15px;">Top</label>
-        <input id="dPCLMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
-        <label for="dPCLMarginBottom" style="margin-left: 15px;">Bottom</label>
-        <input id="dPCLMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
-      </div>
-    </div>
-
-    <div class="dialogContainer">
-      <div class="dialogContainerLabel" style="float: left;">Value:</div>
-      <div style="margin-left: 65px;">
-        <label for="dPCLVTop">Top</label>
-        <input id="dPCLVTop" type="text" value="100" style="width: 40px; text-align: right;" />
-        <label for="dPCLVBottom" style="margin-left: 15px;">Bottom</label>
-        <input id="dPCLVBottom" type="text" value="0" style="width: 40px; text-align: right;" />
-      </div>
-    </div>
-
-    <div class="dialogContainer">
-      <div class="dialogContainerLabel" style="float: left;">Background:</div>
-      <div style="margin-left: 90px;">
-        <label for="dPCLBackgroundColor">Color</label>
-        <input id="dPCLBackgroundColor" type="text" value="#cccccc" style="width: 60px;" />
-      </div>
-    </div>
-
-    <div class="dialogContainer">
-      <input type="button" value="OK" style="width:80px; height: 30px; float: right;" />
-      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
-      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
-    </div>
-  </div>
 </div>
 
 <!-- **** Create Dialog **** -->

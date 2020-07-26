@@ -111,7 +111,7 @@
             </ul>
           </li>
           <li>Remove</li>
-          <li onclick="showPanelPreferences()">Preferences</li>
+          <li>Preferences</li>
         </ul>
 
         <ul id="tCMTLineLayer" class="treeMenu">
@@ -126,7 +126,11 @@
           <li>Rename</li>
           <li>Append Recordset</li>
           <li>Remove</li>
-          <li onclick="showDialog('dialogPreferencesChartLayer')">Preferences</li>
+          <li id="tCMChartLayerPreferences">Preferences</li>
+          <script type="text/javascript">
+            document.getElementById("tCMChartLayerPreferences").
+              addEventListener("click", dPCLOpen);
+          </script>
         </ul>
         <ul id="tCMScaleLayer" class="treeMenu">
           <li>scalelayer</li>
