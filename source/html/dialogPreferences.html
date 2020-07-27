@@ -7,7 +7,9 @@
   <div class="dialogBody">
     <div class="dialogContainer">
       <label class="dialogContainerLabel" for="dPCLName" style="float: left;">Name:</label>
-      <div style="margin-left: 65px;"><input id="dPCLName" type="text" style="width: 300px;" /></div>
+      <div style="margin-left: 65px;">
+        <input id="dPCLName" type="text" style="width: 300px;" />
+      </div>
     </div>
 
     <div class="dialogContainer">
@@ -59,6 +61,125 @@
   </div>
 </div>
 
+<div id="dialogPreferencesRecordItem" class="dialog"  style="width: 420px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    Preferences (Record Item)<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPRIName" style="float: left;">Name:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 50px;">
+        <div class="dialogSubContainer">
+          <input id="dPRIName" type="text" style="width: 300px;" />
+        </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPRIRecordsetName">Name in Recordset</label>
+          <input id="dPRIRecordsetName" class="readonlyInputText" type="text" readonly="readonly" style="width: 180px;" value="name in recordset"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- for TLine -->
+    <div id="dPRIPeriod" class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Period:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 50px;">
+      <div class="dialogSubContainer">
+        <label class="dialogSubContainerLabel" for="dPRIPeriodColor">Color</label>
+        <input id="dPRIPeriodColor" type="text" style="width: 150px;" value=""/>
+      </div>
+      </div>
+    </div>
+
+    <div id="dPRILabel" class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Label:</label>
+      <div class="dialogSubContainerGroup" style="margin-left:50px;">
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPRILabelFont">Font</label>
+          <input id="dPRILabelFont" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dPRILabelStyle" style="margin-left: 5px;"></label>
+          <select id="dPRILabelStyle" style="width: 90px;" name="labelDecoration">
+            <option value="normal" selected="selected">Normal</option>
+            <option value="bold">Bold</option>
+            <option value="italic">Italic</option>
+            <option value="italic bold">Italic/Bold</option>
+          </select>
+        </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPRILabelColor">Color</label>
+          <input id="dPRILabelColor" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dPRILabelSize" style="margin-left: 15px;">Size</label>
+          <input id="dPRILabelSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+        </div>
+      </div>
+    </div>
+
+    <!-- for Line Chart -->
+    <div id="dPRILine" class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Line:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 50px;">
+        <label class="dialogSubContainerLabel" for="dPRILineColor">Color</label>
+        <input id="dPRILineColor" type="text" style="width: 150px;" value=""/>
+        <label class="dialogSubContainerLabel" for="dPRILineWidth" style="margin-left: 15px;">Size</label>
+        <input id="dPRILineWidth" type="text" style="width: 25px; text-align: right;" value=""/> px
+      </div>
+    </div>
+
+    <!-- for Line and Plot Chart -->
+    <div id="dPRIPlot" class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Plot:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 50px;">
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPRIPlotType">Type</label>
+          <select id="dPRIPlotType">
+            <option value="0" selected="selected" style="width: 50px;">Circle</option>
+            <option value="1">Square</option>
+            <option value="2">Triangle</option>
+            <option value="3">Cross</option>
+          </select>
+          <label class="dialogSubContainerLabel" for="dPRIPlotSize" style="margin-left: 15px;">Size</label>
+          <input id="dPRIPlotSize" type="text" style="width: 25px; text-align: right;" value=""/> px
+          <label class="dialogSubContainerLabel" for="dPRIPlotRotate" style="margin-left: 15px;">Rotate</label>
+          <input id="dPRIPlotRotate" type="text" style="width: 30px; text-align: right;" value=""/> deg
+        </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPRIPlotFillColor">Fill Color</label>
+          <input id="dPRIPlotFillColor" type="text" style="width: 150px;" value=""/>
+        </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPRIPlotEdgeColor">Edge Color</label>
+          <input id="dPRIPlotEdgeColor" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dPRIPlotEdgeWidth" style="margin-left: 15px;">Width</label>
+          <input id="dPRIPlotEdgeWidth" type="text" style="width: 25px; text-align: right;" value=""/> px
+        </div>
+      </div>
+    </div>
+
+    <!-- for Bar Chart -->
+    <div id="dPRIBar" class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Bar:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 50px;">
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPRIBarFillColor">Fill Color</label>
+          <input id="dPRIBarFillColor" type="text" style="width: 150px;" value="" />
+        </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPRIBarEdgeColor">Edge Color</label>
+          <input id="dPRIBarEdgeColor" type="text" style="width: 150px;" value="" />
+          <label class="dialogSubContainerLabel" for="dPRIBarEdgeWidth" style="margin-left: 15px;">Width</label>
+          <input id="dPRIBarEdgeWidth" type="text" style="width: 25px; text-align: right;" value=""/> px
+        </div>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPRIClose()"/>
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPRIApply()" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesRecordItem')" />
+    </div>
+  </div>
+</div>
+
+
 
 <!-- **** Preferences **** -->
 <div id="dialogPreferences" class="dialog" style="width: 510px; height: 400px;">
@@ -71,9 +192,7 @@
       <div class="tabContainer">
         <label id="tabRootLabel" class="tabLabel tabLabelSelected" for="tabRoot" onclick="clickTabLabel(event)" >Root</label>
         <label id="tabPanelLabel" class="tabLabel" for="tabPanel" onclick="clickTabLabel(event)" >Panel</label>
-        <label id="tabLayerLabel" class="tabLabel" onclick="clickTabLabel(event)">Layer</label>
         <label id="tabRecordsetLabel" class="tabLabel" for="tabRecordset" onclick="clickTabLabel(event)">Recordset</label>
-        <label id="tabRecordItemLabel" class="tabLabel" for="tabRecordItem" onclick="clickTabLabel(event)">Record Item</label>
         <label id="tabObjectLabel" class="tabLabel" for="tabObject" onclick="clickTabLabel(event)">Object</label>
         <label id="tabVScaleLabel" class="tabLabel" for="tabVScale" onclick="clickTabLabel(event)">Value Scale</label>
 
@@ -220,78 +339,6 @@
 
 
 <!-- *** Preferences of Record Item *** -->
-        <div id="tabRecordItem" class="tab">
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel" for="itemRecordsetNameText">Name in Recordset:</label><input id="itemRecordsetNameText" class="readonlyInputText" type="text" readonly="readonly" style="width: 250px;" value="name in recordset"/>
-          </div>
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel" for="itemNameText">Name:</label><input id="itemNameText" type="text" style="width: 250px;" value=""/>
-          </div>
-
-          <!-- for TLine -->
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel">Period Bar:</label>
-            <label class="dialogSubContainerLabel" for="barColor">Color</label><input id="barColor" type="text" style="width: 70px;" value=""/>
-          </div>
-
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel" style="float: left;">Label:</label>
-            <div style="float: left;">
-              <div>
-                <label class="dialogSubContainerLabel" for="labelFont">Font Family </label><input id="labelFont" type="text" style="width: 120px;" value=""/>
-                <label class="dialogSubContainerLabel" for="labelDecoration" style="margin-left: 10px;">Decoration </label>
-                <select id="labelDecoration" style="width: 90px;" name="labelDecoration">
-                  <option selected="selected">None</option>
-                  <option>Bold</option>
-                  <option>Italic</option>
-                  <option>Italic/Bold</option>
-                </select>
-              </div>
-              <div style="margin-top: 5px;">
-                <label class="dialogSubContainerLabel" for="labelColor">Color </label><input id="labelColor" type="text" style="width: 70px;" value="#000000"/>
-                <label class="dialogSubContainerLabel" for="labelSize" style="margin-left: 10px;">Size</label><input id="labelSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
-              </div>
-            </div>
-          </div>
-
-          <!-- for Line Chart -->
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel">Line:</label>
-            <label class="dialogSubContainerLabel" for="lineColor">Color </label><input id="lineColor" type="text" style="width: 50px;" value=""/>
-            <label class="dialogSubContainerLabel" for="lineWidth" style="margin-left: 10px;">Size </label><input id="lineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
-          </div>
-
-          <!-- for Line and Plot Chart -->
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel" style="float: left;">Plot:</label>
-            <div style="float: left;">
-              <div>
-                <label class="dialogSubContainerLabel" for="plotType">Type</label>
-                <select id="plotType">
-                  <option selected="selected" style="width: 50px;">Circle</option>
-                  <option>Square</option>
-                  <option>Triangle</option>
-                  <option>Cross</option>
-                </select>
-                <label class="dialogSubContainerLabel" for="plotSize" style="margin-left: 10px;">Size </label><input id="plotSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
-                <label class="dialogSubContainerLabel" for="plotFillColor" style="margin-left: 10px;">Fill Color </label><input id="plotFillColor" type="text" style="width: 50px;" value=""/>
-              </div>
-              <div style="margin-top: 5px;">
-                <label class="dialogSubContainerLabel" for="plotLinelColor">Line Color </label><input id="plotLinelColor" type="text" style="width: 50px;" value=""/>
-                <label class="dialogSubContainerLabel" for="plotLineWidth" style="margin-left: 10px;">width </label><input id="plotLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
-              </div>
-            </div>
-          </div>
-
-          <!-- for Bar Chart -->
-          <div class="dialogContainer">
-            <label class="dialogContainerLabel">Bar:</label>
-            <label class="dialogSubContainerLabel" for="barFillColor">Fill Color </label><input id="barFillColor" type="text" style="width: 50px;" value=""/>
-            <label class="dialogSubContainerLabel" for="barLinelColor" style="margin-left: 10px;">Line Color </label><input id="barLinelColor" type="text" style="width: 50px;" value=""/>
-            <label class="dialogSubContainerLabel" for="barLineWidth" style="margin-left: 10px;">width </label><input id="barLineWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
-          </div>
-
-        </div>
 
         <div id="tabObject" class="tab">
           55555

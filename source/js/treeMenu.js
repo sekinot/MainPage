@@ -51,7 +51,7 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
         shape: {
             iconSrc: "img/shape.png", iconAlt: "Shape", menuType: "Shape"},
         recordItem: {
-            iconSrc: "img/recordItem.png", iconAlt: "Record Item", menuType: "Item"}
+            iconSrc: "img/recordItem.png", iconAlt: "Record Item", menuType: "RecordItem"}
     };
     function getObjType (obj) {
         if (obj instanceof HuTime.PanelCollection)
@@ -149,6 +149,8 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     else if (hutimeObj.name) {
         labelSpan.appendChild(document.createTextNode(hutimeObj.name));
     }
+    else if (hutimeObj.itemName)
+        labelSpan.appendChild(document.createTextNode(hutimeObj.recordDataName));
     else if ( typeof hutimeObj === "string") {
         labelSpan.appendChild(document.createTextNode(hutimeObj));
     }
@@ -162,10 +164,17 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     let childObj = [];
     switch (hutimeObjType) {
         case "recordset":
-            if (hutimeObj instanceof HuTime.ChartRecordset)
-                childObj = hutimeObj._valueItems;
-            else if (hutimeObj instanceof HuTime.TLineRecordset)
-                childObj = [ hutimeObj.labelItem ];
+            childObj = hutimeObj.recordSettings.dataSettings.slice();
+            if (hutimeObj instanceof HuTime.ChartRecordset) {
+                childObj.unshift(hutimeObj._tEndDataSetting);
+                childObj.unshift(hutimeObj._tBeginDataSetting);
+            }
+            else {
+                childObj.unshift(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNameEnd, "tEnd"));
+                childObj.unshift(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNameBegin, "tBegin"));
+            }
             break;
         case "tlineLayer":
         case "chartLayer":

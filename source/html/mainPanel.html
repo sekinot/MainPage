@@ -174,10 +174,13 @@
           <li>Remove</li>
           <li>Preferences</li>
         </ul>
-        <ul id="tCMItem" class="treeMenu">
-          <li>item</li>
+        <ul id="tCMRecordItem" class="treeMenu">
           <li>Rename</li>
-          <li>Preferences</li>
+          <li id="tCMRecordItemPreferences">Preferences</li>
+          <script type="text/javascript">
+            document.getElementById("tCMRecordItemPreferences").
+              addEventListener("click", dPRIOpen);
+          </script>
         </ul>
 
         <ul id="tCMOther" class="treeMenu">
