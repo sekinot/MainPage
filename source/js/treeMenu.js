@@ -132,13 +132,84 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     selectSpan.addEventListener("contextmenu", treeContextMenu);
     selectSpan.className = "branchSelectSpan";
 
-    // アイコンのul要素の追加
-    let icon = document.createElement("img");
-    icon.className = "branchIcon";
-    icon.src = hutimeObjSettings[hutimeObjType].iconSrc;
-    icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
-    icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
-    selectSpan.appendChild(icon);
+    // アイコンの追加
+    if (hutimeObjType === "recordItem") {
+        // Record Itemを描画するlayerを取得
+        let layer, recordset;
+        let parentBranch = li;
+        while (parentBranch) {
+            if (parentBranch.objType === "Recordset")
+                recordset = parentBranch.hutimeObject;
+            if (parentBranch.objType === "ChartLayer" || parentBranch.objType === "TLineLayer") {
+                layer = parentBranch.hutimeObject;
+                break;
+            }
+            parentBranch = parentBranch.parentNode.closest("li")
+        }
+
+        if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === hutimeObj.itemName ||
+            recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === hutimeObj.itemName ||
+            recordset.recordSettings.tSetting &&
+                (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName ||
+                recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName)) {
+            // t value icon
+            let icon = document.createElement("img");
+            icon.className = "branchIcon";
+            icon.src = hutimeObjSettings[hutimeObjType].iconSrc;
+            icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
+            icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
+            selectSpan.appendChild(icon);
+        }
+        else if ((recordset._valueItems && recordset._valueItems.find(
+                valueObj => valueObj.name === hutimeObj.itemName)) ||
+                recordset.labelItem === hutimeObj.itemName) {
+            // value item and label item icon
+            let canvas = document.createElement("canvas");
+            canvas.className = "branchIcon";
+            canvas.style.height = "19px";
+            canvas.height = 18;
+            canvas.width = 24;
+            selectSpan.appendChild(canvas);
+            switch (layer.constructor.name) {
+                case "TLineLayer":
+                    drawIconPeriod(canvas, recordset.rangeStyle);
+                    drawIconLabel(canvas, recordset.labelStyle);
+                    break;
+                case "LineChartLayer":
+                    drawIconLine(canvas, recordset.getItemLineStyle(hutimeObj.itemName));
+                    drawIconPlot(canvas, recordset.getItemPlotStyle(hutimeObj.itemName),
+                        recordset.getItemPlotSymbol(hutimeObj.itemName),
+                        recordset.getItemPlotRotate(hutimeObj.itemName));
+                    break;
+                case "BarChartLayer":
+                    drawIconBar(canvas, recordset.getItemPlotStyle(hutimeObj.itemName));
+                    break;
+                case "PlotChartLayer":
+                    drawIconPlot(canvas, recordset.getItemPlotStyle(hutimeObj.itemName),
+                        recordset.getItemPlotSymbol(hutimeObj.itemName),
+                        recordset.getItemPlotRotate(hutimeObj.itemName));
+                    break;
+            }
+        }
+        else {
+            // other items icon
+            let icon = document.createElement("img");
+            icon.className = "branchIcon";
+            icon.src = hutimeObjSettings[hutimeObjType].iconSrc;
+            icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
+            icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
+            selectSpan.appendChild(icon);
+        }
+    }
+    else {
+        // icons for other than record items
+        let icon = document.createElement("img");
+        icon.className = "branchIcon";
+        icon.src = hutimeObjSettings[hutimeObjType].iconSrc;
+        icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
+        icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
+        selectSpan.appendChild(icon);
+    }
 
     // ラベルの追加（span要素を含む）
     let labelSpan = branchSpan.appendChild(document.createElement("span"));
@@ -194,6 +265,108 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     li.appendChild(document.createElement("ul"));
     for (let i = 0; i < childObj.length; ++i) {
         addBranch(li, childObj[i])
+    }
+}
+function clearIconCanvas(canvas) {
+   let ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, 24, 18);
+}
+function drawIconPeriod (canvas, style) {
+    let ctx = canvas.getContext("2d");
+    if (style.fillColor && style.fillColor !== "") {
+        drawBar(ctx);
+        ctx.fillStyle = style.fillColor;
+        ctx.fill();
+    }
+    if (style.lineWidth && style.lineColor && style.lineColor !== "") {
+        drawBar(ctx);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = style.lineColor;
+        ctx.stroke();
+    }
+    function drawBar (ctx) {
+        ctx.beginPath();
+        ctx.rect(1, 1, 22, 16);
+    }
+}
+function drawIconLabel (canvas, style) {
+    let ctx = canvas.getContext("2d");
+    ctx.fillStyle = style.fillColor;
+    ctx.font = style.fontWeight + " " + style.fontStyle + " 13px '" + style.fontFamily + "'";
+    ctx.fillText("a1", 4, 14, 20);
+}
+function drawIconLine (canvas, style) {
+   let ctx = canvas.getContext("2d");
+   if (style.lineWidth && style.lineColor && style.lineColor !== "") {
+        ctx.beginPath();
+        ctx.moveTo(0, 10);
+        ctx.lineTo(24, 10);
+        ctx.strokeStyle = style.lineColor;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+}
+function drawIconPlot (canvas, style, symbol, rotate) {
+    let ctx = canvas.getContext("2d");
+    ctx.translate(12, 10)
+    ctx.rotate(rotate * Math.PI / 180);
+    if (style.fillColor && style.fillColor !== "") {
+        drawSymbol(ctx, symbol);
+        ctx.fillStyle = style.fillColor;
+        ctx.fill();
+    }
+    if (style.lineWidth && style.lineColor && style.lineColor !== "") {
+        drawSymbol(ctx, symbol);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = style.lineColor;
+        ctx.stroke();
+    }
+    ctx.rotate(-rotate * Math.PI / 180);
+    ctx.translate(-12, -10)
+    function drawSymbol (ctx, symbol) {
+        switch (symbol) {
+            case 0:
+                ctx.beginPath();
+                ctx.arc(0, 0, 5, 0, 2 * Math.PI);
+                break;
+            case 1:
+                ctx.beginPath();
+                ctx.rect(-5, -5, 10, 10);
+                break;
+            case 2:
+                ctx.beginPath();
+                ctx.moveTo(0, -6.928);
+                ctx.lineTo(6, 3.464);
+                ctx.lineTo(-6, 3.464);
+                ctx.closePath();
+                break;
+            case 3:
+                ctx.beginPath();
+                ctx.moveTo(0, -6);
+                ctx.lineTo(0, 6);
+                ctx.moveTo(-6, 0);
+                ctx.lineTo(6, 0);
+                break;
+        }
+    }
+}
+function drawIconBar (canvas, style) {
+    let ctx = canvas.getContext("2d");
+    if (style.fillColor && style.fillColor !== "") {
+        drawBars(ctx);
+        ctx.fillStyle = style.fillColor;
+        ctx.fill();
+    }
+    if (style.lineWidth && style.lineColor && style.lineColor !== "") {
+        drawBars(ctx);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = style.lineColor;
+        ctx.stroke();
+    }
+    function drawBars (ctx) {
+        ctx.beginPath();
+        ctx.rect(1, 9, 10, 8);
+        ctx.rect(11, 1, 10, 16);
     }
 }
 

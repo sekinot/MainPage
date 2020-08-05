@@ -30,6 +30,8 @@ function dPCLOpen () {
 function dPCLApply () {
     let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
     layer.name = document.getElementById("dPCLName").value;
+    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
+        querySelector("span.branchLabelSpan").innerText = layer.name;
 
     let type = document.getElementById("dPCLType").value;
     if (type !== layer.constructor.name.replace("Layer", "")) {
@@ -74,6 +76,10 @@ function dPCLClose (ev) {
     closeDialog("dialogPreferencesChartLayer");
 }
 
+
+
+
+// *** Preferences of Record Item (dialogPreferencesRecordItem => dPRI)
 function dPRIOpen () {
     let item = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
     // Record Itemを描画するlayerを取得
@@ -165,12 +171,6 @@ function dPRIOpen () {
     else {
         // Preferences of other items
     }
-
-    /* // デバッグ
-    let style = recordset.recordSettings.dataSettings[0].itemName;
-    style += "; " + recordset.recordSettings.dataSettings[0].recordDataName;
-    document.getElementById("statusBar").innerText = style;
-    // */
     showDialog("dialogPreferencesRecordItem");
 }
 function dPRIApply () {
@@ -234,6 +234,8 @@ function dPRIApply () {
     document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
         querySelector("span.branchLabelSpan").innerText = item.recordDataName;
 
+
+
     if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === item.itemName ||
         recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === item.itemName ||
         recordset.recordSettings.tSetting &&
@@ -244,20 +246,33 @@ function dPRIApply () {
     else if ((recordset._valueItems && recordset._valueItems.find(
             valueObj => valueObj.name === item.itemName)) ||
             recordset.labelItem === item.itemName) {
+        let canvas = document.getElementById("treeContextMenu").treeBranch.
+            querySelector("*.branchIcon");
+        clearIconCanvas(canvas);
         switch (layer.constructor.name) {
             case "TLineLayer":
                 setDPRIPeriod(item);
                 setDPRILabel(item);
+                drawIconPeriod(canvas, recordset.rangeStyle);
+                drawIconLabel(canvas, recordset.labelStyle);
                 break;
             case "LineChartLayer":
                 setDPRILine(item);
                 setDPRIPlot(item);
+                drawIconLine(canvas, recordset.getItemLineStyle(item.itemName));
+                drawIconPlot(canvas, recordset.getItemPlotStyle(item.itemName),
+                    recordset.getItemPlotSymbol(item.itemName),
+                    recordset.getItemPlotRotate(item.itemName));
                 break;
             case "BarChartLayer":
                 setDPRIBar(item);
+                drawIconBar(canvas, recordset.getItemPlotStyle(item.itemName))
                 break;
             case "PlotChartLayer":
                 setDPRIPlot(item);
+                drawIconPlot(canvas, recordset.getItemPlotStyle(item.itemName),
+                    recordset.getItemPlotSymbol(item.itemName),
+                    recordset.getItemPlotRotate(item.itemName));
                 break;
         }
     }

@@ -1,0 +1,60 @@
+
+Createダイアログ完成時に、各テキストボックスなどの初期値および、クローズ時の初期化処理を追加
+
+ツリーにプロットの種類、色、線を表示
+チャートの種類を変更したときに、ツリーのアイコンも更新
+
+itemの並び順、tRange関係は最後で良いかも（preferenceを変更する機会があまりない）
+tRasng関係はチェックボックスを使用不可に
+
+Time Scaleは開く（＞）アイコンは不要
+ツリーの各ノードを表示順にする
+
+レコードを　クリックすると、Otherも含めてダイアログ表示する仕組み
+
+ツリーメニュー、右クリックでも選択するようにする（preferenceがどこを指しているのかわからない）
+コンテキストメニューのrenameは不要？（Preferenceで操作）
+
+Record Itemのチェック操作による表示、非表示
+
+
+メインメニューのPreferenceはSettingsに
+チャートはマウスオーバーによる選択をデフォルトでは無効に
+
+（全体のSetting）
+起動時に表示される目盛りの暦
+
+（HuTime API本体）
+TLineとChartでRecordsetのT値の設定方法が違う（TLine:Recordsettings内、Chart:RcordsetのtBeginSetting, tEndSetting）
+エラーをログに出力するようにする（なんのエラーで描画できないのかわからない）
+カレンダースケール、西暦、10年毎ラベルの次がエラー（出ない）
+Headerなしの時、1行目のレコードを読まない（line skipのエラー）
+積み重ねグラフにした時のv軸の計算がおかしい（合計にすべきところを、1つ目の値だけで計算している）
+eval関数を使った処理を、セキュリティ情報配慮から削除する（HuTime.parse）
+チャートのメモリがチェックの操作で残る
+折れ線グラフの線のエッジを丸に
+
+＝＝＝済＝＝＝
+最初の表示はｔ値の範囲を合わせる
+JDの場合、1.1でCalendarRSを使うと、WebAPIを使ってしまうので、オリジナルのRSを使うべき
+item Other の処理
+複数valueの処理
+アイコンの種類ごとに色を変える（from;to;from/to, value, label, other）
+recordset tableもソートする（または、時間、値、その他の順にする？）
+recordsetIcon from, toの順番で並ぶようにする
+from, to, from/toは１つしか入らないようにする（labelも）
+ダイアログが開くとき、閉じるときに実行する関数の指定
+Previewの処理実装
+Previewボタン有効化のタイミング、
+Previewダイアログ、Createダイアログと同時に閉じる
+Headerが無いＣＳＶの処理
+Item選択が不十分な場合の処理（value, labelなし、時間項目なしなど）
+要素ＩＤや関数名のcreateをdCr
+時間目盛り組み込みの処理を整理する
+createダイアログをレイヤタイプ別に３つに分ける
+Create時にタイトルなどを入れるPlainレイヤを載せておく（タイトルの追加も）
+BlankのCreateのタイトル設定
+最初にBlankLayerが入った時、次のレイヤでのRedrawの範囲
+立ち上げ時にＪＧスケールを表示
+プレーンレイヤのオブジェクトをツリーに表示
+ツリーにitem Otherを表示
