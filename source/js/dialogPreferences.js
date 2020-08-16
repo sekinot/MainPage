@@ -234,8 +234,6 @@ function dPRIApply () {
     document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
         querySelector("span.branchLabelSpan").innerText = item.recordDataName;
 
-
-
     if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === item.itemName ||
         recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === item.itemName ||
         recordset.recordSettings.tSetting &&
@@ -246,35 +244,26 @@ function dPRIApply () {
     else if ((recordset._valueItems && recordset._valueItems.find(
             valueObj => valueObj.name === item.itemName)) ||
             recordset.labelItem === item.itemName) {
-        let canvas = document.getElementById("treeContextMenu").treeBranch.
-            querySelector("*.branchIcon");
-        clearIconCanvas(canvas);
         switch (layer.constructor.name) {
             case "TLineLayer":
                 setDPRIPeriod(item);
                 setDPRILabel(item);
-                drawIconPeriod(canvas, recordset.rangeStyle);
-                drawIconLabel(canvas, recordset.labelStyle);
                 break;
             case "LineChartLayer":
                 setDPRILine(item);
                 setDPRIPlot(item);
-                drawIconLine(canvas, recordset.getItemLineStyle(item.itemName));
-                drawIconPlot(canvas, recordset.getItemPlotStyle(item.itemName),
-                    recordset.getItemPlotSymbol(item.itemName),
-                    recordset.getItemPlotRotate(item.itemName));
                 break;
             case "BarChartLayer":
                 setDPRIBar(item);
-                drawIconBar(canvas, recordset.getItemPlotStyle(item.itemName))
                 break;
             case "PlotChartLayer":
                 setDPRIPlot(item);
-                drawIconPlot(canvas, recordset.getItemPlotStyle(item.itemName),
-                    recordset.getItemPlotSymbol(item.itemName),
-                    recordset.getItemPlotRotate(item.itemName));
                 break;
         }
+        let canvas = document.getElementById("treeContextMenu").treeBranch.
+            querySelector("*.branchIcon");
+        canvas.parentNode.insertBefore(getRecordDataItemIcon(item, recordset, layer), canvas);
+        canvas.remove();
     }
     else {
         // Preferences of other items

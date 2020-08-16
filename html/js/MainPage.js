@@ -343,32 +343,7 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
                 valueObj => valueObj.name === hutimeObj.itemName)) ||
                 recordset.labelItem === hutimeObj.itemName) {
             // value item and label item icon
-            let canvas = document.createElement("canvas");
-            canvas.className = "branchIcon";
-            canvas.style.height = "19px";
-            canvas.height = 18;
-            canvas.width = 24;
-            selectSpan.appendChild(canvas);
-            switch (layer.constructor.name) {
-                case "TLineLayer":
-                    drawIconPeriod(canvas, recordset.rangeStyle);
-                    drawIconLabel(canvas, recordset.labelStyle);
-                    break;
-                case "LineChartLayer":
-                    drawIconLine(canvas, recordset.getItemLineStyle(hutimeObj.itemName));
-                    drawIconPlot(canvas, recordset.getItemPlotStyle(hutimeObj.itemName),
-                        recordset.getItemPlotSymbol(hutimeObj.itemName),
-                        recordset.getItemPlotRotate(hutimeObj.itemName));
-                    break;
-                case "BarChartLayer":
-                    drawIconBar(canvas, recordset.getItemPlotStyle(hutimeObj.itemName));
-                    break;
-                case "PlotChartLayer":
-                    drawIconPlot(canvas, recordset.getItemPlotStyle(hutimeObj.itemName),
-                        recordset.getItemPlotSymbol(hutimeObj.itemName),
-                        recordset.getItemPlotRotate(hutimeObj.itemName));
-                    break;
-            }
+            selectSpan.appendChild(getRecordDataItemIcon(hutimeObj, recordset, layer));
         }
         else {
             // other items icon
@@ -446,11 +421,37 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
         addBranch(li, childObj[i])
     }
 }
-function clearIconCanvas(canvas) {
-   let ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, 24, 18);
-}
-function drawIconPeriod (canvas, style) {
+
+// Record Itemアイコンの取得
+function getRecordDataItemIcon (item, recordset, layer) {
+    let canvas = document.createElement("canvas");
+    canvas.className = "branchIcon";
+    canvas.style.height = "19px";
+    canvas.height = 18;
+    canvas.width = 24;
+    canvas.title = "Record Data Item";
+    switch (layer.constructor.name) {
+        case "TLineLayer":
+            drawIconPeriod(canvas, recordset.rangeStyle);
+            drawIconLabel(canvas, recordset.labelStyle);
+            break;
+        case "LineChartLayer":
+            drawIconLine(canvas, recordset.getItemLineStyle(item.itemName));
+            drawIconPlot(canvas, recordset.getItemPlotStyle(item.itemName),
+                recordset.getItemPlotSymbol(item.itemName),
+                recordset.getItemPlotRotate(item.itemName));
+            break;
+        case "BarChartLayer":
+            drawIconBar(canvas, recordset.getItemPlotStyle(item.itemName));
+            break;
+        case "PlotChartLayer":
+            drawIconPlot(canvas, recordset.getItemPlotStyle(item.itemName),
+                recordset.getItemPlotSymbol(item.itemName),
+                recordset.getItemPlotRotate(item.itemName));
+            break;
+    }
+    return canvas;
+    function drawIconPeriod (canvas, style) {
     let ctx = canvas.getContext("2d");
     if (style.fillColor && style.fillColor !== "") {
         drawBar(ctx);
@@ -468,84 +469,85 @@ function drawIconPeriod (canvas, style) {
         ctx.rect(1, 1, 22, 16);
     }
 }
-function drawIconLabel (canvas, style) {
-    let ctx = canvas.getContext("2d");
-    ctx.fillStyle = style.fillColor;
-    ctx.font = style.fontWeight + " " + style.fontStyle + " 13px '" + style.fontFamily + "'";
-    ctx.fillText("a1", 4, 14, 20);
-}
-function drawIconLine (canvas, style) {
-   let ctx = canvas.getContext("2d");
-   if (style.lineWidth && style.lineColor && style.lineColor !== "") {
-        ctx.beginPath();
-        ctx.moveTo(0, 10);
-        ctx.lineTo(24, 10);
-        ctx.strokeStyle = style.lineColor;
-        ctx.lineWidth = 2;
-        ctx.stroke();
-    }
-}
-function drawIconPlot (canvas, style, symbol, rotate) {
-    let ctx = canvas.getContext("2d");
-    ctx.translate(12, 10)
-    ctx.rotate(rotate * Math.PI / 180);
-    if (style.fillColor && style.fillColor !== "") {
-        drawSymbol(ctx, symbol);
+    function drawIconLabel (canvas, style) {
+        let ctx = canvas.getContext("2d");
         ctx.fillStyle = style.fillColor;
-        ctx.fill();
+        ctx.font = style.fontWeight + " " + style.fontStyle + " 13px '" + style.fontFamily + "'";
+        ctx.fillText("a1", 4, 14, 20);
     }
-    if (style.lineWidth && style.lineColor && style.lineColor !== "") {
-        drawSymbol(ctx, symbol);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = style.lineColor;
-        ctx.stroke();
-    }
-    ctx.rotate(-rotate * Math.PI / 180);
-    ctx.translate(-12, -10)
-    function drawSymbol (ctx, symbol) {
-        switch (symbol) {
-            case 0:
-                ctx.beginPath();
-                ctx.arc(0, 0, 5, 0, 2 * Math.PI);
-                break;
-            case 1:
-                ctx.beginPath();
-                ctx.rect(-5, -5, 10, 10);
-                break;
-            case 2:
-                ctx.beginPath();
-                ctx.moveTo(0, -6.928);
-                ctx.lineTo(6, 3.464);
-                ctx.lineTo(-6, 3.464);
-                ctx.closePath();
-                break;
-            case 3:
-                ctx.beginPath();
-                ctx.moveTo(0, -6);
-                ctx.lineTo(0, 6);
-                ctx.moveTo(-6, 0);
-                ctx.lineTo(6, 0);
-                break;
+    function drawIconLine (canvas, style) {
+       let ctx = canvas.getContext("2d");
+       if (style.lineWidth && style.lineColor && style.lineColor !== "") {
+            ctx.beginPath();
+            ctx.moveTo(0, 10);
+            ctx.lineTo(24, 10);
+            ctx.strokeStyle = style.lineColor;
+            ctx.lineWidth = 2;
+            ctx.stroke();
         }
     }
-}
-function drawIconBar (canvas, style) {
-    let ctx = canvas.getContext("2d");
-    if (style.fillColor && style.fillColor !== "") {
-        drawBars(ctx);
-        ctx.fillStyle = style.fillColor;
-        ctx.fill();
+    function drawIconPlot (canvas, style, symbol, rotate) {
+        let ctx = canvas.getContext("2d");
+        ctx.translate(12, 10)
+        ctx.rotate(rotate * Math.PI / 180);
+        if (style.fillColor && style.fillColor !== "") {
+            drawSymbol(ctx, symbol);
+            ctx.fillStyle = style.fillColor;
+            ctx.fill();
+        }
+        if (style.lineWidth && style.lineColor && style.lineColor !== "") {
+            drawSymbol(ctx, symbol);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = style.lineColor;
+            ctx.stroke();
+        }
+        ctx.rotate(-rotate * Math.PI / 180);
+        ctx.translate(-12, -10)
+        function drawSymbol (ctx, symbol) {
+            switch (symbol) {
+                case 0:
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 5, 0, 2 * Math.PI);
+                    break;
+                case 1:
+                    ctx.beginPath();
+                    ctx.rect(-5, -5, 10, 10);
+                    break;
+                case 2:
+                    ctx.beginPath();
+                    ctx.moveTo(0, -6.928);
+                    ctx.lineTo(6, 3.464);
+                    ctx.lineTo(-6, 3.464);
+                    ctx.closePath();
+                    break;
+                case 3:
+                    ctx.beginPath();
+                    ctx.moveTo(0, -6);
+                    ctx.lineTo(0, 6);
+                    ctx.moveTo(-6, 0);
+                    ctx.lineTo(6, 0);
+                    break;
+            }
+        }
     }
-    if (style.lineWidth && style.lineColor && style.lineColor !== "") {
-        drawBars(ctx);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = style.lineColor;
-        ctx.stroke();
-    }
-    function drawBars (ctx) {
-        ctx.beginPath();
-        ctx.rect(1, 9, 10, 8);
-        ctx.rect(11, 1, 10, 16);
+    function drawIconBar (canvas, style) {
+        let ctx = canvas.getContext("2d");
+        if (style.fillColor && style.fillColor !== "") {
+            drawBars(ctx);
+            ctx.fillStyle = style.fillColor;
+            ctx.fill();
+        }
+        if (style.lineWidth && style.lineColor && style.lineColor !== "") {
+            drawBars(ctx);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = style.lineColor;
+            ctx.stroke();
+        }
+        function drawBars (ctx) {
+            ctx.beginPath();
+            ctx.rect(1, 9, 10, 8);
+            ctx.rect(11, 1, 10, 16);
+        }
     }
 }
 
@@ -1086,8 +1088,6 @@ function dPRIApply () {
     document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
         querySelector("span.branchLabelSpan").innerText = item.recordDataName;
 
-
-
     if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === item.itemName ||
         recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === item.itemName ||
         recordset.recordSettings.tSetting &&
@@ -1098,35 +1098,26 @@ function dPRIApply () {
     else if ((recordset._valueItems && recordset._valueItems.find(
             valueObj => valueObj.name === item.itemName)) ||
             recordset.labelItem === item.itemName) {
-        let canvas = document.getElementById("treeContextMenu").treeBranch.
-            querySelector("*.branchIcon");
-        clearIconCanvas(canvas);
         switch (layer.constructor.name) {
             case "TLineLayer":
                 setDPRIPeriod(item);
                 setDPRILabel(item);
-                drawIconPeriod(canvas, recordset.rangeStyle);
-                drawIconLabel(canvas, recordset.labelStyle);
                 break;
             case "LineChartLayer":
                 setDPRILine(item);
                 setDPRIPlot(item);
-                drawIconLine(canvas, recordset.getItemLineStyle(item.itemName));
-                drawIconPlot(canvas, recordset.getItemPlotStyle(item.itemName),
-                    recordset.getItemPlotSymbol(item.itemName),
-                    recordset.getItemPlotRotate(item.itemName));
                 break;
             case "BarChartLayer":
                 setDPRIBar(item);
-                drawIconBar(canvas, recordset.getItemPlotStyle(item.itemName))
                 break;
             case "PlotChartLayer":
                 setDPRIPlot(item);
-                drawIconPlot(canvas, recordset.getItemPlotStyle(item.itemName),
-                    recordset.getItemPlotSymbol(item.itemName),
-                    recordset.getItemPlotRotate(item.itemName));
                 break;
         }
+        let canvas = document.getElementById("treeContextMenu").treeBranch.
+            querySelector("*.branchIcon");
+        canvas.parentNode.insertBefore(getRecordDataItemIcon(item, recordset, layer), canvas);
+        canvas.remove();
     }
     else {
         // Preferences of other items
