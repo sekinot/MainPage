@@ -4,9 +4,6 @@
 Record Itemのチェック操作による表示、非表示
 tRange関係はチェックボックスを使用不可に
 
-TLineのpreference、Labelの書式がdefaultを変更している可能性あり
-
-
 ツリーの各ノードを表示順にする
 レコードを　クリックすると、Otherも含めてダイアログ表示する仕組み
 
@@ -55,7 +52,6 @@ BlankのCreateのタイトル設定
 itemの並び順、tRange関係は最後で良いかも（preferenceを変更する機会があまりない）
 メインメニューのPreferenceはSettingsに
 コンテキストメニューのrenameは削除（Preferenceで操作）
-
 Time Scaleは開く（＞）アイコンは不要
 ツリーメニュー、右クリックでも選択するようにする（preferenceがどこを指しているのかわからない）
-
+TLineのpreference、Labelの書式がdefaultを変更している可能性あり

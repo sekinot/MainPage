@@ -193,7 +193,7 @@ function dPRIApply () {
             document.getElementById("dPRIPeriodColor").value, null, null);
     }
     function setDPRILabel (item) {
-        let style = recordset.labelStyle;
+        let style = new HuTime.StringStyle();
         style.fontFamily = document.getElementById("dPRILabelFont").value;
         let fontStyle = document.getElementById("dPRILabelStyle").value;
         style.fontStyle = "normal";
@@ -204,6 +204,7 @@ function dPRIApply () {
             style.fontWeight = 700;
         style.fillColor = document.getElementById("dPRILabelColor").value;
         style.fontSize = parseFloat(document.getElementById("dPRILabelSize").value);
+        recordset.labelStyle = style;
     }
     function setDPRILine (item) {
         recordset.setItemLineStyle(item.itemName, new HuTime.FigureStyle(
