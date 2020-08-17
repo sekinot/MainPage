@@ -147,11 +147,6 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
             parentBranch = parentBranch.parentNode.closest("li")
         }
 
-        //if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === hutimeObj.itemName ||
-        //    recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === hutimeObj.itemName ||
-        //    recordset.recordSettings.tSetting &&
-        //        (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName ||
-        //        recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName)) {
         if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === hutimeObj.itemName ||
             recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === hutimeObj.itemName) {
             // 今後のt値指定の方法の統一に合わせて改修
