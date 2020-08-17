@@ -238,7 +238,7 @@ function dPRIApply () {
         recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === item.itemName ||
         recordset.recordSettings.tSetting &&
             (recordset.recordSettings.tSetting.itemNameBegin === item.itemName ||
-            recordset.recordSettings.tSetting.itemNameBegin === item.itemName)) {
+            recordset.recordSettings.tSetting.itemNameEnd === item.itemName)) {
         // Preferences of t value
     }
     else if ((recordset._valueItems && recordset._valueItems.find(

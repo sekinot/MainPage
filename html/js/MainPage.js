@@ -326,15 +326,42 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
             parentBranch = parentBranch.parentNode.closest("li")
         }
 
+        //if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === hutimeObj.itemName ||
+        //    recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === hutimeObj.itemName ||
+        //    recordset.recordSettings.tSetting &&
+        //        (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName ||
+        //        recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName)) {
         if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === hutimeObj.itemName ||
-            recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === hutimeObj.itemName ||
-            recordset.recordSettings.tSetting &&
-                (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName ||
-                recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName)) {
+            recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === hutimeObj.itemName) {
+            // 今後のt値指定の方法の統一に合わせて改修
             // t value icon
             let icon = document.createElement("img");
             icon.className = "branchIcon";
-            icon.src = hutimeObjSettings[hutimeObjType].iconSrc;
+            if (recordset._tBeginDataSetting.itemName === hutimeObj.itemName &&
+                recordset._tEndDataSetting.itemName === hutimeObj.itemName)
+                icon.src = "img/fromTo.png";
+            else if (recordset._tBeginDataSetting.itemName === hutimeObj.itemName)
+                icon.src = "img/from.png";
+            else
+                icon.src = "img/to.png";
+            icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
+            icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
+            selectSpan.appendChild(icon);
+        }
+        else if (recordset.recordSettings.tSetting &&
+            (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName ||
+            recordset.recordSettings.tSetting.itemNameEnd === hutimeObj.itemName)) {
+            // 今後のt値指定の方法の統一に合わせて改修
+            // t value icon
+            let icon = document.createElement("img");
+            icon.className = "branchIcon";
+            if (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName &&
+                recordset.recordSettings.tSetting.itemNameEnd === hutimeObj.itemName)
+                icon.src = "img/fromTo.png";
+            else if (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName)
+                icon.src = "img/from.png";
+            else
+                icon.src = "img/to.png";
             icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
             icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
             selectSpan.appendChild(icon);
@@ -390,15 +417,16 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     switch (hutimeObjType) {
         case "recordset":
             childObj = hutimeObj.recordSettings.dataSettings.slice();
+            // 今後、TLineとChartで異なっているt値の項目の設定を統一のこと
             if (hutimeObj instanceof HuTime.ChartRecordset) {
-                childObj.unshift(hutimeObj._tEndDataSetting);
-                childObj.unshift(hutimeObj._tBeginDataSetting);
+                childObj.push(hutimeObj._tBeginDataSetting);
+                childObj.push(hutimeObj._tEndDataSetting);
             }
             else {
-                childObj.unshift(new HuTime.RecordDataSetting(
-                    hutimeObj.recordSettings.tSetting.itemNameEnd, "tEnd"));
-                childObj.unshift(new HuTime.RecordDataSetting(
+                childObj.push(new HuTime.RecordDataSetting(
                     hutimeObj.recordSettings.tSetting.itemNameBegin, "tBegin"));
+                childObj.push(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNameEnd, "tEnd"));
             }
             break;
         case "tlineLayer":
@@ -1092,7 +1120,7 @@ function dPRIApply () {
         recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === item.itemName ||
         recordset.recordSettings.tSetting &&
             (recordset.recordSettings.tSetting.itemNameBegin === item.itemName ||
-            recordset.recordSettings.tSetting.itemNameBegin === item.itemName)) {
+            recordset.recordSettings.tSetting.itemNameEnd === item.itemName)) {
         // Preferences of t value
     }
     else if ((recordset._valueItems && recordset._valueItems.find(
