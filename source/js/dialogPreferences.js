@@ -74,6 +74,7 @@ function dPCLApply () {
 function dPCLClose (ev) {
     dPCLApply(ev);
     closeDialog("dialogPreferencesChartLayer");
+    deselectBranch();
 }
 
 
@@ -273,5 +274,6 @@ function dPRIApply () {
 function dPRIClose () {
     dPRIApply();
     closeDialog("dialogPreferencesRecordItem");
+    deselectBranch();
 }
 

@@ -428,6 +428,9 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
         case "chartLayer":
             childObj = hutimeObj.recordsets;
             break;
+        case "scaleLayer":
+            knobImg.style.visibility = "hidden";
+            break;
         case "blankLayer":
             childObj = hutimeObj.objects;
             break;
@@ -601,10 +604,7 @@ function selectBranch (ev) {
     let branchLI = ev.target.closest("li");
 
     if  (branchLI === selectedBranch) {      // 選択中の枝－＞選択解除
-        selectedBranchSpan.style.backgroundColor = "";
-        selectedBranch = null;
-        selectedBranchSpan = null;
-        selectedObject = null;
+        deselectBranch();
         return;
     }
     if  (selectedBranch) {     // 他を選択中－＞選択範囲を変更（前の選択を解除）
@@ -622,6 +622,12 @@ function selectBranch (ev) {
     ev.stopPropagation();
     return false;
 }
+function deselectBranch () {
+    selectedBranchSpan.style.backgroundColor = "";
+    selectedBranch = null;
+    selectedBranchSpan = null;
+    selectedObject = null;
+}
 
 // ** レイヤツリーの右クリックメニュー操作 **
 let openedTreeMenus = [];       // ユーザによって開かれたメニュー
@@ -637,6 +643,9 @@ function initTreeMenu () {      // メニュー初期化
 function treeContextMenu (ev) {     // 右クリックでの動作（開始時）
     ev.stopPropagation();
     ev.preventDefault();
+
+    if (selectedBranch !== ev.target.closest("li"))
+        selectBranch(ev);
 
     // メニュー操作中の場合は左右クリック同じ動作
     if ((opStatus & opTreeMenu) !== 0)
@@ -951,6 +960,7 @@ function dPCLApply () {
 function dPCLClose (ev) {
     dPCLApply(ev);
     closeDialog("dialogPreferencesChartLayer");
+    deselectBranch();
 }
 
 
@@ -1150,6 +1160,7 @@ function dPRIApply () {
 function dPRIClose () {
     dPRIApply();
     closeDialog("dialogPreferencesRecordItem");
+    deselectBranch();
 }
 
 // **** Createダイアログ (dialogCreate => dCr) ****
