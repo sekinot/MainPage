@@ -197,6 +197,63 @@ function operateBranch (ev) {
     }
 }
 
+// オブジェクトのタイプを取得
+function getObjType (obj, branch) {
+    if (obj instanceof HuTime.PanelCollection)
+        return "panelCollection";
+    if (obj instanceof HuTime.TilePanel)
+        return "tilePanel";
+    if (obj instanceof HuTime.OverlayPanel)
+        return "overlayPanel";
+    if (obj instanceof HuTime.PanelBorder)
+        return "panelBorder";
+
+    if (obj instanceof HuTime.TLineLayer)
+        return "tlineLayer";
+    if (obj instanceof HuTime.RecordLayerBase)
+        return "chartLayer";    // TLine以外のRecordLayerBase
+    if (obj instanceof HuTime.TickScaleLayer)
+        return "scaleLayer";
+    if (obj instanceof HuTime.Layer)
+        return "blankLayer";    // 上記以外のLayer
+
+    if (obj instanceof HuTime.RecordsetBase)
+        return "recordset";
+    if (obj instanceof HuTime.String)
+        return "string";
+    if (obj instanceof HuTime.Image)
+        return "image";
+    if (obj instanceof HuTime.OnLayerObjectBase)
+        return "shape";     // 上記以外のOnLayerObjectBase
+
+    if (obj instanceof HuTime.RecordDataSetting) {
+        let recordset;
+        let parentBranch = branch;
+        while (parentBranch) {
+            if (parentBranch.objType === "Recordset") {
+                recordset = parentBranch.hutimeObject;
+                break;
+            }
+            parentBranch = parentBranch.parentNode.closest("li")
+        }
+
+        // 今後のt値指定の方法の統一に合わせて要改修
+        if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === obj.itemName ||
+            recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === obj.itemName)
+            return "recordTValueItem";
+        else if (recordset.recordSettings && recordset.recordSettings.tSetting &&
+            (recordset.recordSettings.tSetting.itemNameBegin === obj.itemName ||
+            recordset.recordSettings.tSetting.itemNameEnd === obj.itemName))
+            return "recordTValueItem";
+        else if ((recordset._valueItems && recordset._valueItems.find(
+                valueObj => valueObj.name === obj.itemName)) ||
+                recordset.labelItem === obj.itemName)
+            return "recordDataItem";
+        else
+            return "recordItem";
+    }
+}
+
 // ツリーの項目を追加
 function addBranch (targetElement, hutimeObj, name, check, id) {
     // targetElement: 追加する先のli要素
@@ -229,40 +286,15 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
             iconSrc: "img/image.png", iconAlt: "Image", menuType: "Image"},
         shape: {
             iconSrc: "img/shape.png", iconAlt: "Shape", menuType: "Shape"},
+        recordTValueItem: {
+            iconSrc: "img/recordItem.png", iconAlt: "Record Item", menuType: "RecordItem"},
+        recordDataItem: {
+            iconSrc: "img/recordItem.png", iconAlt: "Record Item", menuType: "RecordItem"},
         recordItem: {
             iconSrc: "img/recordItem.png", iconAlt: "Record Item", menuType: "RecordItem"}
     };
-    function getObjType (obj) {
-        if (obj instanceof HuTime.PanelCollection)
-            return "panelCollection";
-        if (obj instanceof HuTime.TilePanel)
-            return "tilePanel";
-        if (obj instanceof HuTime.OverlayPanel)
-            return "overlayPanel";
-        if (obj instanceof HuTime.PanelBorder)
-            return "panelBorder";
 
-        if (obj instanceof HuTime.TLineLayer)
-            return "tlineLayer";
-        if (obj instanceof HuTime.RecordLayerBase)
-            return "chartLayer";    // TLine以外のRecordLayerBase
-        if (obj instanceof HuTime.TickScaleLayer)
-            return "scaleLayer";
-        if (obj instanceof HuTime.Layer)
-            return "blankLayer";    // 上記以外のLayer
-
-        if (obj instanceof HuTime.RecordsetBase)
-            return "recordset";
-        if (obj instanceof HuTime.String)
-            return "string";
-        if (obj instanceof HuTime.Image)
-            return "image";
-        if (obj instanceof HuTime.OnLayerObjectBase)
-            return "shape";     // 上記以外のOnLayerObjectBase
-        return "recordItem";
-    }
-
-    let hutimeObjType = getObjType(hutimeObj);
+    let hutimeObjType = getObjType(hutimeObj, targetElement);
     if (hutimeObjType === "panelBorder")    // パネル境界は対象にしない
         return;
 
@@ -290,7 +322,7 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
 
     // チェックボックスの追加
     let checkbox = document.createElement("img");
-    if (check < 0) {
+    if (check < 0 || hutimeObjType === "recordTValueItem") {
         checkbox.src = "img/discheck.png";
     }
     else {
@@ -312,7 +344,8 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     selectSpan.className = "branchSelectSpan";
 
     // アイコンの追加
-    if (hutimeObjType === "recordItem") {
+    if (hutimeObjType === "recordTValueItem" || hutimeObjType === "recordDataItem" ||
+        hutimeObjType === "recordItem") {
         // Record Itemを描画するlayerを取得
         let layer, recordset;
         let parentBranch = li;
@@ -326,59 +359,6 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
             parentBranch = parentBranch.parentNode.closest("li")
         }
         selectSpan.appendChild(getRecordItemIcon(hutimeObj, recordset, layer));
-
-        /*
-        if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === hutimeObj.itemName ||
-            recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === hutimeObj.itemName) {
-            // 今後のt値指定の方法の統一に合わせて改修
-            // t value icon
-            let icon = document.createElement("img");
-            icon.className = "branchIcon";
-            if (recordset._tBeginDataSetting.itemName === hutimeObj.itemName &&
-                recordset._tEndDataSetting.itemName === hutimeObj.itemName)
-                icon.src = "img/fromTo.png";
-            else if (recordset._tBeginDataSetting.itemName === hutimeObj.itemName)
-                icon.src = "img/from.png";
-            else
-                icon.src = "img/to.png";
-            icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
-            icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
-            selectSpan.appendChild(icon);
-        }
-        else if (recordset.recordSettings.tSetting &&
-            (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName ||
-            recordset.recordSettings.tSetting.itemNameEnd === hutimeObj.itemName)) {
-            // 今後のt値指定の方法の統一に合わせて改修
-            // t value icon
-            let icon = document.createElement("img");
-            icon.className = "branchIcon";
-            if (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName &&
-                recordset.recordSettings.tSetting.itemNameEnd === hutimeObj.itemName)
-                icon.src = "img/fromTo.png";
-            else if (recordset.recordSettings.tSetting.itemNameBegin === hutimeObj.itemName)
-                icon.src = "img/from.png";
-            else
-                icon.src = "img/to.png";
-            icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
-            icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
-            selectSpan.appendChild(icon);
-        }
-        else if ((recordset._valueItems && recordset._valueItems.find(
-                valueObj => valueObj.name === hutimeObj.itemName)) ||
-                recordset.labelItem === hutimeObj.itemName) {
-            // value item and label item icon
-            selectSpan.appendChild(getRecordDataItemIcon(hutimeObj, recordset, layer));
-        }
-        else {
-            // other items icon
-            let icon = document.createElement("img");
-            icon.className = "branchIcon";
-            icon.src = hutimeObjSettings[hutimeObjType].iconSrc;
-            icon.alt = hutimeObjSettings[hutimeObjType].iconAlt;
-            icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
-            selectSpan.appendChild(icon);
-        }
-        // */
     }
     else {
         // icons for other than record items
@@ -638,13 +618,59 @@ function clickBranchCheckBox (ev) {
         ev.target.src
             = ev.target.src.substr(0, ev.target.src.lastIndexOf("/") + 1) + "uncheck.png";
         ev.target.value = false;
-        ev.target.closest("li").hutimeObject.visible = false;
+
+        let li = ev.target.closest("li");
+        if (li.objType === "RecordItem" && getObjType(li.hutimeObject, li) === "recordDataItem") {
+            let recordset, layer;
+            let parentBranch = li;
+            while (parentBranch) {
+                if (parentBranch.objType === "Recordset")
+                    recordset = parentBranch.hutimeObject;
+                if (parentBranch.hutimeObject instanceof HuTime.Layer) {
+                    layer = parentBranch.hutimeObject;
+                    break;
+                }
+                parentBranch = parentBranch.parentNode.closest("li")
+            }
+            if (layer instanceof HuTime.TLineLayer) {
+                recordset.showRecordset = false;    // 機能せず
+                recordset.showLabel = false;
+            }
+            else {
+                recordset.setItemShowPlot(li.hutimeObject.itemName, false);
+                recordset.setItemShowLine(li.hutimeObject.itemName, false);
+            }
+        }
+        li.hutimeObject.visible = false;
     }
     else {
         ev.target.src
             = ev.target.src.substr(0, ev.target.src.lastIndexOf("/") + 1) + "check.png";
         ev.target.value = true;
-        ev.target.closest("li").hutimeObject.visible = true;
+
+        let li = ev.target.closest("li");
+        if (li.objType === "RecordItem" && getObjType(li.hutimeObject, li) === "recordDataItem") {
+            let recordset, layer;
+            let parentBranch = li;
+            while (parentBranch) {
+                if (parentBranch.objType === "Recordset")
+                    recordset = parentBranch.hutimeObject;
+                if (parentBranch.hutimeObject instanceof HuTime.Layer) {
+                    layer = parentBranch.hutimeObject;
+                    break;
+                }
+                parentBranch = parentBranch.parentNode.closest("li")
+            }
+            if (layer instanceof HuTime.TLineLayer) {
+                recordset.showRecordset = true;     // 機能せず
+                recordset.showLabel = true;
+            }
+            else {
+                recordset.setItemShowPlot(li.hutimeObject.itemName, true);
+                recordset.setItemShowLine(li.hutimeObject.itemName, true);
+            }
+        }
+        li.hutimeObject.visible = true;
     }
     hutime.redraw();
 }
@@ -1036,9 +1062,6 @@ function dPCLClose (ev) {
     closeDialog("dialogPreferencesChartLayer");
     deselectBranch();
 }
-
-
-
 
 // *** Preferences of Record Item (dialogPreferencesRecordItem => dPRI)
 function dPRIOpen () {

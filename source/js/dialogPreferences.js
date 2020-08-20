@@ -97,9 +97,6 @@ function dPCLClose (ev) {
     deselectBranch();
 }
 
-
-
-
 // *** Preferences of Record Item (dialogPreferencesRecordItem => dPRI)
 function dPRIOpen () {
     let item = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
