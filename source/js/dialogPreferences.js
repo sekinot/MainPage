@@ -61,6 +61,7 @@ function dPCLApply () {
         }
         document.getElementById("treeContextMenu").treeBranch.hutimeObject = newLayer;
         layer = newLayer;
+        updateTreeIcon(layer, document.getElementById("treeContextMenu").treeBranch);
     }
     layer.vBreadth = parseFloat(document.getElementById("dPCLHeight").value);
     layer.vMarginTop = parseFloat(document.getElementById("dPCLMarginTop").value);
@@ -70,6 +71,25 @@ function dPCLApply () {
 
     layer.style.backgroundColor = document.getElementById("dPCLBackgroundColor").value;
     hutime.redraw();
+
+    // ツリーメニューのアイコンを更新
+    function updateTreeIcon(layer, layerBranch) {
+        let recordsetBranches = layerBranch.querySelectorAll("li");
+        for (let i = 0; i < recordsetBranches.length; ++i) {
+            if (recordsetBranches[i].hutimeObject instanceof HuTime.RecordsetBase) {
+                let itemBranches = recordsetBranches[i].querySelectorAll("li");
+                for (let j = 0; j < itemBranches.length; ++j) {
+                    if(itemBranches[i].hutimeObject instanceof HuTime.RecordDataSetting) {
+                        let newIcon = getRecordItemIcon(itemBranches[j].hutimeObject,
+                            recordsetBranches[i].hutimeObject, layer);
+                        let oldIcon = itemBranches[j].querySelector("*.branchIcon");
+                        oldIcon.parentNode.insertBefore(newIcon, oldIcon);
+                        oldIcon.remove();
+                    }
+                }
+            }
+        }
+    }
 }
 function dPCLClose (ev) {
     dPCLApply(ev);

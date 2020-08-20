@@ -325,7 +325,9 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
             }
             parentBranch = parentBranch.parentNode.closest("li")
         }
+        selectSpan.appendChild(getRecordItemIcon(hutimeObj, recordset, layer));
 
+        /*
         if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === hutimeObj.itemName ||
             recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === hutimeObj.itemName) {
             // 今後のt値指定の方法の統一に合わせて改修
@@ -376,6 +378,7 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
             icon.title = hutimeObjSettings[hutimeObjType].iconAlt;
             selectSpan.appendChild(icon);
         }
+        // */
     }
     else {
         // icons for other than record items
@@ -449,6 +452,57 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
 }
 
 // Record Itemアイコンの取得
+function getRecordItemIcon (item, recordset, layer) {
+    let icon;
+    if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === item.itemName ||
+        recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === item.itemName) {
+        // 今後のt値指定の方法の統一に合わせて改修
+        // t value icon
+        icon = document.createElement("img");
+        icon.className = "branchIcon";
+        if (recordset._tBeginDataSetting.itemName === item.itemName &&
+            recordset._tEndDataSetting.itemName === item.itemName)
+            icon.src = "img/fromTo.png";
+        else if (recordset._tBeginDataSetting.itemName === item.itemName)
+            icon.src = "img/from.png";
+        else
+            icon.src = "img/to.png";
+        icon.alt = "Record Item";
+        icon.title = "Record Item";
+    }
+    else if (recordset.recordSettings && recordset.recordSettings.tSetting &&
+        (recordset.recordSettings.tSetting.itemNameBegin === item.itemName ||
+        recordset.recordSettings.tSetting.itemNameEnd === item.itemName)) {
+        // 今後のt値指定の方法の統一に合わせて改修
+        // t value icon
+        icon = document.createElement("img");
+        icon.className = "branchIcon";
+        if (recordset.recordSettings.tSetting.itemNameBegin === item.itemName &&
+            recordset.recordSettings.tSetting.itemNameEnd === item.itemName)
+            icon.src = "img/fromTo.png";
+        else if (recordset.recordSettings.tSetting.itemNameBegin === item.itemName)
+            icon.src = "img/from.png";
+        else
+            icon.src = "img/to.png";
+        icon.alt = "Record Item";
+        icon.title = "Record Item";
+    }
+    else if ((recordset._valueItems && recordset._valueItems.find(
+            valueObj => valueObj.name === item.itemName)) ||
+            recordset.labelItem === item.itemName) {
+        // value item and label item icon
+        icon = getRecordDataItemIcon(item, recordset, layer);
+    }
+    else {
+        // other items icon
+        icon = document.createElement("img");
+        icon.className = "branchIcon";
+        icon.src = "img/recordItem.png";
+        icon.alt = "Record Item";
+        icon.title = "Record Item";
+    }
+    return icon;
+}
 function getRecordDataItemIcon (item, recordset, layer) {
     let canvas = document.createElement("canvas");
     canvas.className = "branchIcon";
@@ -947,6 +1001,7 @@ function dPCLApply () {
         }
         document.getElementById("treeContextMenu").treeBranch.hutimeObject = newLayer;
         layer = newLayer;
+        updateTreeIcon(layer, document.getElementById("treeContextMenu").treeBranch);
     }
     layer.vBreadth = parseFloat(document.getElementById("dPCLHeight").value);
     layer.vMarginTop = parseFloat(document.getElementById("dPCLMarginTop").value);
@@ -956,6 +1011,25 @@ function dPCLApply () {
 
     layer.style.backgroundColor = document.getElementById("dPCLBackgroundColor").value;
     hutime.redraw();
+
+    // ツリーメニューのアイコンを更新
+    function updateTreeIcon(layer, layerBranch) {
+        let recordsetBranches = layerBranch.querySelectorAll("li");
+        for (let i = 0; i < recordsetBranches.length; ++i) {
+            if (recordsetBranches[i].hutimeObject instanceof HuTime.RecordsetBase) {
+                let itemBranches = recordsetBranches[i].querySelectorAll("li");
+                for (let j = 0; j < itemBranches.length; ++j) {
+                    if(itemBranches[i].hutimeObject instanceof HuTime.RecordDataSetting) {
+                        let newIcon = getRecordItemIcon(itemBranches[j].hutimeObject,
+                            recordsetBranches[i].hutimeObject, layer);
+                        let oldIcon = itemBranches[j].querySelector("*.branchIcon");
+                        oldIcon.parentNode.insertBefore(newIcon, oldIcon);
+                        oldIcon.remove();
+                    }
+                }
+            }
+        }
+    }
 }
 function dPCLClose (ev) {
     dPCLApply(ev);
