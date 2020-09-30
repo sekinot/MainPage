@@ -1,5 +1,85 @@
 <!-- **** Preferences **** -->
 <!-- *** Preferences of Chart Layer *** -->
+
+<div id="dialogPreferencesTLineLayer" class="dialog" style="width: 420px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    Preferences (TLine Layer)<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPTLName" style="float: left;">Name:</label>
+      <div style="margin-left: 65px;">
+        <input id="dPTLName" type="text" style="width: 300px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Position:</div>
+      <div style="margin-left: 65px;">
+        <label class="dialogSubContainerLabel" for="dPTLHeight">Height</label>
+        <input id="dPTLHeight" type="text" value="" style="width:30px; text-align: right;" /> px
+        <label for="dPTLMarginTop" style="margin-left: 15px;">Top</label>
+        <input id="dPTLMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
+        <label for="dPTLMarginBottom" style="margin-left: 15px;">Bottom</label>
+        <input id="dPTLMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Plot:</label>
+      <div style="margin-left: 65px;">
+        <label for="dPTLInterval">Interval</label>
+        <input id="dPTLInterval" type="text" value="100" style="width: 30px; text-align: right;" /> px
+      </div>
+    </div>
+
+    <!--div-- class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Plot:</label>
+
+
+      <div class="dialogSubContainerGroup" style="margin-left: 65px;">
+        <div class="dialogSubContainer">
+        <label for="dPTLType">Type:</label>
+          <select id="dPTLType" style="width: 100px;">
+            <option value="Band">Band</option>
+            <option value="Line">Line</option>
+          </select>
+        </div>
+        <div class="dialogSubContainer">
+          <label for="dPTLVInterval">Interval</label>
+          <input id="dPTLVInterval" type="text" value="100" style="width: 30px; text-align: right;" /> px
+          <label for="dPTLVPadding" style="margin-left: 15px;">Padding</label>
+          <input id="dPTLVPadding" type="text" value="100" style="width: 30px; text-align: right;" /> px
+        </div>
+
+        <div class="dialogSubContainer">
+          <input id="dPTLVShowLabel" type="checkbox" />
+          <label for="dPTLVShowLabel">Label</label>
+          <input id="dPTLVShowReliable" type="checkbox" />
+          <label for="dPTLVShowReliable">Reliable Range</label>
+          <input id="dPTLVShowPossible" type="checkbox" />
+          <label for="dPTLVShowPossible">Possible Range</label>
+        </div>
+
+      </div>
+    </div-->
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPTLBackgroundColor">Color</label>
+        <input id="dPTLBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPTLClose()"/>
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPTLApply()" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesTLineLayer')" />
+    </div>
+  </div>
+</div>
+
 <div id="dialogPreferencesChartLayer" class="dialog" style="width: 420px; left: 200px; top: 100px;">
   <div class="dialogTitle">
     Preferences (Chart Layer)<span class="dialogCloseButton"></span>
@@ -178,6 +258,7 @@
     </div>
   </div>
 </div>
+
 
 
 

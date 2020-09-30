@@ -50,7 +50,11 @@ function initialize () {    // 全体の初期化
     hutime.redraw(HuTime.isoToJd(begin.toISOString()), HuTime.isoToJd(end.toISOString()));
 
 
-    importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json")
+    importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
+    importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
+
+    //showDialog("dialogPreferencesTLineLayer");
+
 }
 
 // **** メニューバーの操作 ****
@@ -965,6 +969,42 @@ function stopResizeDialog (ev) {
 }
 
 // **** Preferencesダイアログ ****
+// *** Preferences of TLine Layerダイアログ (dialogPreferencesTLineLayer => dPTL)
+function dPTLOpen () {
+    let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    document.getElementById("dPTLName").value = layer.name;
+
+    document.getElementById("dPTLInterval").value = layer.plotInterval;
+
+    document.getElementById("dPTLHeight").value = layer.vBreadth;
+    document.getElementById("dPTLMarginTop").value = layer.vMarginTop;
+    document.getElementById("dPTLMarginBottom").value = layer.vMarginBottom;
+
+    document.getElementById("dPTLBackgroundColor").value = layer.style.backgroundColor;
+    document.getElementById("dialogPreferencesTLineLayer").hutimeObject = layer;
+    showDialog("dialogPreferencesTLineLayer");
+}
+function dPTLApply () {
+    let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    layer.name = document.getElementById("dPTLName").value;
+    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
+        querySelector("span.branchLabelSpan").innerText = layer.name;
+
+    layer.plotInterval = parseFloat(document.getElementById("dPTLInterval").value);
+
+    layer.vBreadth = parseFloat(document.getElementById("dPTLHeight").value);
+    layer.vMarginTop = parseFloat(document.getElementById("dPTLMarginTop").value);
+    layer.vMarginBottom = parseFloat(document.getElementById("dPTLMarginBottom").value);
+
+    layer.style.backgroundColor = document.getElementById("dPTLBackgroundColor").value;
+    hutime.redraw();
+}
+function dPTLClose (ev) {
+    dPTLApply(ev);
+    closeDialog("dialogPreferencesTLineLayer");
+    deselectBranch();
+}
+
 // *** Preferences of Chart Layerダイアログ (dialogPreferencesChartLayer => dPCL)
 function dPCLOpen () {
     let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;

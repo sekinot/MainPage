@@ -115,7 +115,11 @@
         <ul id="tCMTLineLayer" class="treeMenu">
           <li>Append Recordset</li>
           <li>Remove</li>
-          <li onclick="">Preferences</li>
+          <li id="tCMTLineLayerPreferences">Preferences</li>
+          <script type="text/javascript">
+            document.getElementById("tCMTLineLayerPreferences").
+              addEventListener("click", dPTLOpen);
+          </script>
         </ul>
         <ul id="tCMChartLayer" class="treeMenu">
           <li>Append Recordset</li>
