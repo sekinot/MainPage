@@ -161,6 +161,12 @@ function dPRIOpen () {
         document.getElementById("dPRIPeriodColor").value = recordset.rangeStyle.fillColor;
     }
     function getDPRILabel (item) {
+        document.getElementById("dPRILabelShow").checked = recordset.showLabel;
+
+        document.getElementById("dPRILabelTOffset").value = recordset.labelOffsetT;
+        document.getElementById("dPRILabelVOffset").value =  recordset.labelOffsetV;
+        document.getElementById("dPRILabelRotate").value =  recordset.labelRotate;
+
         document.getElementById("dPRILabel").style.display = "block";
         let style = recordset.labelStyle;
         document.getElementById("dPRILabelFont").value =  style.fontFamily;
@@ -246,6 +252,12 @@ function dPRIApply () {
             document.getElementById("dPRIPeriodColor").value, null, null);
     }
     function setDPRILabel (item) {
+        recordset.showLabel = document.getElementById("dPRILabelShow").checked;
+
+        recordset.labelOffsetT = parseFloat(document.getElementById("dPRILabelTOffset").value);
+        recordset.labelOffsetV = parseFloat(document.getElementById("dPRILabelVOffset").value);
+        recordset.labelRotate = parseFloat(document.getElementById("dPRILabelRotate").value);
+
         let style = new HuTime.StringStyle();
         style.fontFamily = document.getElementById("dPRILabelFont").value;
         let fontStyle = document.getElementById("dPRILabelStyle").value;

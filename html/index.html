@@ -406,16 +406,27 @@
     <div id="dPRIPeriod" class="dialogContainer">
       <label class="dialogContainerLabel" style="float: left;">Period:</label>
       <div class="dialogSubContainerGroup" style="margin-left: 50px;">
-      <div class="dialogSubContainer">
-        <label class="dialogSubContainerLabel" for="dPRIPeriodColor">Color</label>
-        <input id="dPRIPeriodColor" type="text" style="width: 150px;" value=""/>
-      </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPRIPeriodColor">Color</label>
+          <input id="dPRIPeriodColor" type="text" style="width: 150px;" value=""/>
+        </div>
+        <div class="dialogSubContainer">
+          
+
+
+        </div>
       </div>
     </div>
 
     <div id="dPRILabel" class="dialogContainer">
       <label class="dialogContainerLabel" style="float: left;">Label:</label>
       <div class="dialogSubContainerGroup" style="margin-left:50px;">
+
+        <div class="dialogSubContainer">
+          <input id="dPRILabelShow" type="checkbox" />
+          <label for="dPRILabelShow">Show</label>
+        </div>
+
         <div class="dialogSubContainer">
           <label class="dialogSubContainerLabel" for="dPRILabelFont">Font</label>
           <input id="dPRILabelFont" type="text" style="width: 150px;" value=""/>
@@ -432,6 +443,15 @@
           <input id="dPRILabelColor" type="text" style="width: 150px;" value=""/>
           <label class="dialogSubContainerLabel" for="dPRILabelSize" style="margin-left: 15px;">Size</label>
           <input id="dPRILabelSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+        </div>
+
+        <div class="dialogSubContainer">
+          <label for="dPRILabelTOffset">Offset (T)</label>
+          <input id="dPRILabelTOffset" type="text" style="width: 25px; text-align: right;" value=""/> px
+          <label for="dPRILabelVOffset" style="margin-left: 10px;">(V)</label>
+          <input id="dPRILabelVOffset" type="text" style="width: 25px; text-align: right;" value=""/> px
+          <label for="dPRILabelRotate" style="margin-left: 20px;">Rotate</label>
+          <input id="dPRILabelRotate" type="text" style="width: 25px; text-align: right;" value=""/> deg
         </div>
       </div>
     </div>

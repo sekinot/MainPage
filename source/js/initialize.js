@@ -53,7 +53,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-    //showDialog("dialogPreferencesTLineLayer");
+    showDialog("dialogPreferencesRecordItem");
 
 }
 
