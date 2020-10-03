@@ -27,42 +27,32 @@
 
     <div class="dialogContainer">
       <label class="dialogContainerLabel" style="float: left;">Plot:</label>
-      <div style="margin-left: 65px;">
-        <label for="dPTLInterval">Interval</label>
-        <input id="dPTLInterval" type="text" value="100" style="width: 30px; text-align: right;" /> px
-      </div>
-    </div>
-
-    <!--div-- class="dialogContainer">
-      <label class="dialogContainerLabel" style="float: left;">Plot:</label>
-
-
       <div class="dialogSubContainerGroup" style="margin-left: 65px;">
         <div class="dialogSubContainer">
-        <label for="dPTLType">Type:</label>
-          <select id="dPTLType" style="width: 100px;">
-            <option value="Band">Band</option>
-            <option value="Line">Line</option>
-          </select>
+          <input id="dPTLTypeBand" type="radio" name="dPTLType" value="band" checked="checked" />
+          <label for="dPTLTypeBand">Band</label>
+          <input id="dPTLTypeLine" type="radio" name="dPTLType" value="line" />
+          <label for="dPTLTypeLine">Line</label>
+          <label id="dPTLBandBreadthLabel" for="dPTLBandBreadth" style="margin-left: 20px">Band Width</label>
+          <input id="dPTLBandBreadth" type="text" value="100" style="width: 23px; text-align: right;" />
+          <span id="dPTLBandBreadthUnit">px</span>
+          <script type="text/javascript">
+            document.getElementById("dPTLTypeBand").addEventListener("change", dPTLPlotTypeChanged);
+            document.getElementById("dPTLTypeLine").addEventListener("change", dPTLPlotTypeChanged);
+          </script>
         </div>
         <div class="dialogSubContainer">
-          <label for="dPTLVInterval">Interval</label>
-          <input id="dPTLVInterval" type="text" value="100" style="width: 30px; text-align: right;" /> px
-          <label for="dPTLVPadding" style="margin-left: 15px;">Padding</label>
-          <input id="dPTLVPadding" type="text" value="100" style="width: 30px; text-align: right;" /> px
+          <input id="dPTLdrawPAsR" type="checkbox" />
+          <label for="dPTLdrawPAsR">Draw possible and reliable ranges separately</label>
         </div>
-
         <div class="dialogSubContainer">
-          <input id="dPTLVShowLabel" type="checkbox" />
-          <label for="dPTLVShowLabel">Label</label>
-          <input id="dPTLVShowReliable" type="checkbox" />
-          <label for="dPTLVShowReliable">Reliable Range</label>
-          <input id="dPTLVShowPossible" type="checkbox" />
-          <label for="dPTLVShowPossible">Possible Range</label>
+          <label for="dPTLInterval">Interval</label>
+          <input id="dPTLInterval" type="text" value="100" style="width: 18px; text-align: right;" /> px
+          <label for="dPTLPadding" style="margin-left: 15px;">Padding</label>
+          <input id="dPTLPadding" type="text" value="100" style="width: 18px; text-align: right;" /> px
         </div>
-
       </div>
-    </div-->
+   </div>
 
     <div class="dialogContainer">
       <div class="dialogContainerLabel" style="float: left;">Background:</div>
@@ -166,11 +156,6 @@
         <div class="dialogSubContainer">
           <label class="dialogSubContainerLabel" for="dPRIPeriodColor">Color</label>
           <input id="dPRIPeriodColor" type="text" style="width: 150px;" value=""/>
-        </div>
-        <div class="dialogSubContainer">
-          
-
-
         </div>
       </div>
     </div>

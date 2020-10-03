@@ -217,7 +217,8 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
         case "recordset":
             childObj = hutimeObj.recordSettings.dataSettings.slice();
             // 今後、TLineとChartで異なっているt値の項目の設定を統一のこと
-            if (hutimeObj instanceof HuTime.ChartRecordset) {
+            if (hutimeObj instanceof HuTime.ChartRecordset ||
+                hutimeObj instanceof HuTime.TLineRecordset && !hutimeObj.recordSettings.tSetting) {
                 childObj.push(hutimeObj._tBeginDataSetting);
                 childObj.push(hutimeObj._tEndDataSetting);
             }
@@ -313,7 +314,7 @@ function getRecordDataItemIcon (item, recordset, layer) {
     canvas.title = "Record Data Item";
     switch (layer.constructor.name) {
         case "TLineLayer":
-            drawIconPeriod(canvas, recordset.rangeStyle);
+            drawIconPeriod(canvas, recordset.rangeStyle, layer);
             drawIconLabel(canvas, recordset.labelStyle);
             break;
         case "LineChartLayer":
@@ -332,24 +333,36 @@ function getRecordDataItemIcon (item, recordset, layer) {
             break;
     }
     return canvas;
-    function drawIconPeriod (canvas, style) {
-    let ctx = canvas.getContext("2d");
-    if (style.fillColor && style.fillColor !== "") {
-        drawBar(ctx);
-        ctx.fillStyle = style.fillColor;
-        ctx.fill();
+    function drawIconPeriod (canvas, style, layer) {
+        let ctx = canvas.getContext("2d");
+        if (layer.useBandStyle && style.fillColor && style.fillColor !== "") {
+            drawBar(ctx);
+            ctx.fillStyle = style.fillColor;
+            ctx.fill();
+        }
+        if (style.lineWidth && style.lineColor && style.lineColor !== "") {
+            if (layer.useBandStyle)
+                drawBar(ctx);
+            else
+                drawLine(ctx);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = style.lineColor;
+            ctx.stroke();
+        }
+        function drawBar (ctx) {
+            ctx.beginPath();
+            ctx.rect(1, 1, 22, 16);
+        }
+        function drawLine (ctx) {
+            ctx.beginPath();
+            ctx.moveTo(0, 10);
+            ctx.lineTo(24, 10);
+            ctx.moveTo(1, 5);
+            ctx.lineTo(1, 14);
+            ctx.moveTo(23, 5);
+            ctx.lineTo(23, 14);
+        }
     }
-    if (style.lineWidth && style.lineColor && style.lineColor !== "") {
-        drawBar(ctx);
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = style.lineColor;
-        ctx.stroke();
-    }
-    function drawBar (ctx) {
-        ctx.beginPath();
-        ctx.rect(1, 1, 22, 16);
-    }
-}
     function drawIconLabel (canvas, style) {
         let ctx = canvas.getContext("2d");
         ctx.fillStyle = style.fillColor;

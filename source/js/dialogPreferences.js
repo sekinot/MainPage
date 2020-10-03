@@ -1,10 +1,29 @@
 // **** Preferencesダイアログ ****
 // *** Preferences of TLine Layerダイアログ (dialogPreferencesTLineLayer => dPTL)
+function dPTLPlotTypeChanged () {
+    if (document.getElementById("dPTLTypeLine").checked) {
+        document.getElementById("dPTLBandBreadth").disabled = true;
+        document.getElementById("dPTLBandBreadthLabel").style.color = DisabledLabelColor;
+        document.getElementById("dPTLBandBreadthUnit").style.color = DisabledLabelColor;
+    }
+    else {
+        document.getElementById("dPTLBandBreadth").disabled = false;
+        document.getElementById("dPTLBandBreadthLabel").style.color = "#000000";
+        document.getElementById("dPTLBandBreadthUnit").style.color = "#000000";
+    }
+}
 function dPTLOpen () {
     let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
     document.getElementById("dPTLName").value = layer.name;
 
+    document.getElementById("dPTLTypeBand").checked = layer.useBandStyle;
+    document.getElementById("dPTLTypeLine").checked = !layer.useBandStyle;
+    document.getElementById("dPTLBandBreadth").value = layer.recordsets[0].bandBreadth;
+    dPTLPlotTypeChanged();
+
+    document.getElementById("dPTLdrawPAsR").checked = !layer.recordsets[0].drawPRangeAsRRange;
     document.getElementById("dPTLInterval").value = layer.plotInterval;
+    document.getElementById("dPTLPadding").value = layer.padding;
 
     document.getElementById("dPTLHeight").value = layer.vBreadth;
     document.getElementById("dPTLMarginTop").value = layer.vMarginTop;
@@ -20,7 +39,42 @@ function dPTLApply () {
     document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
         querySelector("span.branchLabelSpan").innerText = layer.name;
 
+    if (document.getElementById("dPTLTypeBand").checked !== layer.useBandStyle) {
+        layer.useBandStyle = document.getElementById("dPTLTypeBand").checked;
+        // 前の設定を残しつつ、書式を継承する（帯の色を線の色にするなど）
+        if (layer.recordsets[0].rangeStyleOld) {
+            let styleTemp = new HuTime.FigureStyle(layer.recordsets[0].rangeStyle.fillColor,
+                layer.recordsets[0].rangeStyle.lineColor, layer.recordsets[0].rangeStyle.fillColor);
+            layer.recordsets[0].rangeStyle.fillColor = layer.recordsets[0].rangeStyleOld.fillColor;
+            layer.recordsets[0].rangeStyle.lineColor = layer.recordsets[0].rangeStyleOld.lineColor;
+            layer.recordsets[0].rangeStyle.lineWidth = layer.recordsets[0].rangeStyleOld.lineWidth;
+            layer.recordsets[0].rangeStyleOld.fillColor = styleTemp.fillColor;  // 前の設定を保存
+            layer.recordsets[0].rangeStyleOld.lineColor = styleTemp.lineColor;
+            layer.recordsets[0].rangeStyleOld.lineWidth = styleTemp.lineWidth;
+        }
+        else {
+            layer.recordsets[0].rangeStyleOld = new HuTime.FigureStyle(     // 前の設定を保存
+                layer.recordsets[0].rangeStyle.fillColor,
+                layer.recordsets[0].rangeStyle.lineColor, layer.recordsets[0].rangeStyle.lineWidth);
+            if (layer.useBandStyle) {   // 線->帯
+                layer.recordsets[0].rangeStyle.fillColor = layer.recordsets[0].rangeStyle.lineColor;
+                layer.recordsets[0].rangeStyle.lineColor = null;
+                layer.recordsets[0].rangeStyle.lineWidth = null;
+            }
+            else    // 帯->線
+            {
+                layer.recordsets[0].rangeStyle.lineColor = layer.recordsets[0].rangeStyle.fillColor;
+                layer.recordsets[0].rangeStyle.fillColor = null;
+                layer.recordsets[0].rangeStyle.lineWidth = 2;
+            }
+        }
+        changeDataItemIcon();
+    }
+    layer.recordsets[0].bandBreadth = parseFloat(document.getElementById("dPTLBandBreadth").value);
+
+    layer.recordsets[0].drawPRangeAsRRange = !document.getElementById("dPTLdrawPAsR").checked;
     layer.plotInterval = parseFloat(document.getElementById("dPTLInterval").value);
+    layer.padding = parseFloat(document.getElementById("dPTLPadding").value);
 
     layer.vBreadth = parseFloat(document.getElementById("dPTLHeight").value);
     layer.vMarginTop = parseFloat(document.getElementById("dPTLMarginTop").value);
@@ -28,6 +82,36 @@ function dPTLApply () {
 
     layer.style.backgroundColor = document.getElementById("dPTLBackgroundColor").value;
     hutime.redraw();
+
+    function changeDataItemIcon () {
+        let treeChildBranches =
+            document.getElementById("treeContextMenu").treeBranch.querySelectorAll("li");
+        let recordset;
+        let dataSettings;
+        for (let i = 0; i < treeChildBranches.length; ++i) {
+            if (treeChildBranches[i].objType === "Recordset") {
+                recordset = treeChildBranches[i].hutimeObject;
+                dataSettings = recordset.recordSettings.dataSettings;
+                break;
+            }
+        }
+        let dataItemBranches = [];
+        for (let i = 0; i < treeChildBranches.length; ++i) {
+            for (let j = 0; j < dataSettings.length; ++j) {
+                if (treeChildBranches[i].objType === "RecordItem" &&
+                    treeChildBranches[i].hutimeObject.recordDataName === dataSettings[j].recordDataName) {
+                    dataItemBranches.push(treeChildBranches[i]);
+                    break;
+                }
+            }
+        }
+        for (let i = 0; i < dataItemBranches.length; ++i) {
+        let canvas = dataItemBranches[0].querySelector("*.branchIcon");
+            canvas.parentNode.insertBefore(getRecordDataItemIcon(
+                dataItemBranches[0].hutimeObject, recordset, layer), canvas);
+            canvas.remove();
+        }
+    }
 }
 function dPTLClose (ev) {
     dPTLApply(ev);
@@ -158,7 +242,11 @@ function dPRIOpen () {
     document.getElementById("dPRIBar").style.display = "none";
     function getDPRIPeriod (item) {
         document.getElementById("dPRIPeriod").style.display = "block";
-        document.getElementById("dPRIPeriodColor").value = recordset.rangeStyle.fillColor;
+
+        if (layer.useBandStyle)
+            document.getElementById("dPRIPeriodColor").value = recordset.rangeStyle.fillColor;
+        else
+            document.getElementById("dPRIPeriodColor").value = recordset.rangeStyle.lineColor;
     }
     function getDPRILabel (item) {
         document.getElementById("dPRILabelShow").checked = recordset.showLabel;
@@ -248,8 +336,12 @@ function dPRIApply () {
         parentBranch = parentBranch.parentNode.closest("li")
     }
     function setDPRIPeriod (item) {
-        recordset.rangeStyle = new HuTime.FigureStyle(
-            document.getElementById("dPRIPeriodColor").value, null, null);
+        if (layer.useBandStyle)
+            recordset.rangeStyle = new HuTime.FigureStyle(
+                document.getElementById("dPRIPeriodColor").value, null, null);
+        else
+            recordset.rangeStyle = new HuTime.FigureStyle(
+                null, document.getElementById("dPRIPeriodColor").value, null);
     }
     function setDPRILabel (item) {
         recordset.showLabel = document.getElementById("dPRILabelShow").checked;
