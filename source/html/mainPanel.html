@@ -113,7 +113,11 @@
             </ul>
           </li>
           <li>Remove</li>
-          <li>Preferences</li>
+          <li id="tCMTilePanelPreferences">Preferences</li>
+          <script type="text/javascript">
+            document.getElementById("tCMTilePanelPreferences").
+              addEventListener("click", dPTPOpen);
+          </script>
         </ul>
 
         <ul id="tCMTLineLayer" class="treeMenu">

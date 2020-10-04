@@ -56,7 +56,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-    //showDialog("dialogPreferencesPanelCollection");
+    showDialog("dialogPreferencesTilePanel");
 
 }
 
@@ -1010,6 +1010,40 @@ function dPPCClose() {
     deselectBranch();
 }
 
+// *** Preferences of Tile Panelダイアログ (dialogPreferencesTilePanel => dPTP)
+function dPTPOpen() {
+    let panel = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    document.getElementById("dPTPName").value = panel.name;
+
+    document.getElementById("dPTPResizable").checked = panel.resizable;
+    document.getElementById("dPTPRepositionable").checked = panel.repositionable;
+    if (panel.tRatio === Math.floor(panel.tRatio))
+        document.getElementById("dPTPTRatio").value = panel.tRatio.toFixed(1);
+    else
+        document.getElementById("dPTPTRatio").value = panel.tRatio;
+
+    document.getElementById("dPTPBackgroundColor").value = panel.style.backgroundColor;
+    document.getElementById("dialogPreferencesTilePanel").hutimeObject = panel;
+    showDialog("dialogPreferencesTilePanel");
+}
+function dPTPApply() {
+    let panel = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    panel.name = document.getElementById("dPTPName").value;
+    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
+        querySelector("span.branchLabelSpan").innerText = panel.name;
+
+    panel.resizable = document.getElementById("dPTPResizable").checked;
+    panel.repositionable = document.getElementById("dPTPRepositionable").checked;
+    panel.tRatio = parseFloat(document.getElementById("dPTPTRatio").value);
+
+    panel.style.backgroundColor = document.getElementById("dPTPBackgroundColor").value;
+    hutime.redraw();
+}
+function dPTPClose() {
+    dPTPApply();
+    closeDialog("dialogPreferencesTilePanel");
+    deselectBranch();
+}
 
 // *** Preferences of TLine Layerダイアログ (dialogPreferencesTLineLayer => dPTL)
 function dPTLPlotTypeChanged () {
