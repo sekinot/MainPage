@@ -56,7 +56,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-    showDialog("dialogPreferencesTilePanel");
+    //showDialog("dialogPreferencesRecordset");
 
 }
 
@@ -1263,6 +1263,28 @@ function dPCLClose (ev) {
     deselectBranch();
 }
 
+function dPRSOpen () {
+    let recordset = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    document.getElementById("dPRSName").value = recordset.name;
+    if (recordset.reader.source instanceof File)
+        document.getElementById("dPRSSource").innerText = recordset.reader.source.name;
+    else
+        document.getElementById("dPRSSource").innerText = recordset.reader.source;
+
+    document.getElementById("dialogPreferencesRecordset").hutimeObject = recordset;
+    showDialog("dialogPreferencesRecordset");
+}
+function dRSLApply () {
+    let recordset = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    recordset.name = document.getElementById("dPRSName").value;
+    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
+        querySelector("span.branchLabelSpan").innerText = recordset.name;
+}
+function dPRSClose() {
+    dRSLApply();
+    closeDialog("dialogPreferencesRecordset");
+    deselectBranch();
+}
 // *** Preferences of Record Item (dialogPreferencesRecordItem => dPRI)
 function dPRIOpen () {
     let item = document.getElementById("treeContextMenu").treeBranch.hutimeObject;

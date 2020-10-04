@@ -208,6 +208,37 @@
   </div>
 </div>
 
+<!-- *** Preferences of Recordset *** -->
+<div id="dialogPreferencesRecordset" class="dialog" style="width: 420px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    Preferences (Recordset)<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPRSName" style="float: left;">Name:</label>
+      <div style="margin-left: 60px;">
+        <input id="dPRSName" type="text" style="width: 300px;" />
+      </div>
+    </div>
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPRSSource" style="float: left;">Source:</label>
+      <div style="margin-left: 60px;">
+        <textarea id="dPRSSource" readonly="readonly" style="width: 300px; background-color: #eeeeee; border: solid 1px #999999;" >
+        </textarea>
+      </div>
+
+    </div>
+
+    <div class="dialogContainer">
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPRSClose()"/>
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dRSLApply()" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesRecordset')" />
+    </div>
+
+
+  </div>
+</div>
+
 <!-- *** Preferences of Record Item *** -->
 <div id="dialogPreferencesRecordItem" class="dialog"  style="width: 420px; left: 200px; top: 100px;">
   <div class="dialogTitle">

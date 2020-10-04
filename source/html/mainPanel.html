@@ -154,7 +154,11 @@
         </ul>
 
         <ul id="tCMRecordset" class="treeMenu">
-          <li>Preferences</li>
+          <li id="tCMRecordsetPreferences">Preferences</li>
+          <script type="text/javascript">
+            document.getElementById("tCMRecordsetPreferences").
+              addEventListener("click", dPRSOpen);
+          </script>
         </ul>
         <ul id="tCMString" class="treeMenu">
           <li>Remove</li>
