@@ -8,6 +8,7 @@
 
 （全体のSetting）
 起動時に表示される目盛りの暦
+PanelCollection.wheelZoomRatio マウスホイールの回転と拡大縮小率
 
 （HuTime API本体）
 TLineとChartでRecordsetのT値の設定方法が違う（TLine:Recordsettings内、Chart:RcordsetのtBeginSetting, tEndSetting）

@@ -1,4 +1,29 @@
 // **** Preferencesダイアログ ****
+
+// *** Preferences of Panel Collectionダイアログ (dialogPreferencesPanelCollection => dPPC)
+function dPPCOpen() {
+    let panelCollection = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    document.getElementById("dPPCName").value = panelCollection.name;
+
+    document.getElementById("dPPCBackgroundColor").value = panelCollection.style.backgroundColor;
+    document.getElementById("dialogPreferencesPanelCollection").hutimeObject = panelCollection;
+    showDialog("dialogPreferencesPanelCollection");
+}
+function dPPCApply() {
+    let panelCollection = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    panelCollection.name = document.getElementById("dPPCName").value;
+    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
+        querySelector("span.branchLabelSpan").innerText = panelCollection.name;
+    panelCollection.style.backgroundColor = document.getElementById("dPPCBackgroundColor").value;
+    hutime.redraw();
+}
+function dPPCClose() {
+    dPPCApply();
+    closeDialog("dialogPreferencesPanelCollection");
+    deselectBranch();
+}
+
+
 // *** Preferences of TLine Layerダイアログ (dialogPreferencesTLineLayer => dPTL)
 function dPTLPlotTypeChanged () {
     if (document.getElementById("dPTLTypeLine").checked) {

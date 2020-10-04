@@ -98,7 +98,11 @@
             </ul>
           </li>
           <li>Remove</li>
-          <li>Preferences</li>
+          <li id="tCMPanelCollectionPreferences">Preferences</li>
+          <script type="text/javascript">
+            document.getElementById("tCMPanelCollectionPreferences").
+              addEventListener("click", dPPCOpen);
+          </script>
         </ul>
         <ul id="tCMPanel" class="treeMenu">
           <li>Export</li>

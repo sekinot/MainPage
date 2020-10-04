@@ -20,7 +20,8 @@ const selectedBranchColor = "#ffffcc";     // 選択中のツリー項目の色
 const minLayerTreeWidth = 100;  // ツリーの最小幅
 const minHuTimeMainWidth = 150; // メインパネルの最小幅
 const minHuTimeMainHeight = 50; // メインパネルの最小幅
-const HuTimeBackgroundColor = "#333333";    // メインパネルの背景色
+const HuTimeBackgroundColor = "#cccccc";    // メインパネルの背景色
+const InitialRootName = "HuTime Root";     // パネルコレクションの名前の初期値
 
 const NewLayerVBreadth = 150;           // 新規作成レイヤの既定の高さ
 const PanelTitleVBreadth = 20;          // パネルタイトルの高さ
@@ -55,7 +56,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-    //showDialog("dialogPreferencesTLineLayer");
+    //showDialog("dialogPreferencesPanelCollection");
 
 }
 
@@ -186,7 +187,8 @@ function borderStatusMouseUp (ev) {
 // **** レイヤーツリーの操作 ****
 function initTree () {
     addBranch(document.getElementById("layerTree")
-        , hutime.panelCollections[0], "HuTime root", -1, "treeRoot");
+        , hutime.panelCollections[0], InitialRootName, -1, "treeRoot");
+    hutime.panelCollections[0].name = InitialRootName;
 }
 
 // ツリーの開閉
@@ -984,6 +986,31 @@ function stopResizeDialog (ev) {
 }
 
 // **** Preferencesダイアログ ****
+
+// *** Preferences of Panel Collectionダイアログ (dialogPreferencesPanelCollection => dPPC)
+function dPPCOpen() {
+    let panelCollection = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    document.getElementById("dPPCName").value = panelCollection.name;
+
+    document.getElementById("dPPCBackgroundColor").value = panelCollection.style.backgroundColor;
+    document.getElementById("dialogPreferencesPanelCollection").hutimeObject = panelCollection;
+    showDialog("dialogPreferencesPanelCollection");
+}
+function dPPCApply() {
+    let panelCollection = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    panelCollection.name = document.getElementById("dPPCName").value;
+    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
+        querySelector("span.branchLabelSpan").innerText = panelCollection.name;
+    panelCollection.style.backgroundColor = document.getElementById("dPPCBackgroundColor").value;
+    hutime.redraw();
+}
+function dPPCClose() {
+    dPPCApply();
+    closeDialog("dialogPreferencesPanelCollection");
+    deselectBranch();
+}
+
+
 // *** Preferences of TLine Layerダイアログ (dialogPreferencesTLineLayer => dPTL)
 function dPTLPlotTypeChanged () {
     if (document.getElementById("dPTLTypeLine").checked) {

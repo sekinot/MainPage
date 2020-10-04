@@ -20,7 +20,8 @@ const selectedBranchColor = "#ffffcc";     // 選択中のツリー項目の色
 const minLayerTreeWidth = 100;  // ツリーの最小幅
 const minHuTimeMainWidth = 150; // メインパネルの最小幅
 const minHuTimeMainHeight = 50; // メインパネルの最小幅
-const HuTimeBackgroundColor = "#333333";    // メインパネルの背景色
+const HuTimeBackgroundColor = "#cccccc";    // メインパネルの背景色
+const InitialRootName = "HuTime Root";     // パネルコレクションの名前の初期値
 
 const NewLayerVBreadth = 150;           // 新規作成レイヤの既定の高さ
 const PanelTitleVBreadth = 20;          // パネルタイトルの高さ
@@ -55,7 +56,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-    //showDialog("dialogPreferencesTLineLayer");
+    //showDialog("dialogPreferencesPanelCollection");
 
 }
 

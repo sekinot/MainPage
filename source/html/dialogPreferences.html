@@ -1,6 +1,35 @@
 <!-- **** Preferences **** -->
 <!-- *** Preferences of Chart Layer *** -->
 
+<div id="dialogPreferencesPanelCollection" class="dialog"  style="width: 420px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    Preferences (Panel Collection)<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPPCName" style="float: left;">Name:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 50px;">
+        <div class="dialogSubContainer">
+          <input id="dPPCName" type="text" style="width: 300px;" />
+        </div>
+      </div>
+    </div>
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPPCBackgroundColor">Color</label>
+        <input id="dPPCBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
+      </div>
+    </div>
+    <div class="dialogContainer">
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPPCClose()"/>
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPPCApply()" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesPanelCollection')" />
+    </div>
+
+  </div>
+</div>
+
 <div id="dialogPreferencesTLineLayer" class="dialog" style="width: 420px; left: 200px; top: 100px;">
   <div class="dialogTitle">
     Preferences (TLine Layer)<span class="dialogCloseButton"></span>
@@ -263,7 +292,6 @@
     </div>
   </div>
 </div>
-
 
 
 

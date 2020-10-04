@@ -1,7 +1,8 @@
 // **** レイヤーツリーの操作 ****
 function initTree () {
     addBranch(document.getElementById("layerTree")
-        , hutime.panelCollections[0], "HuTime root", -1, "treeRoot");
+        , hutime.panelCollections[0], InitialRootName, -1, "treeRoot");
+    hutime.panelCollections[0].name = InitialRootName;
 }
 
 // ツリーの開閉
