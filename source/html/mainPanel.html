@@ -140,7 +140,11 @@
         </ul>
         <ul id="tCMScaleLayer" class="treeMenu">
           <li>Remove</li>
-          <li>Preferences</li>
+          <li id="tCMScaleLayerPreferences">Preferences</li>
+          <script type="text/javascript">
+            document.getElementById("tCMScaleLayerPreferences").
+              addEventListener("click", dPSLOpen);
+          </script>
         </ul>
         <ul id="tCMBlankLayer" class="treeMenu">
           <li>Append Object &raquo;

@@ -171,7 +171,11 @@
         </ul>
         <ul id="tCMScaleLayer" class="treeMenu">
           <li>Remove</li>
-          <li>Preferences</li>
+          <li id="tCMScaleLayerPreferences">Preferences</li>
+          <script type="text/javascript">
+            document.getElementById("tCMScaleLayerPreferences").
+              addEventListener("click", dPSLOpen);
+          </script>
         </ul>
         <ul id="tCMBlankLayer" class="treeMenu">
           <li>Append Object &raquo;
@@ -300,6 +304,14 @@
     </div>
 
     <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPTPBackgroundColor">Color</label>
+        <input id="dPTPBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
       <div class="dialogContainerLabel" style="float: left;">Operation:</div>
       <div class="dialogSubContainerGroup" style="margin-left: 90px;">
         <div class="dialogSubContainer">
@@ -316,13 +328,6 @@
 
     </div>
 
-    <div class="dialogContainer">
-      <div class="dialogContainerLabel" style="float: left;">Background:</div>
-      <div style="margin-left: 90px;">
-        <label for="dPTPBackgroundColor">Color</label>
-        <input id="dPTPBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
-      </div>
-    </div>
     <div class="dialogContainer">
       <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPTPClose()"/>
       <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPTPApply()" />
@@ -357,6 +362,14 @@
     </div>
 
     <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPTLBackgroundColor">Color</label>
+        <input id="dPTLBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
       <label class="dialogContainerLabel" style="float: left;">Plot:</label>
       <div class="dialogSubContainerGroup" style="margin-left: 65px;">
         <div class="dialogSubContainer">
@@ -384,14 +397,6 @@
         </div>
       </div>
    </div>
-
-    <div class="dialogContainer">
-      <div class="dialogContainerLabel" style="float: left;">Background:</div>
-      <div style="margin-left: 90px;">
-        <label for="dPTLBackgroundColor">Color</label>
-        <input id="dPTLBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
-      </div>
-    </div>
 
     <div class="dialogContainer">
       <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPTLClose()"/>
@@ -438,6 +443,14 @@
     </div>
 
     <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPCLBackgroundColor">Color</label>
+        <input id="dPCLBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
       <div class="dialogContainerLabel" style="float: left;">Value:</div>
       <div style="margin-left: 65px;">
         <label for="dPCLVTop">Top</label>
@@ -448,17 +461,131 @@
     </div>
 
     <div class="dialogContainer">
-      <div class="dialogContainerLabel" style="float: left;">Background:</div>
-      <div style="margin-left: 90px;">
-        <label for="dPCLBackgroundColor">Color</label>
-        <input id="dPCLBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPCLClose()"/>
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPCLApply()" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesChartLayer')" />
+    </div>
+  </div>
+</div>
+
+<!-- *** Preferences of Calendar Scale Layer *** -->
+<div id="dialogPreferencesScaleLayer" class="dialog" style="width: 420px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    Preferences (Scale Layer)<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPSLName" style="float: left;">Name:</label>
+      <div style="margin-left: 50px;">
+        <input id="dPSLName" type="text" style="width: 300px;" />
       </div>
     </div>
 
     <div class="dialogContainer">
-      <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPCLClose()"/>
-      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPCLApply()" />
-      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesChartLayer')" />
+      <label class="dialogContainerLabel" for="dPSLCalendar" style="float: left;">Calendar:</label>
+      <div style="margin-left: 75px;">
+        <select id="dPSLCalendar" style="width: 300px;">
+          <option value="101.1">Julian / Gregorian Calendar (modified in 1582)</option>
+          <option value="101.2">Julian / Gregorian Calendar (modified in 1752)</option>
+          <option value="2.1">Gregorian Calendar</option>
+          <option value="1.1">Julian date (real number)</option>
+          <option value="1001.1">Japanese Calendar (Southern Court)</option>
+          <option value="1001.2">Japanese Calendar (Northern Court)</option>
+          <option value="1002.1">Japanese Lunar Calendar (from Meiji)</option>
+          <option value="1004.1">Minguo Calendar</option>
+          <option value="1003.1">Thai Buddhist Calendar</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Position:</div>
+      <div style="margin-left: 65px;">
+        <label class="dialogSubContainerLabel" for="dPSLHeight">Height</label>
+        <input id="dPSLHeight" type="text" value="" style="width:30px; text-align: right;" /> px
+        <label for="dPSLMarginTop" style="margin-left: 15px;">Top</label>
+        <input id="dPSLMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
+        <label for="dPSLMarginBottom" style="margin-left: 15px;">Bottom</label>
+        <input id="dPSLMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPSLBackgroundColor">Color</label>
+        <input id="dPSLBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPSLLabelLevel" style="float: left;">Label:</label>
+      <div style="margin: 0 0 3px 50px;">
+        <select id="dPSLLabelLevel" style="width: 100px;">
+          <option value="0" selected="selected">All Levels</option>
+          <option value="1">Level 1</option>
+          <option value="2">Level 2</option>
+          <option value="3">Level 3</option>
+          <option value="4">Level 4</option>
+        </select>
+        <script type="text/javascript">
+          document.getElementById("dPSLLabelLevel").addEventListener("change", function () {
+              dPSLGetLabelData(document.getElementById("treeContextMenu").treeBranch.hutimeObject);
+          });
+        </script>
+      </div>
+      <div class="dialogSubContainerGroupBorder" style="margin-left: 50px;">
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPSLLabelFont">Font</label>
+          <input id="dPSLLabelFont" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dPSLLabelStyle" style="margin-left: 5px;"></label>
+          <select id="dPSLLabelStyle" style="width: 90px;" name="labelDecoration">
+            <option value="nochange"></option>
+            <option value="normal">Normal</option>
+            <option value="bold">Bold</option>
+            <option value="italic">Italic</option>
+            <option value="italic bold">Italic/Bold</option>
+          </select>
+        </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPSLLabelColor">Color</label>
+          <input id="dPSLLabelColor" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dPSLLabelSize" style="margin-left: 15px;">Size</label>
+          <input id="dPSLLabelSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+        </div>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPSLTickLevel" style="float: left;">Tick:</label>
+      <div style="margin: 0 0 3px 50px;">
+        <select id="dPSLTickLevel" style="width: 100px;">
+          <option value="0" selected="selected">All Levels</option>
+          <option value="1">Level 1</option>
+          <option value="2">Level 2</option>
+          <option value="3">Level 3</option>
+          <option value="4">Level 4</option>
+        </select>
+        <script type="text/javascript">
+          document.getElementById("dPSLTickLevel").addEventListener("change", function () {
+              dPSLGetTickData(document.getElementById("treeContextMenu").treeBranch.hutimeObject);
+          });
+        </script>
+      </div>
+      <div class="dialogSubContainerGroupBorder" style="margin-left: 50px;">
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dPSLTickColor">Color</label>
+          <input id="dPSLTickColor" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dPSLTickWidth" style="margin-left: 15px;">Width</label>
+          <input id="dPSLTickWidth" type="text" style="width: 25px; text-align: right;" value="20"/> px
+        </div>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPSLClose()"/>
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPSLApply()" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesScaleLayer')" />
     </div>
   </div>
 </div>
@@ -486,7 +613,7 @@
 
     <div class="dialogContainer">
       <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPRSClose()"/>
-      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dRSLApply()" />
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPRSLApply()" />
       <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesRecordset')" />
     </div>
 

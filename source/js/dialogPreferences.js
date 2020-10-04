@@ -276,6 +276,213 @@ function dPCLClose (ev) {
     deselectBranch();
 }
 
+// *** Preferences of Scale Layerダイアログ (dialogPreferencesScaleLayer => dPSL)
+function dPSLGetLabelData (layer) {     // 目盛りラベルの書式データを取得
+    let labelLevel = document.getElementById("dPSLLabelLevel").value;
+    let labelStyles = layer.scaleStyle.labelStyle;
+    if (labelLevel > 0) {
+        document.getElementById("dPSLLabelFont").value = labelStyles[labelLevel - 1].fontFamily;
+        if (labelStyles[labelLevel - 1].fontWeight.toString().replace("bold", "700") === "700") {
+            if (labelStyles[labelLevel - 1].fontStyle === "italic")
+                document.getElementById("dPSLLabelStyle").value = "italic bold";
+            else
+                document.getElementById("dPSLLabelStyle").value = "bold";
+        }
+        else {
+            document.getElementById("dPSLLabelStyle").value = labelStyles[labelLevel - 1].fontStyle;
+        }
+        document.getElementById("dPSLLabelColor").value = labelStyles[labelLevel - 1].fillColor;
+        document.getElementById("dPSLLabelSize").value =
+            parseFloat(labelStyles[labelLevel - 1].fontSize);
+    }
+    else {
+        let fontFamily = labelStyles[0].fontFamily;
+        let fontStyle = labelStyles[0].fontStyle;
+        let fontWeight = labelStyles[0].fontWeight;
+        let fillColor = labelStyles[0].fillColor;
+        let fontSize = parseFloat(labelStyles[0].fontSize);
+        for (let i = 1; i < labelStyles.length; ++i) {
+            if (fontFamily !== labelStyles[i].fontFamily)
+                fontFamily = null;
+            if (fontWeight !== labelStyles[i].fontWeight.toString().replace("bold", "700"))
+                fontWeight = null;
+            if (fontStyle !== labelStyles[i].fontStyle)
+                fontStyle = null;
+            if (fillColor !== labelStyles[i].fillColor)
+                fillColor = null;
+            if (fontSize !== parseFloat(labelStyles[i].fontSize))
+                fontSize = null;
+        }
+        document.getElementById("dPSLLabelFont").value = fontFamily;
+        if (!fontStyle || !fontWeight) {
+            document.getElementById("dPSLLabelStyle").value = "nochange";
+        }
+        else if (fontWeight === "700") {
+            if (fontStyle === "italic")
+                document.getElementById("dPSLLabelStyle").value = "italic bold";
+            else
+                document.getElementById("dPSLLabelStyle").value = "bold";
+        }
+        else {
+            document.getElementById("dPSLLabelStyle").value = fontFamily;
+        }
+        document.getElementById("dPSLLabelColor").value = fillColor;
+        document.getElementById("dPSLLabelSize").value = fontSize;
+    }
+}
+function dPSLSetLabelData (layer) {     // 目盛りラベルの書式データを反映
+    let labelLevel = document.getElementById("dPSLLabelLevel").value;
+    let labelStyles = layer.scaleStyle.labelStyle;
+    if (labelLevel > 0) {
+        labelStyles[labelLevel - 1].fontFamily = document.getElementById("dPSLLabelFont").value;
+        if (document.getElementById("dPSLLabelStyle").value.indexOf("bold") >= 0)
+            labelStyles[labelLevel - 1].fontWeight = 700;
+        else
+            labelStyles[labelLevel - 1].fontWeight = 400;
+        if (document.getElementById("dPSLLabelStyle").value.indexOf("italic") >= 0)
+            labelStyles[labelLevel - 1].fontStyle = "italic";
+        else
+            labelStyles[labelLevel - 1].fontStyle= "normal";
+        labelStyles[labelLevel - 1].fillColor = document.getElementById("dPSLLabelColor").value;
+        labelStyles[labelLevel - 1].fontSize =
+            parseFloat(document.getElementById("dPSLLabelSize").value) + "px";
+    }
+    else {
+        let fontFamily = document.getElementById("dPSLLabelFont").value;
+        let fontStyle = document.getElementById("dPSLLabelStyle").value;
+        let fillColor = document.getElementById("dPSLLabelColor").value;
+        let fontSize = document.getElementById("dPSLLabelSize").value;
+        labelStyles.forEach(style => {
+            if (fontFamily)
+                style.fontFamily = fontFamily;
+            if (fontStyle !== "nochange") {
+                if (fontStyle.indexOf("bold") >= 0)
+                    style.fontWeight = 700;
+                else
+                    style.fontWeight = 400;
+                if (fontStyle.indexOf("italic") >= 0)
+                    style.fontStyle = "italic";
+                else
+                    style.fontStyle = "normal";
+            }
+            if (fillColor)
+                style.fillColor = fillColor;
+            if (fontSize)
+                style.fontSize = parseFloat(fontSize) + "px";
+        });
+    }
+}
+function dPSLGetTickData (layer) {
+    let tickLevel = document.getElementById("dPSLTickLevel").value;
+    let tickStyles = layer.scaleStyle.tickStyle;
+    if (tickLevel > 0) {
+        document.getElementById("dPSLTickColor").value = tickStyles[tickLevel - 1].lineColor;
+        document.getElementById("dPSLTickWidth").value = tickStyles[tickLevel - 1].lineWidth;
+    }
+    else {
+        let lineColor = tickStyles[0].lineColor;
+        let lineWidth = tickStyles[0].lineWidth;
+        for (let i = 1; i < tickStyles.length; ++i) {
+            if (lineColor !== tickStyles[i].lineColor)
+                lineColor = null;
+            if (lineWidth !== tickStyles[i].lineWidth)
+                lineWidth = null;
+        }
+        document.getElementById("dPSLTickColor").value = lineColor;
+        document.getElementById("dPSLTickWidth").value = lineWidth;
+    }
+}
+function dPSLSetTickData (layer) {
+    let tickLevel = document.getElementById("dPSLTickLevel").value;
+    let tickStyles = layer.scaleStyle.tickStyle;
+    if (tickLevel > 0) {
+        tickStyles[tickLevel - 1].lineColor = document.getElementById("dPSLTickColor").value;
+        tickStyles[tickLevel - 1].lineWidth =
+            parseFloat(document.getElementById("dPSLTickWidth").value);
+    }
+    else {
+        let lineColor = document.getElementById("dPSLTickColor").value;
+        let lineWidth = document.getElementById("dPSLTickWidth").value;
+        tickStyles.forEach(style => {
+            if (lineColor)
+                style.lineColor = lineColor;
+            if (lineWidth)
+                style.lineWidth = parseFloat(lineWidth);
+        });
+    }
+}
+function dPSLOpen () {
+    let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    document.getElementById("dPSLName").value = layer.name;
+
+    if (layer instanceof HuTime.CalendarScaleLayer)
+        document.getElementById("dPSLCalendar").value = layer.scaleDataset.calendarId;
+    else
+        document.getElementById("dPSLCalendar").value = "1.1";
+
+    document.getElementById("dPSLHeight").value = layer.vBreadth;
+    document.getElementById("dPSLMarginTop").value = layer.vMarginTop;
+    document.getElementById("dPSLMarginBottom").value = layer.vMarginBottom;
+
+    document.getElementById("dPSLBackgroundColor").value = layer.style.backgroundColor;
+
+    dPSLGetLabelData(layer);
+    dPSLGetTickData(layer);
+
+    document.getElementById("dialogPreferencesScaleLayer").hutimeObject = layer;
+    showDialog("dialogPreferencesScaleLayer");
+}
+function dPSLApply () {
+    let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    layer.name = document.getElementById("dPSLName").value;
+    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
+        querySelector("span.branchLabelSpan").innerText = layer.name;
+
+    if (document.getElementById("dPSLCalendar").value === "1.1" &&
+        layer instanceof HuTime.CalendarScaleLayer) {
+        let panel = layer.parent;
+        let newLayer = new HuTime.TickScaleLayer(
+            layer.vBreadth, layer.vMarginTop, layer.vMarginBottom,
+            layer.scaleStyle, new HuTime.StandardScaleDataset());
+        panel.removeLayer(layer);
+        panel.appendLayer(newLayer);
+        layer = newLayer;
+        document.getElementById("treeContextMenu").treeBranch.hutimeObject = newLayer;
+    }
+    else if (document.getElementById("dPSLCalendar").value !== "1.1") {
+        if (layer instanceof HuTime.CalendarScaleLayer) {
+            layer.scaleDataset.calendarId = document.getElementById("dPSLCalendar").value;
+        }
+        else {
+            let panel = layer.parent;
+            let newLayer = new HuTime.CalendarScaleLayer(layer.vBreadth, layer.vMarginTop, layer.vMarginBottom,
+                document.getElementById("dPSLCalendar").value);
+            newLayer.scaleStyle = layer.scaleStyle;
+            panel.removeLayer(layer);
+            panel.appendLayer(newLayer);
+            layer = newLayer;
+            document.getElementById("treeContextMenu").treeBranch.hutimeObject = newLayer;
+        }
+    }
+
+    dPSLSetLabelData(layer);
+    dPSLSetTickData(layer);
+
+    layer.vBreadth = parseFloat(document.getElementById("dPSLHeight").value);
+    layer.vMarginTop = parseFloat(document.getElementById("dPSLMarginTop").value);
+    layer.vMarginBottom = parseFloat(document.getElementById("dPSLMarginBottom").value);
+
+    layer.style.backgroundColor = document.getElementById("dPSLBackgroundColor").value;
+
+    layer.redraw();
+}
+function dPSLClose (ev) {
+    dPSLApply(ev);
+    closeDialog("dialogPreferencesScaleLayer");
+    deselectBranch();
+}
+
+// *** Preferences of Recordset (dialogPreferencesRecordset => dPRS)
 function dPRSOpen () {
     let recordset = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
     document.getElementById("dPRSName").value = recordset.name;
@@ -287,17 +494,18 @@ function dPRSOpen () {
     document.getElementById("dialogPreferencesRecordset").hutimeObject = recordset;
     showDialog("dialogPreferencesRecordset");
 }
-function dRSLApply () {
+function dPRSLApply () {
     let recordset = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
     recordset.name = document.getElementById("dPRSName").value;
     document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
         querySelector("span.branchLabelSpan").innerText = recordset.name;
 }
 function dPRSClose() {
-    dRSLApply();
+    dPRSLApply();
     closeDialog("dialogPreferencesRecordset");
     deselectBranch();
 }
+
 // *** Preferences of Record Item (dialogPreferencesRecordItem => dPRI)
 function dPRIOpen () {
     let item = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
