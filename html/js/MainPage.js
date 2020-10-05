@@ -56,7 +56,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-    //showDialog("dialogPreferencesScaleLayer");
+    showDialog("dialogPreferencesBlankLayer");
 }
 
 // **** メニューバーの操作 ****
@@ -1465,6 +1465,40 @@ function dPSLApply () {
 function dPSLClose (ev) {
     dPSLApply(ev);
     closeDialog("dialogPreferencesScaleLayer");
+    deselectBranch();
+}
+
+// *** Preferences of Blank Layerダイアログ (dialogPreferencesBlankLayer => dPBL)
+function dPBLOpen () {
+    let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    document.getElementById("dPBLName").value = layer.name;
+
+    document.getElementById("dPBLHeight").value = layer.vBreadth;
+    document.getElementById("dPBLMarginTop").value = layer.vMarginTop;
+    document.getElementById("dPBLMarginBottom").value = layer.vMarginBottom;
+    document.getElementById("dPBLBackgroundColor").value = layer.style.backgroundColor;
+    document.getElementById("dPBLFixedLayer").checked = layer.fixedLayer;
+
+    document.getElementById("dialogPreferencesBlankLayer").hutimeObject = layer;
+    showDialog("dialogPreferencesBlankLayer");
+}
+function dPBLApply () {
+    let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    layer.name = document.getElementById("dPBLName").value;
+    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
+        querySelector("span.branchLabelSpan").innerText = layer.name;
+
+    layer.vBreadth = parseFloat(document.getElementById("dPBLHeight").value);
+    layer.vMarginTop = parseFloat(document.getElementById("dPBLMarginTop").value);
+    layer.vMarginBottom = parseFloat(document.getElementById("dPBLMarginBottom").value);
+    layer.style.backgroundColor = document.getElementById("dPBLBackgroundColor").value;
+    layer.fixedLayer = document.getElementById("dPBLFixedLayer").checked;
+
+    layer.redraw();
+}
+function dPBLClose () {
+    dPBLApply();
+    closeDialog("dialogPreferencesBlankLayer");
     deselectBranch();
 }
 

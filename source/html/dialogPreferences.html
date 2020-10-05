@@ -331,6 +331,56 @@
   </div>
 </div>
 
+<!-- *** Preferences of Blank Layer *** -->
+<div id="dialogPreferencesBlankLayer" class="dialog" style="width: 420px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    Preferences (Blank Layer)<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dPBLName" style="float: left;">Name:</label>
+      <div style="margin-left: 50px;">
+        <input id="dPBLName" type="text" style="width: 300px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Position:</div>
+      <div style="margin-left: 65px;">
+        <label class="dialogSubContainerLabel" for="dPBLHeight">Height</label>
+        <input id="dPBLHeight" type="text" value="" style="width:30px; text-align: right;" /> px
+        <label for="dPBLMarginTop" style="margin-left: 15px;">Top</label>
+        <input id="dPBLMarginTop" type="text" value="0" style="width:30px; text-align: right;"/> px
+        <label for="dPBLMarginBottom" style="margin-left: 15px;">Bottom</label>
+        <input id="dPBLMarginBottom" type="text" value="0" style="width:30px; text-align: right;"/> px
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Background:</div>
+      <div style="margin-left: 90px;">
+        <label for="dPBLBackgroundColor">Color</label>
+        <input id="dPBLBackgroundColor" type="text" value="#cccccc" style="width: 150px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Operation:</div>
+      <div style="margin-left: 80px;">
+          <input id="dPBLFixedLayer" type="checkbox" name="dPTLType" value="band" checked="checked" />
+          <label for="dPBLFixedLayer">Fixed Layer</label>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPBLClose()"/>
+      <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPBLApply()" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesBlankLayer')" />
+    </div>
+
+  </div>
+</div>
+
 <!-- *** Preferences of Recordset *** -->
 <div id="dialogPreferencesRecordset" class="dialog" style="width: 420px; left: 200px; top: 100px;">
   <div class="dialogTitle">
