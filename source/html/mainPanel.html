@@ -8,14 +8,6 @@
         <!-- ** File Menu ** -->
         <li>File
           <ul>
-            <!--li onclick="showDialog('dialogCreate')">Create</li-->
-            <li>Create &raquo;
-              <ul>
-                <li onclick="dCrOpen('TLine')">Time Line</li>
-                <li onclick="dCrOpen('Chart')">Chart</li>
-                <li onclick="dCrOpen('Blank')">Blank</li>
-              </ul>
-            </li>
             <li onclick="showDialog('dialogSave')">Save</li>
             <li onclick="showDialog('dialogLoad')">Load</li>
 
@@ -33,8 +25,14 @@
         <!-- ** Data Menu ** -->
         <li>Data
           <ul>
-            <li onclick="showDialog('dialogImportRemote')">Import Data</li>
-            <li>Time Scales</li>
+            <li>New &raquo;
+              <ul>
+                <li onclick="dCrOpen('TLine')">Time Line</li>
+                <li onclick="dCrOpen('Chart')">Chart</li>
+              </ul>
+            </li>
+            <li onclick="showDialog('dialogImportRemote')">Import</li>
+            <li>Time Scale</li>
             <li>Repository</li>
             <!-- Project Data -->
             <li>Import Collection</li>
@@ -91,13 +89,14 @@
       <!-- *** Layer Tree Context Menu *** -->
       <div id="treeContextMenu">
         <ul id="tCMRoot" class="treeMenu">
-          <li>Append Panel &raquo;
+          <li>New Panel &raquo;
             <ul>
-              <li>Create</li>
-              <li>Import</li>
+              <li>Blank Panel</li>
+              <li onclick="dCrOpen('TLine')">Panel with Time Line</li>
+              <li onclick="dCrOpen('Chart')">Panel with Chart</li>
             </ul>
           </li>
-          <li>Remove</li>
+          <li>Import Panel</li>
           <li id="tCMPanelCollectionPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMPanelCollectionPreferences").
@@ -105,14 +104,29 @@
           </script>
         </ul>
         <ul id="tCMPanel" class="treeMenu">
-          <li>Export</li>
-          <li>Append Layer &raquo;
+          <li>New Layer &raquo;
             <ul>
-              <li>Create</li>
-              <li>Import</li>
+              <li id="tCMNewTlineLayer">Time Line Layer</li>
+              <li id="tCMNewChartLayer">Chart Layer</li>
+              <li id="tCMNewBlankLayer">Blank Layer</li>
+              <script type="text/javascript">
+                document.getElementById("tCMNewTlineLayer").addEventListener("click",
+                  function () { dCrOpen("TLine",
+                      document.getElementById("treeContextMenu").treeBranch.hutimeObject,
+                      document.getElementById("treeContextMenu").treeBranch); });
+                document.getElementById("tCMNewChartLayer").addEventListener("click",
+                  function () { dCrOpen("Chart",
+                      document.getElementById("treeContextMenu").treeBranch.hutimeObject,
+                      document.getElementById("treeContextMenu").treeBranch); });
+                document.getElementById("tCMNewBlankLayer").addEventListener("click",
+                  function () { dCrOpen("Blank",
+                      document.getElementById("treeContextMenu").treeBranch.hutimeObject,
+                      document.getElementById("treeContextMenu").treeBranch); });
+              </script>
             </ul>
           </li>
-          <li>Remove</li>
+          <li>Export Panel</li>
+          <li>Remove Panel</li>
           <li id="tCMTilePanelPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMTilePanelPreferences").
@@ -121,8 +135,7 @@
         </ul>
 
         <ul id="tCMTLineLayer" class="treeMenu">
-          <li>Append Recordset</li>
-          <li>Remove</li>
+          <li>Remove Layer</li>
           <li id="tCMTLineLayerPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMTLineLayerPreferences").
@@ -130,8 +143,7 @@
           </script>
         </ul>
         <ul id="tCMChartLayer" class="treeMenu">
-          <li>Append Recordset</li>
-          <li>Remove</li>
+          <li>Remove Layer</li>
           <li id="tCMChartLayerPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMChartLayerPreferences").
@@ -139,7 +151,7 @@
           </script>
         </ul>
         <ul id="tCMScaleLayer" class="treeMenu">
-          <li>Remove</li>
+          <li>Remove Layer</li>
           <li id="tCMScaleLayerPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMScaleLayerPreferences").
@@ -147,13 +159,14 @@
           </script>
         </ul>
         <ul id="tCMBlankLayer" class="treeMenu">
-          <li>Append Object &raquo;
+          <li>New Object &raquo;
             <ul>
               <li>Shape</li>
               <li>String</li>
+              <li>Image</li>
             </ul>
           </li>
-          <li>Remove</li>
+          <li>Remove Layer</li>
           <li id="tCMBlankLayerPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMBlankLayerPreferences").
@@ -169,15 +182,15 @@
           </script>
         </ul>
         <ul id="tCMString" class="treeMenu">
-          <li>Remove</li>
-          <li>Preferences</li>
-        </ul>
-        <ul id="tCMImage" class="treeMenu">
-          <li>Remove</li>
+          <li>Remove String</li>
           <li>Preferences</li>
         </ul>
         <ul id="tCMShape" class="treeMenu">
-          <li>Remove</li>
+          <li>Remove Shape</li>
+          <li>Preferences</li>
+        </ul>
+        <ul id="tCMImage" class="treeMenu">
+          <li>Remove Image</li>
           <li>Preferences</li>
         </ul>
         <ul id="tCMRecordItem" class="treeMenu">

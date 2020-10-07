@@ -265,7 +265,14 @@ function dCrSourcePreview (ev) {
 }
 
 // *** 実行操作関係 ***
-function dCrOpen (type) {
+function dCrOpen (type, hutimeObject, treeBranch) {
+    if (hutimeObject)
+        document.getElementById("dCrDialogTitle").innerText = "New Layer";
+    else
+        document.getElementById("dCrDialogTitle").innerText = "New Panel";
+    document.getElementById("dialogCreate").hutimeObject = hutimeObject;
+    document.getElementById("dialogCreate").treeBranch = treeBranch;
+
     dCrLayerType = type;
     document.getElementById("dCrTypeTLine").style.display = type === "TLine" ? "block" : "none";
     document.getElementById("dCrTypeChart").style.display = type === "Chart" ? "block" : "none";
@@ -376,25 +383,42 @@ function dCrCreate (ev) {  // Layer生成
 
     // Data Layer
     let dataLayer;
+    let layerMarginTop
+    if (document.getElementById("dialogCreate").hutimeObject)
+        layerMarginTop = 0;
+    else
+        layerMarginTop = PanelTitleVBreadth;
+
     switch (dCrLayerType) {
         case "TLine" :
-            dataLayer = new HuTime.TLineLayer(rs, null, PanelTitleVBreadth, null);
+            dataLayer = new HuTime.TLineLayer(rs, null, layerMarginTop, null);
             break;
         case "LineChart" :
-            dataLayer = new HuTime.LineChartLayer(rs, null, PanelTitleVBreadth, null);
+            dataLayer = new HuTime.LineChartLayer(rs, null, layerMarginTop, null);
             break;
         case "BarChart" :
             // plotWidthType: 可能範囲（pBegin - pEnd）で描画（rBegin - rEndだと、from/toが同じ日付だと逆転する）
             rs.plotWidthType = 1;
-            dataLayer = new HuTime.BarChartLayer(rs, null, PanelTitleVBreadth, null);
+            dataLayer = new HuTime.BarChartLayer(rs, null, layerMarginTop, null);
             break;
         case "PlotChart" :
-            dataLayer = new HuTime.PlotChartLayer(rs, null, PanelTitleVBreadth, null);
+            dataLayer = new HuTime.PlotChartLayer(rs, null, layerMarginTop, null);
             break;
         default :
             return;
     }
     dataLayer.name = sourceName + "_" + itemName
+
+
+    // 既存のパネルにレイヤを追加する場合
+    if (document.getElementById("dialogCreate").hutimeObject) {
+        let panel = document.getElementById("dialogCreate").hutimeObject;
+        panel.appendLayer(dataLayer);
+        addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer);
+        panel.redraw();
+        dCrClose();
+        return;
+    }
 
     // Panel
     let panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
@@ -442,6 +466,18 @@ function dCrCreate (ev) {  // Layer生成
     dCrClose();
 }
 function dcCreateBlank () {
+    // 既存のパネルにレイヤを追加する場合
+    if (document.getElementById("dialogCreate").hutimeObject) {
+        let panel = document.getElementById("dialogCreate").hutimeObject;
+        let layer = new HuTime.Layer(null, 0, null);
+        layer.name = document.getElementById("dCrPanelTitle").value;
+        panel.appendLayer(layer);
+        addBranch(document.getElementById("dialogCreate").treeBranch, layer);
+        panel.redraw();
+        dCrClose();
+        return;
+    }
+
     let title = document.getElementById("dCrPanelTitle").value;
     let panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
     let plainLayer = new HuTime.Layer(null, PanelTitleVBreadth, null);

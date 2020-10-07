@@ -1,6 +1,16 @@
 
-
+PanelCollectionの右クリックからブランクのPanelを生成
+ノードの削除
 ツリーの各ノードを表示順にする
+ノードの順序を入れ替える
+ノードを別の場所に移す
+
+JSONデータの出力
+JSONデータの読み込み
+
+TimeScaleの追加
+Imageの出力
+埋め込みコードの出力
 レコードを　クリックすると、Otherも含めてダイアログ表示する仕組み
 
 ツリーのラベル、PreferenceのNameが空になったときにuntitledにならない
@@ -9,6 +19,7 @@
 （全体のSetting）
 起動時に表示される目盛りの暦
 PanelCollection.wheelZoomRatio マウスホイールの回転と拡大縮小率
+
 
 （HuTime API本体）
 TLineとChartでRecordsetのT値の設定方法が違う（TLine:Recordsettings内、Chart:RcordsetのtBeginSetting, tEndSetting）
@@ -63,4 +74,5 @@ Record Itemのチェック操作による表示、非表示
 tRange関係はチェックボックスを使用不可に
 TLineの線表示にした場合のツリーのアイコンを対応させる
 帯の太さの設定をPreferencesに
+ツリーやメニューに合わせてCreateダイアログを修正
 
