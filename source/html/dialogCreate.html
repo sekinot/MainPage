@@ -198,3 +198,37 @@
 </div>
 <!-- End of Create Source Data Preview -->
 
+<!-- *** Create New Blank Panel Dialog *** -->
+<div id="dialogNewBlankPanel" class="dialog" style="width: 520px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    New Blank Panel<span class="dialogCloseButton"></span>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("dialogNewBlankPanel").
+      querySelector("span.dialogCloseButton").addEventListener("click", dCrClose);
+  </script>
+  <div class="dialogBody">
+
+    <!-- Title -->
+    <div id="dCrBLAnnotation" class="dialogSubContainer">
+      <div class="dialogContainerLabel" style="float:left;">Title:</div>
+      <div class="dialogSubContainerGroup">
+        <div class="dialogSubContainer">
+          <input id="dCrBLPanelTitle" type="text" style="width: 300px;" /><label for="dCrPanelTitle"></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Operation buttons -->
+    <div class="dialogContainer">
+      <input id="dCrNPCreateButton" type="button" value="Create" style="width:80px; height: 30px; float: right;" />
+      <input id="dCrNPCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+      <script type="text/javascript">
+        document.getElementById("dCrNPCreateButton").addEventListener("click", dCrBLCreate);
+        document.getElementById("dCrNPCancelButton").addEventListener("click",
+            function () { closeDialog("dialogNewBlankPanel"); });
+      </script>
+    </div>
+  </div>
+</div>
+<!-- ** end of Create New Blank Panel Dialog -->

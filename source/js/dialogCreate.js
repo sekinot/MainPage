@@ -510,3 +510,15 @@ function dSpClose () {
     closeDialog("dialogSourcePreview");
 }
 
+// **** Create Blank Panel ダイアログ (dialogNewBlankPanel => dCrBL) ****
+function dCrBLOpen () {
+    showDialog("dialogNewBlankPanel");
+}
+function dCrBLCreate () {
+    let panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
+    panel.name = document.getElementById("dCrBLPanelTitle").value;
+    hutime.panelCollections[0].appendPanel(panel);
+    hutime.redraw();
+    addBranch(document.getElementById("treeRoot"), panel);
+    closeDialog("dialogNewBlankPanel");
+}

@@ -56,7 +56,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-    //showDialog("dialogPreferencesBlankLayer");
+    //showDialog("dialogNewBlankPanel");
 }
 
 // **** メニューバーの操作 ****
@@ -2256,7 +2256,18 @@ function dSpClose () {
     closeDialog("dialogSourcePreview");
 }
 
-// **** Save ダイアログ（dialogSave => dSv）****
+// **** Create Blank Panel ダイアログ (dialogNewBlankPanel => dCrBL) ****
+function dCrBLOpen () {
+    showDialog("dialogNewBlankPanel");
+}
+function dCrBLCreate () {
+    let panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
+    panel.name = document.getElementById("dCrBLPanelTitle").value;
+    hutime.panelCollections[0].appendPanel(panel);
+    hutime.redraw();
+    addBranch(document.getElementById("treeRoot"), panel);
+    closeDialog("dialogNewBlankPanel");
+}// **** Save ダイアログ（dialogSave => dSv）****
 
 // **** Load ダイアログ（dialogLoad => dLd）****
 
