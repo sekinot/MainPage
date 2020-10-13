@@ -414,7 +414,8 @@ function dCrCreate (ev) {  // Layer生成
     if (document.getElementById("dialogCreate").hutimeObject) {
         let panel = document.getElementById("dialogCreate").hutimeObject;
         panel.appendLayer(dataLayer);
-        addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer);
+        addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer,
+            undefined, undefined, undefined, document.getElementById("dialogCreate").treeBranch.querySelector("li"));
         panel.redraw();
         dCrClose();
         return;

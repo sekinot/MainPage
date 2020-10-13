@@ -246,9 +246,12 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
             childObj = hutimeObj.objects;
             break;
         case "panelCollection":
-        case "tilePanel":
-        case "overlayPanel":
             childObj = hutimeObj.contents;
+            break;
+
+        case "tilePanel":
+        case "overlayPanel":    // レイヤは逆順
+            childObj = hutimeObj.contents.reverse();
             break;
     }
     if (knobImg.style.visibility === "hidden")

@@ -431,9 +431,12 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
             childObj = hutimeObj.objects;
             break;
         case "panelCollection":
-        case "tilePanel":
-        case "overlayPanel":
             childObj = hutimeObj.contents;
+            break;
+
+        case "tilePanel":
+        case "overlayPanel":    // レイヤは逆順
+            childObj = hutimeObj.contents.reverse();
             break;
     }
     if (knobImg.style.visibility === "hidden")
@@ -2178,7 +2181,8 @@ function dCrCreate (ev) {  // Layer生成
     if (document.getElementById("dialogCreate").hutimeObject) {
         let panel = document.getElementById("dialogCreate").hutimeObject;
         panel.appendLayer(dataLayer);
-        addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer);
+        addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer,
+            undefined, undefined, undefined, document.getElementById("dialogCreate").treeBranch.querySelector("li"));
         panel.redraw();
         dCrClose();
         return;
