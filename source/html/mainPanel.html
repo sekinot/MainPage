@@ -126,7 +126,10 @@
             </ul>
           </li>
           <li>Export Panel</li>
-          <li>Remove Panel</li>
+          <li id="tCMTilePanelRemove">Remove Panel</li>
+          <script type="text/javascript">
+            document.getElementById("tCMTilePanelRemove").addEventListener("click", updateBranch);
+          </script>
           <li id="tCMTilePanelPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMTilePanelPreferences").

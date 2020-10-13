@@ -77,7 +77,7 @@ function getObjType (obj, branch) {
 }
 
 // ツリーの項目を追加
-function addBranch (targetElement, hutimeObj, name, check, id) {
+function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
     // targetElement: 追加する先のli要素
     // hutimeObj: HuTimeオブジェクト (PanelCollection, Panel, Layer, Recordset)
 
@@ -123,9 +123,14 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     // li要素の追加
     let li = document.createElement("li");
     li.hutimeObject = hutimeObj;
-    li.id = id;
+    if (id)
+        li.id = id;
     li.objType = hutimeObjSettings[hutimeObjType].menuType;
-    targetElement.querySelector("ul").appendChild(li);
+
+    if (siblingElement)
+        targetElement.querySelector("ul").insertBefore(li, siblingElement);
+    else
+        targetElement.querySelector("ul").appendChild(li);
 
     // ブランチを示すspan要素
     let branchSpan = document.createElement("span");
@@ -252,6 +257,19 @@ function addBranch (targetElement, hutimeObj, name, check, id) {
     for (let i = 0; i < childObj.length; ++i) {
         addBranch(li, childObj[i])
     }
+}
+
+// ツリーの項目を削除
+function removeBranch (targetElement) {
+    targetElement.remove();
+}
+
+// ツリーの項目を更新（展開していたブランチは閉じる）
+function updateBranch () {
+    let targetElement =  document.getElementById("treeContextMenu").treeBranch;
+    addBranch(targetElement.parentNode.closest("li"),
+        targetElement.hutimeObject, undefined, undefined, undefined, targetElement);
+    targetElement.remove();
 }
 
 // Record Itemアイコンの取得
