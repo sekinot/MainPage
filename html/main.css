@@ -219,7 +219,7 @@ ul.tree ul li {
     left: 0;
     top: 0;
 
-    z-index: 100;
+    z-index: 2000;
     position: absolute;
     display: none;
     background-color: #eeeeff;
@@ -233,6 +233,7 @@ ul.treeMenu {
     top: -12px;
     position: absolute;
     white-space: normal;
+    z-index: 2000;
 }
 ul.treeMenu li {
     width: 140px;

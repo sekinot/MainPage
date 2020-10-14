@@ -167,6 +167,14 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
     // 選択範囲用のspan要素の追加
     let selectSpan = branchSpan.appendChild(document.createElement("span"));
     selectSpan.addEventListener("click", selectBranch);
+
+    selectSpan.addEventListener("mousedown", startMoveBranch);
+
+    selectSpan.addEventListener("mouseover", selectMoveBranch);
+    selectSpan.addEventListener("mouseout", selectMoveBranch);
+
+    //selectSpan.addEventListener("mouseup", stopMoveBranch);
+
     selectSpan.addEventListener("contextmenu", treeContextMenu);
     selectSpan.className = "branchSelectSpan";
 
@@ -579,6 +587,7 @@ function initTreeMenu () {      // メニュー初期化
 function treeContextMenu (ev) {     // 右クリックでの動作（開始時）
     ev.stopPropagation();
     ev.preventDefault();
+    ev.target.closest("li").style.zIndex = "";
 
     if (selectedBranch !== ev.target.closest("li"))
         selectBranch(ev);

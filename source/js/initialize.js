@@ -45,6 +45,8 @@ function initialize () {    // 全体の初期化
 
     appendTimeScale("101.1");
 
+    hutime.addEventListener("porderchanged", changePanelIconOrder);
+
     // 現在の前後1年を表示
     let begin = new Date(Date.now());
     begin.setFullYear(begin.getFullYear() - 1);

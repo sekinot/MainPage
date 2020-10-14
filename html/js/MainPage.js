@@ -45,6 +45,8 @@ function initialize () {    // 全体の初期化
 
     appendTimeScale("101.1");
 
+    hutime.addEventListener("porderchanged", changePanelIconOrder);
+
     // 現在の前後1年を表示
     let begin = new Date(Date.now());
     begin.setFullYear(begin.getFullYear() - 1);
@@ -352,6 +354,14 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
     // 選択範囲用のspan要素の追加
     let selectSpan = branchSpan.appendChild(document.createElement("span"));
     selectSpan.addEventListener("click", selectBranch);
+
+    selectSpan.addEventListener("mousedown", startMoveBranch);
+
+    selectSpan.addEventListener("mouseover", selectMoveBranch);
+    selectSpan.addEventListener("mouseout", selectMoveBranch);
+
+    //selectSpan.addEventListener("mouseup", stopMoveBranch);
+
     selectSpan.addEventListener("contextmenu", treeContextMenu);
     selectSpan.className = "branchSelectSpan";
 
@@ -764,6 +774,7 @@ function initTreeMenu () {      // メニュー初期化
 function treeContextMenu (ev) {     // 右クリックでの動作（開始時）
     ev.stopPropagation();
     ev.preventDefault();
+    ev.target.closest("li").style.zIndex = "";
 
     if (selectedBranch !== ev.target.closest("li"))
         selectBranch(ev);
@@ -885,6 +896,147 @@ function removeLayer () {
     panel.removeLayer(layerBranch.hutimeObject);
     panel.redraw();
     removeBranch(layerBranch);
+}
+
+// パネルの移動
+function startMoveBranch (ev) {
+    let branchElement = ev.target.closest("li");
+    branchElement.branchDragging = true;
+    branchElement.originX = ev.pageX;
+    branchElement.originY = ev.pageY;
+    if (!branchElement.style.left)
+        branchElement.style.left = "0";
+    if (!branchElement.style.top)
+        branchElement.style.top = "0";
+    document.branchElement = branchElement;
+    document.selectedBranchElement = null;
+    document.addEventListener("mousemove", moveBranch, true);
+    document.addEventListener("mouseup", stopMoveBranch, true);
+
+    branchElement.style.zIndex = "1000";
+    branchElement.style.pointerEvents = "none";
+
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+}
+function moveBranch (ev) {
+    if (!document.branchElement)
+        return;
+
+    let branchElement = document.branchElement;
+    branchElement.style.left =
+        (parseInt(branchElement.style.left) - branchElement.originX + ev.pageX) + "px";
+    branchElement.style.top =
+        (parseInt(branchElement.style.top) - branchElement.originY + ev.pageY) + "px";
+
+    branchElement.originX = ev.pageX;
+    branchElement.originY = ev.pageY;
+
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+}
+function stopMoveBranch (ev) {
+    let branchElement = document.branchElement;
+    branchElement.style.left = "0";
+    branchElement.style.top = "0";
+    branchElement.style.zIndex = undefined;
+    branchElement.style.pointerEvents = "auto";
+
+    if (document.selectedBranchElement) {
+        document.selectedBranchElement.querySelector("span.branchSpan").
+            style.backgroundColor = null;
+        document.selectedBranchElement.querySelector("span.branchSpan").
+            style.borderTop = null;
+
+        let hutimeObject = document.branchElement.hutimeObject;
+        let parent = hutimeObject.parent;
+        let selectedHutimeObject = document.selectedBranchElement.hutimeObject;
+        let selectedParent = selectedHutimeObject.parent;
+
+        if (hutimeObject instanceof HuTime.Layer) {
+            if (selectedHutimeObject instanceof HuTime.Layer) {
+                parent.removeLayer(hutimeObject);
+                parent.redraw();
+
+                let layers = [];
+                for (let i = 0; i < selectedParent.layers.length; ++i) {
+                    if (!(selectedParent.layers[i] instanceof HuTime.PanelBorder))
+                       layers.push(selectedParent.layers[i]);
+                }
+                for (let i = 0; i < layers.length; ++i) {
+                    selectedParent.removeLayer(layers[i]);
+                }
+                for (let i = 0; i < layers.length; ++i) {
+                    selectedParent.appendLayer(layers[i])
+                    selectedParent.redraw();    // まとめてredrawすると順番が変わることがあるため（今後修正）
+                    if (layers[i] === selectedHutimeObject) {
+                        selectedParent.appendLayer(hutimeObject);
+                        selectedParent.redraw();
+                    }
+                }
+                removeBranch(document.branchElement);
+                addBranch(document.selectedBranchElement.parentNode.closest("li"),
+                    hutimeObject, undefined, undefined, undefined,
+                    document.selectedBranchElement);
+            }
+            else if (selectedHutimeObject instanceof HuTime.PanelBase) {
+                selectedHutimeObject.appendLayer(hutimeObject);
+                parent.removeLayer(hutimeObject);
+                selectedHutimeObject.redraw();
+                parent.redraw();
+                removeBranch(document.branchElement);
+                addBranch(document.selectedBranchElement,
+                    hutimeObject, undefined, undefined, undefined,
+                    document.selectedBranchElement.querySelector("ul").querySelector("li"));
+            }
+        }
+        else if (hutimeObject instanceof HuTime.TilePanel) {
+            hutime.panelCollections[0].changePanelOrder(hutimeObject, selectedHutimeObject);
+            removeBranch(document.branchElement);
+            addBranch(document.selectedBranchElement.parentNode.closest("li"),
+                hutimeObject, undefined, undefined, undefined,
+                document.selectedBranchElement);
+        }
+    }
+    document.branchElement.branchDragging = false;
+    document.removeEventListener("mousemove", moveBranch, true);
+    document.removeEventListener("mouseup", stopMoveBranch, true);
+    document.branchElement = null;
+    document.selectedBranchElement = null;
+    ev.preventDefault();
+    ev.stopPropagation();
+    return false;
+}
+function selectMoveBranch (ev) {
+    if (!document.branchElement)
+        return;
+
+    let li = ev.target.closest("li");
+
+    if (ev.type === "mouseover") {
+        if (document.branchElement.hutimeObject instanceof HuTime.Layer) {
+            if (li.hutimeObject instanceof HuTime.Layer)
+                li.querySelector("span.branchSpan").style.borderTop = "solid 3px pink";
+            else if (li.hutimeObject instanceof HuTime.PanelBase)
+                li.querySelector("span.branchSpan").style.backgroundColor = "pink";
+        }
+        else if (document.branchElement.hutimeObject instanceof HuTime.PanelBase) {
+            if (li.hutimeObject instanceof HuTime.PanelBase)
+                li.querySelector("span.branchSpan").style.borderTop = "solid 3px pink";
+        }
+        document.selectedBranchElement = li;
+    }
+    else {
+        li.querySelector("span.branchSpan").style.borderTop = null;
+        li.querySelector("span.branchSpan").style.backgroundColor = null;
+        document.selectedBranchElement = null;
+    }
+}
+function changePanelIconOrder (ev) {
+    // evにsourceとtargetのパネルの情報が含まれてから実装
+    // HuTime.PanelCollection.changePanelOrderの改修必要
 }
 
 
