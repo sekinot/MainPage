@@ -869,6 +869,26 @@ function appendTimeScale(calendarId) {
     addBranch(document.getElementById("treeRoot"), panel)
 }
 
+
+// パネルの削除
+function removePanel () {
+    let panelBranch = document.getElementById("treeContextMenu").treeBranch;
+    panelBranch.hutimeObject.parent.removePanel(panelBranch.hutimeObject);
+    hutime.redraw();
+    removeBranch(panelBranch);
+}
+
+// レイヤの削除
+function removeLayer () {
+    let layerBranch = document.getElementById("treeContextMenu").treeBranch;
+    let panel = layerBranch.hutimeObject.parent
+    panel.removeLayer(layerBranch.hutimeObject);
+    panel.redraw();
+    removeBranch(layerBranch);
+}
+
+
+
 // **** ダイアログ関係（共通） ****
 // デバッグ用
 ///*
@@ -2240,7 +2260,8 @@ function dcCreateBlank () {
         let layer = new HuTime.Layer(null, 0, null);
         layer.name = document.getElementById("dCrPanelTitle").value;
         panel.appendLayer(layer);
-        addBranch(document.getElementById("dialogCreate").treeBranch, layer);
+        addBranch(document.getElementById("dialogCreate").treeBranch, layer,
+            undefined, undefined, undefined, document.getElementById("dialogCreate").treeBranch.querySelector("li"));
         panel.redraw();
         dCrClose();
         return;

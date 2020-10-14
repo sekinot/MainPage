@@ -128,7 +128,7 @@
           <li>Export Panel</li>
           <li id="tCMTilePanelRemove">Remove Panel</li>
           <script type="text/javascript">
-            document.getElementById("tCMTilePanelRemove").addEventListener("click", updateBranch);
+            document.getElementById("tCMTilePanelRemove").addEventListener("click", removePanel);
           </script>
           <li id="tCMTilePanelPreferences">Preferences</li>
           <script type="text/javascript">
@@ -138,27 +138,33 @@
         </ul>
 
         <ul id="tCMTLineLayer" class="treeMenu">
-          <li>Remove Layer</li>
+          <li id="tCMTLineLayerRemove">Remove Layer</li>
           <li id="tCMTLineLayerPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMTLineLayerPreferences").
               addEventListener("click", dPTLOpen);
+            document.getElementById("tCMTLineLayerRemove").
+              addEventListener("click", removeLayer);
           </script>
         </ul>
         <ul id="tCMChartLayer" class="treeMenu">
-          <li>Remove Layer</li>
+          <li id="tCMChartLayerRemove">Remove Layer</li>
           <li id="tCMChartLayerPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMChartLayerPreferences").
               addEventListener("click", dPCLOpen);
+            document.getElementById("tCMChartLayerRemove").
+              addEventListener("click", removeLayer);
           </script>
         </ul>
         <ul id="tCMScaleLayer" class="treeMenu">
-          <li>Remove Layer</li>
+          <li id="tCMScaleLayerRemove">Remove Layer</li>
           <li id="tCMScaleLayerPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMScaleLayerPreferences").
               addEventListener("click", dPSLOpen);
+            document.getElementById("tCMScaleLayerRemove").
+              addEventListener("click", removeLayer);
           </script>
         </ul>
         <ul id="tCMBlankLayer" class="treeMenu">
@@ -169,11 +175,13 @@
               <li>Image</li>
             </ul>
           </li>
-          <li>Remove Layer</li>
+          <li id="tCMBlankLayerRemove">Remove Layer</li>
           <li id="tCMBlankLayerPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMBlankLayerPreferences").
               addEventListener("click", dPBLOpen);
+            document.getElementById("tCMBlankLayerRemove").
+              addEventListener("click", removeLayer);
           </script>
         </ul>
 

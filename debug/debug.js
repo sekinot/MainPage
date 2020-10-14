@@ -6,6 +6,7 @@ document.write('<script type="text/javascript" src="' + mainPageJsPath + 'mainPa
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'treeMenu.js"></script>');
 
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'common.js"></script>');
+document.write('<script type="text/javascript" src="' + mainPageJsPath + 'operation.js"></script>');
 
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogBase.js"></script>');
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogPreferences.js"></script>');

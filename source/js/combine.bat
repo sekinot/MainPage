@@ -9,6 +9,7 @@ type %sourceDir%mainPanel.js >> %targetFile%
 type %sourceDir%treeMenu.js >> %targetFile%
 
 type %sourceDir%common.js >> %targetFile%
+type %sourceDir%operation.js >> %targetFile%
 
 type %sourceDir%dialogBase.js >> %targetFile%
 type %sourceDir%dialogPreferences.js >> %targetFile%

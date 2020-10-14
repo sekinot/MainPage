@@ -473,7 +473,8 @@ function dcCreateBlank () {
         let layer = new HuTime.Layer(null, 0, null);
         layer.name = document.getElementById("dCrPanelTitle").value;
         panel.appendLayer(layer);
-        addBranch(document.getElementById("dialogCreate").treeBranch, layer);
+        addBranch(document.getElementById("dialogCreate").treeBranch, layer,
+            undefined, undefined, undefined, document.getElementById("dialogCreate").treeBranch.querySelector("li"));
         panel.redraw();
         dCrClose();
         return;
