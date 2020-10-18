@@ -15,10 +15,10 @@
     <div class="dialogContainer">
       <label class="dialogContainerLabel" style="float: left;">Data:</label>
       <div style="margin-left: 60px;">
-        <input id="dExPanelDataEmbed" type="radio" name="dataEmbed" />
-        <label for="dExPanelDataEmbed">Embed Data into the Exported Data</label><br />
-        <input id="dExPanelRemoteSource" type="radio" name="dataEmbed" checked="checked" />
-        <label for="dExPanelRemoteSource">Export only Remote Source</label>
+        <input id="dExPanelDataEmbed" type="radio" name="dataEmbed" checked="checked"/>
+        <label for="dExPanelDataEmbed">Embed data into the exported data</label><br />
+        <input id="dExPanelRemoteSource" type="radio" name="dataEmbed" />
+        <label for="dExPanelRemoteSource">Export only remote source</label>
       </div>
     </div>
 
@@ -38,4 +38,78 @@
 
 </div>
 <!-- End of Export Panel Dialog -->
+
+<!-- **** Import Panel Dialog **** -->
+<div id="dialogImportPanel" class="dialog" style="width: 520px; left: 200px; top: 100px;">
+  <div id="dImPanelDialogTitle" class="dialogTitle">
+    Import Panel<span class="dialogCloseButton"></span>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("dialogImportPanel").
+      querySelector("span.dialogCloseButton").addEventListener("click", function () {
+            closeDialog("dialogImportPanel");
+    });
+  </script>
+  <div class="dialogBody">
+
+    <!-- Source -->
+    <div id="dImPLocation" class="dialogContainer" style="display: block;">
+      <div class="dialogContainerLabel" style="float: left;">Location:</div>
+      <div class="dialogSubContainerGroupBorder" style="margin-left: 70px;">
+
+        <!-- location of the source (Remote | Local) -->
+        <div class="dialogSubContainer">
+          <input id="dImPLocationRemoteType" type="radio" name="dImPLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="dImPLocationRemoteType">Remote</label>
+          <input id="dImPLocationLocalType" type="radio" name="dImPLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="dImPLocationLocalType" >Local</label>
+          <script type="text/javascript">
+            document.getElementById("dImPLocationRemoteType").addEventListener("click", dImPSwitchLocationType);
+            document.getElementById("dImPLocationLocalType").addEventListener("click", dImPSwitchLocationType);
+          </script>
+        </div>
+
+        <!-- URL or path of the source -->
+        <div class="dialogSubContainer">
+          <div style="float: left;">
+            <span id="dImPLocationRemoteFile" style="display: block;">
+              <label class="dialogSubContainerLabel" for="dImPLocationURL">URL</label>
+              <textarea id="dImPLocationURL" style="width: 325px; height: 27px; resize: vertical;"></textarea>
+            </span>
+            <span id="dImPLocationLocalFile" style="display: none; height: 27px;">
+              <label class="dialogSubContainerLabel" for="dImPLocationFile">File</label>
+              <input id="dImPLocationFile" type="file" style="width: 325px;" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- Data -->
+    <!--
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Data:</label>
+      <div style="margin-left: 60px;">
+        <input id="dImUseRemoteData" type="checkbox" />
+        <label for="dImUseRemoteData">Forcibly use remote data</label>
+      </div>
+    </div>
+    -->
+    <!-- Operation buttons -->
+    <div class="dialogContainer">
+      <input id="dImPanelImportButton" type="button" value="Import" style="width:80px; height: 30px; float: right;" />
+      <input id="dImPanelCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+
+      <script type="text/javascript">
+        document.getElementById("dImPanelImportButton").addEventListener("click", dImPImport);
+        document.getElementById("dImPanelCancelButton").addEventListener("click", function () {
+            closeDialog("dialogImportPanel");
+        });
+      </script>
+    </div>
+  </div>
+
+</div>
+<!-- End of Import Panel Dialog -->
+
 

@@ -96,7 +96,11 @@
               <li onclick="dCrOpen('Chart')">Panel with Chart</li>
             </ul>
           </li>
-          <li>Import Panel</li>
+          <li id="tCMPanelCollectionImport">Import Panel</li>
+          <script type="text/javascript">
+            document.getElementById("tCMPanelCollectionImport").
+              addEventListener("click", dImPOpen);
+          </script>
           <li id="tCMPanelCollectionPreferences">Preferences</li>
           <script type="text/javascript">
             document.getElementById("tCMPanelCollectionPreferences").

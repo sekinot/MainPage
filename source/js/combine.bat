@@ -18,7 +18,4 @@ type %sourceDir%dialogSaveLoad.js >> %targetFile%
 type %sourceDir%dialogSaveLoad.js >> %targetFile%
 type %sourceDir%dialogData.js >> %targetFile%
 
-type %sourceDir%_inCorrection.js >> %targetFile%
-
-
 endlocal
