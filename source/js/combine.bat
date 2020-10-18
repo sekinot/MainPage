@@ -15,6 +15,8 @@ type %sourceDir%dialogBase.js >> %targetFile%
 type %sourceDir%dialogPreferences.js >> %targetFile%
 type %sourceDir%dialogCreate.js >> %targetFile%
 type %sourceDir%dialogSaveLoad.js >> %targetFile%
+type %sourceDir%dialogSaveLoad.js >> %targetFile%
+type %sourceDir%dialogData.js >> %targetFile%
 
 type %sourceDir%_inCorrection.js >> %targetFile%
 

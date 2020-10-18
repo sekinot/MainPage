@@ -1,0 +1,41 @@
+<!-- **** Export Panel Dialog **** -->
+<div id="dialogExportPanel" class="dialog" style="width: 520px; left: 200px; top: 100px;">
+  <div id="dExPanelDialogTitle" class="dialogTitle">
+    Export Panel<span class="dialogCloseButton"></span>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("dialogExportPanel").
+      querySelector("span.dialogCloseButton").addEventListener("click", function () {
+            closeDialog("dialogExportPanel");
+    });
+  </script>
+  <div class="dialogBody">
+
+    <!-- Data -->
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Data:</label>
+      <div style="margin-left: 60px;">
+        <input id="dExPanelDataEmbed" type="radio" name="dataEmbed" />
+        <label for="dExPanelDataEmbed">Embed Data into the Exported Data</label><br />
+        <input id="dExPanelRemoteSource" type="radio" name="dataEmbed" checked="checked" />
+        <label for="dExPanelRemoteSource">Export only Remote Source</label>
+      </div>
+    </div>
+
+    <!-- Operation buttons -->
+    <div class="dialogContainer">
+      <input id="dExPanelExportButton" type="button" value="Export" style="width:80px; height: 30px; float: right;" />
+      <input id="dExPanelCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+
+      <script type="text/javascript">
+        document.getElementById("dExPanelExportButton").addEventListener("click", dExPExport);
+        document.getElementById("dExPanelCancelButton").addEventListener("click", function () {
+            closeDialog("dialogExportPanel");
+        });
+      </script>
+    </div>
+  </div>
+
+</div>
+<!-- End of Export Panel Dialog -->
+

@@ -58,7 +58,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-    //showDialog("dialogNewBlankPanel");
+    //showDialog("dialogExportPanel");
 }
 
 // **** メニューバーの操作 ****
@@ -941,7 +941,7 @@ function stopMoveBranch (ev) {
     let branchElement = document.branchElement;
     branchElement.style.left = "0";
     branchElement.style.top = "0";
-    branchElement.style.zIndex = undefined;
+    branchElement.style.zIndex = "";
     branchElement.style.pointerEvents = "auto";
 
     if (document.selectedBranchElement) {
@@ -1038,8 +1038,6 @@ function changePanelIconOrder (ev) {
     // evにsourceとtargetのパネルの情報が含まれてから実装
     // HuTime.PanelCollection.changePanelOrderの改修必要
 }
-
-
 
 // **** ダイアログ関係（共通） ****
 // デバッグ用
@@ -2465,6 +2463,29 @@ function dCrBLCreate () {
 }// **** Save ダイアログ（dialogSave => dSv）****
 
 // **** Load ダイアログ（dialogLoad => dLd）****
+
+// **** Save ダイアログ（dialogSave => dSv）****
+
+// **** Load ダイアログ（dialogLoad => dLd）****
+
+
+// *** Export Panelダイアログ (dialogExportPanel => dExP)
+function dExPOpen () {
+    showDialog("dialogExportPanel");
+}
+function dExPExport () {
+    let panel = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+    let embed = document.getElementById("dExPanelDataEmbed").checked;
+    for (let i = 0; i < panel.layers.length; ++i) {
+        if (!panel.layers[i].recordsets)
+            continue;
+        for (let j = 0; j <　panel.layers[i].recordsets.length; ++j) {
+            panel.layers[i].recordsets[j].useLoadedDataForJSON = embed;
+        }
+    }
+    HuTime.JSON.save(panel);
+    closeDialog("dialogExportPanel");
+}
 
 /**** 整理中 ****/
 // *** タブ ***

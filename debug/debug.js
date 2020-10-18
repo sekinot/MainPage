@@ -12,6 +12,7 @@ document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialog
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogPreferences.js"></script>');
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogCreate.js"></script>');
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogSaveLoad.js"></script>');
+document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogData.js"></script>');
 
 document.write('<script type="text/javascript" src="' + mainPageJsPath + '_inCorrection.js"></script>');
 

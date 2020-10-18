@@ -59,7 +59,7 @@ function stopMoveBranch (ev) {
     let branchElement = document.branchElement;
     branchElement.style.left = "0";
     branchElement.style.top = "0";
-    branchElement.style.zIndex = undefined;
+    branchElement.style.zIndex = "";
     branchElement.style.pointerEvents = "auto";
 
     if (document.selectedBranchElement) {
@@ -156,6 +156,4 @@ function changePanelIconOrder (ev) {
     // evにsourceとtargetのパネルの情報が含まれてから実装
     // HuTime.PanelCollection.changePanelOrderの改修必要
 }
-
-
 

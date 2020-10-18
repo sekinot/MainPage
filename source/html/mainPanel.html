@@ -125,7 +125,11 @@
               </script>
             </ul>
           </li>
-          <li>Export Panel</li>
+          <li id="tCMTilePanelExport">Export Panel</li>
+          <script type="text/javascript">
+            document.getElementById("tCMTilePanelExport").
+              addEventListener("click", dExPOpen);
+          </script>
           <li id="tCMTilePanelRemove">Remove Panel</li>
           <script type="text/javascript">
             document.getElementById("tCMTilePanelRemove").addEventListener("click", removePanel);
