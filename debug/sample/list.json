@@ -1,0 +1,23 @@
+{
+  "title": "Sample List (A)",
+  "rights": "CC-BY",
+  "items": "title,subject",
+  "list": [
+    {
+      "title": "list0",
+      "subject": "AAA",
+      "url": "http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json"
+    },
+    {
+      "title": "list1",
+      "subject": "AAA",
+      "description": "チャーシューメン",
+      "url": "http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"
+    },
+    {
+      "title": "list2",
+      "subject": "BBB",
+      "url": "http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json"
+    }
+  ]
+}

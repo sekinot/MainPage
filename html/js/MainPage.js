@@ -58,7 +58,41 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-    //showDialog("dialogImportPanel");
+
+    let fileElement = document.createElement("imput");
+    fileElement.setAttribute("type", "file");
+    let reader = new FileReader();
+
+
+
+    let list =
+        "{\n" +
+        "  \"title\": \"Sample List (A)\",\n" +
+        "  \"rights\": \"CC-BY\",\n" +
+        "  \"items\": \"title,subject\",\n" +
+        "  \"list\": [\n" +
+        "    {\n" +
+        "      \"title\": \"list0\",\n" +
+        "      \"subject\": \"AAA\",\n" +
+        "      \"url\": \"http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json\"\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"title\": \"list1\",\n" +
+        "      \"subject\": \"AAA\",\n" +
+        "      \"description\": \"チャーシューメン\",\n" +
+        "      \"url\": \"http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json\"\n" +
+        "    },\n" +
+        "    {\n" +
+        "      \"title\": \"list2\",\n" +
+        "      \"subject\": \"BBB\",\n" +
+        "      \"url\": \"http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json\"\n" +
+        "    }\n" +
+        "  ]\n" +
+        "}";
+    dataList.push(JSON.parse(list));
+
+    dDLOpen();
+    //showDialog("dialogDataList");
 }
 
 // **** メニューバーの操作 ****
@@ -2583,39 +2617,66 @@ function importObject (panel) {
             rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
         };
     }
-}/**** 整理中 ****/
-/*
-// *** タブ ***
-// タブの切り替え
-function clickTabLabel (ev) {
-    let tabs = ev.target.closest(".tabContainer").querySelectorAll("div.tab");
-    for (let i = 0; i < tabs.length; ++i) {
-        if (tabs[i].id === ev.target.getAttribute("for"))
-            tabs[i].className = "tab tabSelected";
-        else
-            tabs[i].className = "tab";
-    }
-    let labels = ev.target.closest(".tabContainer").querySelectorAll("label.tabLabel");
-    for (let i = 0; i < labels.length; ++i) {
-        if (labels[i] === ev.target)
-            labels[i].className = "tabLabel tabLabelSelected";
-        else
-            labels[i].className = "tabLabel";
-    }
-}
-// */
-/*
-// **** 個別のダイアログ操作 ****
-// リモートデータのインポート
-function dialogImportRemote_Import () {    // リモートインポート
-    closeDialog("dialogImportRemote");
-    importRemoteJsonContainer (document.forms["dialogImportRemoteForm"].url.value);
 }
 
-// ローカルデータのインポート
-function dialogImportLocal_Import () {      // ローカルインポート
-    closeDialog("dialogImportLocal");
-    importLocalJsonContainer (document.forms["dialogImportLocalForm"].file);
+// *** Import Panelダイアログ (dialogImportPanel => dImP)
+dataList = []
+function dDLOpen (index) {
+    index = 0;
+    let list = dataList[index].list;
+    let header = dataList[index].items.split(",");
+    let table = document.getElementById("dataListTable");
+    while (table.firstChild) {
+        table.removeChild(table.firstChild);
+    }
+
+    // ヘッダの出力
+    let headerTr = document.createElement("tr");
+    headerTr.className = "dataListHeader";
+    let th;
+    for (let i = 0; i < header.length; ++i) {
+        th = document.createElement("th");
+        th.innerText = header[i].trim();
+        th.className = "dataListHeader";
+        headerTr.appendChild(th)
+    }
+    th = document.createElement("th");
+    th.innerHTML = "&nbsp;"
+    headerTr.appendChild(th);
+    table.appendChild(headerTr);
+
+    // 表本体
+    for (let i = 0; i < list.length; ++i) {
+        let tr = document.createElement("tr");
+        tr.className = "dataList";
+        let td;
+        for (let j = 0; j < header.length; ++j) {
+            td = document.createElement("td");
+            if (list[i][header[j]])
+                td.innerText = list[i][header[j]];
+            else
+                td.innerHTML = "&nbsp;";
+            td.setAttribute("onclick",
+            "openListDataDetail(" + i.toString() + ")");
+            td.className = "dataList";
+            tr.appendChild(td);
+        }
+        td = document.createElement("td");
+        td.style.width = "70px";
+        td.style.textAlign = "center";
+
+        let button = document.createElement("input");
+        button.type = "button";
+        button.value = "Import";
+        button.setAttribute("onclick",
+            "importRemoteJsonContainer('" + list[i]["url"] + "')");
+        td.appendChild(button);
+        tr.appendChild(td);
+        document.getElementById("dataListTable").appendChild(tr);
+    }
+    showDialog("dialogDataList");
 }
 
-// */
+function openListDataDetail (index) {
+    document.getElementById("statusBar").innerText = "detail " + index;
+}

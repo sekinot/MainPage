@@ -114,3 +114,65 @@ function importObject (panel) {
         };
     }
 }
+
+// *** Import Panelダイアログ (dialogImportPanel => dImP)
+dataList = []
+function dDLOpen (index) {
+    index = 0;
+    let list = dataList[index].list;
+    let header = dataList[index].items.split(",");
+    let table = document.getElementById("dataListTable");
+    while (table.firstChild) {
+        table.removeChild(table.firstChild);
+    }
+
+    // ヘッダの出力
+    let headerTr = document.createElement("tr");
+    headerTr.className = "dataListHeader";
+    let th;
+    for (let i = 0; i < header.length; ++i) {
+        th = document.createElement("th");
+        th.innerText = header[i].trim();
+        th.className = "dataListHeader";
+        headerTr.appendChild(th)
+    }
+    th = document.createElement("th");
+    th.innerHTML = "&nbsp;"
+    headerTr.appendChild(th);
+    table.appendChild(headerTr);
+
+    // 表本体
+    for (let i = 0; i < list.length; ++i) {
+        let tr = document.createElement("tr");
+        tr.className = "dataList";
+        let td;
+        for (let j = 0; j < header.length; ++j) {
+            td = document.createElement("td");
+            if (list[i][header[j]])
+                td.innerText = list[i][header[j]];
+            else
+                td.innerHTML = "&nbsp;";
+            td.setAttribute("onclick",
+            "openListDataDetail(" + i.toString() + ")");
+            td.className = "dataList";
+            tr.appendChild(td);
+        }
+        td = document.createElement("td");
+        td.style.width = "70px";
+        td.style.textAlign = "center";
+
+        let button = document.createElement("input");
+        button.type = "button";
+        button.value = "Import";
+        button.setAttribute("onclick",
+            "importRemoteJsonContainer('" + list[i]["url"] + "')");
+        td.appendChild(button);
+        tr.appendChild(td);
+        document.getElementById("dataListTable").appendChild(tr);
+    }
+    showDialog("dialogDataList");
+}
+
+function openListDataDetail (index) {
+    document.getElementById("statusBar").innerText = "detail " + index;
+}

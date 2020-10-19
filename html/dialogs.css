@@ -315,3 +315,29 @@ div.itemRoleMenu li:hover {
 #dialogCreate div.dialogSubContainerGroup, div.dialogSubContainerGroupBorder {
     margin: 0 0 0 60px;
 }
+
+/**** Data List ****/
+table.dataList {
+
+}
+tr.dataList {
+    margin: 0;
+    padding: 0;
+}
+tr.dataListHeader {
+    background-color: #dddddd;
+}
+tr.dataList:nth-child(odd) {
+    background-color: #ffffdd;
+}
+tr.dataList:nth-child(even) {
+    background-color: #ddddff;
+}
+th.dataListHeader {
+    padding: 2px 5px;
+}
+td.dataList {
+    margin: 0;
+    padding: 2px 5px;
+    cursor: pointer;
+}

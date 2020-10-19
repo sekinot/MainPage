@@ -62,19 +62,19 @@
                 <li onclick="dCrOpen('Chart')">Chart</li>
               </ul>
             </li>
-            <li onclick="showDialog('dialogImportRemote')">Import</li>
+            <li onclick="dImPOpen()">Import</li>
             <li>Time Scale</li>
-            <li>Repository</li>
+            <!--li>Data Repository</li-->
             <!-- Project Data -->
-            <li>Import Collection</li>
-            <li class="importedCollection">Project A &raquo;
+            <li>Import Data List</li>
+            <li class="importedCollection" onclick="dDLOpen()">Project A</li>
+            <!--li class="importedCollection">Project B &raquo;
               <ul>
                 <li>Data 1</li>
                 <li>Data 2</li>
                 <li>Data 3</li>
               </ul>
-            </li>
-            <li class="importedCollection">Project B</li>
+            </li-->
           </ul>
         </li>
 
@@ -1217,6 +1217,35 @@
 </div>
 <!-- End of Import Panel Dialog -->
 
+<!-- **** Data List Dialog **** -->
+<div id="dialogDataList" class="dialog" style="width:400px; height:200px; left: 200px; top: 100px;">
+  <div id="dDLDialogTitle" class="dialogTitle">
+    Data List<span class="dialogCloseButton"></span>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("dialogDataList").
+      querySelector("span.dialogCloseButton").addEventListener("click", function () {
+            closeDialog("dialogDataList");
+    });
+  </script>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <table id="dataListTable" style="width: 100%;">
+      </table>
+    </div>
 
+    <!-- Operation buttons -->
+    <!--div class="dialogContainer">
+      <input id="dDLCloseButton" type="button" value="Close" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+      <script type="text/javascript">
+        document.getElementById("dDLCloseButton").addEventListener("click", function () {
+            closeDialog("dialogDataList");
+        });
+      </script>
+    </div-->
+  </div>
+  <div class="dialogResizeHandle" style="cursor: se-resize;"></div>
+</div>
+<!-- End of Data List Dialog -->
 </body>
 </html>
