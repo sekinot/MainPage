@@ -58,41 +58,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-
-    let fileElement = document.createElement("imput");
-    fileElement.setAttribute("type", "file");
-    let reader = new FileReader();
-
-
-
-    let list =
-        "{\n" +
-        "  \"title\": \"Sample List (A)\",\n" +
-        "  \"rights\": \"CC-BY\",\n" +
-        "  \"items\": \"title,subject\",\n" +
-        "  \"list\": [\n" +
-        "    {\n" +
-        "      \"title\": \"list0\",\n" +
-        "      \"subject\": \"AAA\",\n" +
-        "      \"url\": \"http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json\"\n" +
-        "    },\n" +
-        "    {\n" +
-        "      \"title\": \"list1\",\n" +
-        "      \"subject\": \"AAA\",\n" +
-        "      \"description\": \"チャーシューメン\",\n" +
-        "      \"url\": \"http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json\"\n" +
-        "    },\n" +
-        "    {\n" +
-        "      \"title\": \"list2\",\n" +
-        "      \"subject\": \"BBB\",\n" +
-        "      \"url\": \"http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json\"\n" +
-        "    }\n" +
-        "  ]\n" +
-        "}";
-    dataList.push(JSON.parse(list));
-
-    //dDLOpen();
-    //showDialog("dialogListDataDetail");
+    //showDialog("dialogImportDataList");
 }
 
 // **** メニューバーの操作 ****
@@ -2702,4 +2668,52 @@ function openListDataDetail (listIndex, dataIndex) {
         body.appendChild(container);
     }
     showDialog("dialogListDataDetail");
+}
+
+// *** Import Data Listダイアログ（dialogImportDataList => dImDL）
+function dImDLSwitchLocationType () {
+    if (document.getElementById("dImDLLocationRemoteType").checked) {
+        document.getElementById("dImDLLocationRemoteFile").style.display = "block";
+        document.getElementById("dImDLLocationLocalFile").style.display = "none";
+    }
+    else {
+        document.getElementById("dImDLLocationRemoteFile").style.display = "none";
+        document.getElementById("dImDLLocationLocalFile").style.display = "block";
+    }
+}
+function dImDLOpen () {
+    dImDLSwitchLocationType();
+    showDialog("dialogImportDataList");
+}
+function dImDLImport () {
+    if (document.getElementById("dImDLLocationRemoteType").checked) {
+        let request = new XMLHttpRequest();
+        request.open("GET", document.getElementById("dImDLLocationURL").value, true);
+        request.send();
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 && request.status === 200) {
+                getDataList(request.responseText);
+            }
+        }
+    }
+    else {
+        let file = document.getElementById("dImDLLocationFile").files[0];
+        let reader = new FileReader();
+        reader.readAsText(file);
+        reader.addEventListener('load', function () {
+            getDataList(reader.result);
+        });
+    }
+    closeDialog("dialogImportDataList");
+
+    function getDataList (jsonData) {
+        let dataObj = JSON.parse(jsonData);
+        let index = dataList.push(dataObj) - 1;
+        let dataMenu = document.getElementById("mainMenuData");
+        let li = document.createElement("li");
+        li.setAttribute("onclick", "dDLOpen(" + index.toString() + ")");
+        li.className = "importedCollection";
+        li.innerText = dataObj["title"];
+        dataMenu.querySelector("ul").appendChild(li);
+    }
 }

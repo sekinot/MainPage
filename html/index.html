@@ -54,7 +54,7 @@
         </li>
 
         <!-- ** Data Menu ** -->
-        <li>Data
+        <li id="mainMenuData">Data
           <ul>
             <li>New &raquo;
               <ul>
@@ -66,8 +66,10 @@
             <li>Time Scale</li>
             <!--li>Data Repository</li-->
             <!-- Project Data -->
-            <li>Import Data List</li>
-            <li class="importedCollection" onclick="dDLOpen()">Project A</li>
+            <li onclick="dImDLOpen()">Import Data List</li>
+
+
+            <!--li class="importedCollection" onclick="dDLOpen()">Project A</li-->
             <!--li class="importedCollection">Project B &raquo;
               <ul>
                 <li>Data 1</li>
@@ -1265,5 +1267,65 @@
 </div>
 <!-- End of List Data Detail Dialog -->
 
+<!--- **** Import Data List Dialog *** -->
+<div id="dialogImportDataList" class="dialog" style="width: 520px; left: 200px; top: 100px;">
+  <div id="dImDLDialogTitle" class="dialogTitle">
+    Import Data List<span class="dialogCloseButton"></span>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("dImDLDialogTitle").
+      querySelector("span.dialogCloseButton").addEventListener("click", function () {
+            closeDialog("dialogImportDataList");
+    });
+  </script>
+  <div class="dialogBody">
+
+    <!-- Source -->
+    <div id="dImDLLocation" class="dialogContainer" style="display: block;">
+      <div class="dialogContainerLabel" style="float: left;">Location:</div>
+      <div class="dialogSubContainerGroupBorder" style="margin-left: 70px;">
+
+        <!-- location of the source (Remote | Local) -->
+        <div class="dialogSubContainer">
+          <input id="dImDLLocationRemoteType" type="radio" name="dImDLLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="dImDLLocationRemoteType">Remote</label>
+          <input id="dImDLLocationLocalType" type="radio" name="dImDLLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="dImDLLocationLocalType" >Local</label>
+          <script type="text/javascript">
+            document.getElementById("dImDLLocationRemoteType").addEventListener("click", dImDLSwitchLocationType);
+            document.getElementById("dImDLLocationLocalType").addEventListener("click", dImDLSwitchLocationType);
+          </script>
+        </div>
+
+        <!-- URL or path of the source -->
+        <div class="dialogSubContainer">
+          <div style="float: left;">
+            <span id="dImDLLocationRemoteFile" style="display: block;">
+              <label class="dialogSubContainerLabel" for="dImDLLocationURL">URL</label>
+              <textarea id="dImDLLocationURL" style="width: 325px; height: 27px; resize: vertical;"></textarea>
+            </span>
+            <span id="dImDLLocationLocalFile" style="display: none; height: 27px;">
+              <label class="dialogSubContainerLabel" for="dImDLLocationFile">File</label>
+              <input id="dImDLLocationFile" type="file" style="width: 325px;" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <input id="dImDLImportButton" type="button" value="Import" style="width:80px; height: 30px; float: right;" />
+      <input id="dImDLCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+      <script type="text/javascript">
+        document.getElementById("dImDLImportButton").addEventListener("click", dImDLImport);
+        document.getElementById("dImDLCancelButton").addEventListener("click", function () {
+            closeDialog("dialogImportDataList");
+        });
+      </script>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- End of Import Data List Dialog -->
 </body>
 </html>

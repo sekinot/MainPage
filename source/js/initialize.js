@@ -58,40 +58,6 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-
-    let fileElement = document.createElement("imput");
-    fileElement.setAttribute("type", "file");
-    let reader = new FileReader();
-
-
-
-    let list =
-        "{\n" +
-        "  \"title\": \"Sample List (A)\",\n" +
-        "  \"rights\": \"CC-BY\",\n" +
-        "  \"items\": \"title,subject\",\n" +
-        "  \"list\": [\n" +
-        "    {\n" +
-        "      \"title\": \"list0\",\n" +
-        "      \"subject\": \"AAA\",\n" +
-        "      \"url\": \"http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json\"\n" +
-        "    },\n" +
-        "    {\n" +
-        "      \"title\": \"list1\",\n" +
-        "      \"subject\": \"AAA\",\n" +
-        "      \"description\": \"チャーシューメン\",\n" +
-        "      \"url\": \"http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json\"\n" +
-        "    },\n" +
-        "    {\n" +
-        "      \"title\": \"list2\",\n" +
-        "      \"subject\": \"BBB\",\n" +
-        "      \"url\": \"http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json\"\n" +
-        "    }\n" +
-        "  ]\n" +
-        "}";
-    dataList.push(JSON.parse(list));
-
-    //dDLOpen();
-    //showDialog("dialogListDataDetail");
+    //showDialog("dialogImportDataList");
 }
 
