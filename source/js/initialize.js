@@ -91,7 +91,7 @@ function initialize () {    // 全体の初期化
         "}";
     dataList.push(JSON.parse(list));
 
-    dDLOpen();
-    //showDialog("dialogDataList");
+    //dDLOpen();
+    //showDialog("dialogListDataDetail");
 }
 

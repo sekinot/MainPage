@@ -115,7 +115,7 @@ function importObject (panel) {
     }
 }
 
-// *** Import Panelダイアログ (dialogImportPanel => dImP)
+// *** Data Listダイアログ (dialogDataList => dDL)
 dataList = []
 function dDLOpen (index) {
     index = 0;
@@ -153,7 +153,8 @@ function dDLOpen (index) {
             else
                 td.innerHTML = "&nbsp;";
             td.setAttribute("onclick",
-            "openListDataDetail(" + i.toString() + ")");
+            "openListDataDetail(" + index.toString() +
+                ", " + i.toString() + ")");
             td.className = "dataList";
             tr.appendChild(td);
         }
@@ -173,6 +174,28 @@ function dDLOpen (index) {
     showDialog("dialogDataList");
 }
 
-function openListDataDetail (index) {
-    document.getElementById("statusBar").innerText = "detail " + index;
+// *** ListDataDetailダイアログ（dialogListDataDetail => dLDD）
+function openListDataDetail (listIndex, dataIndex) {
+    let body = document.getElementById("dialogListDataDetail").querySelector("div.dialogBody");
+    while (body.firstChild) {
+        body.removeChild(body.firstChild);
+    }
+
+    let data = dataList[listIndex].list[dataIndex];
+    //document.getElementById("statusBar").innerText = "";
+    for (let item in data) {
+        let container = document.createElement("div");
+        container.className = "dialogContainer";
+        let label = document.createElement("div");
+        label.className = "dialogContainerLabel";
+        label.style.float = "left";
+        label.innerText = item + ":";
+        container.appendChild(label);
+        let content = document.createElement("div");
+        content.style.marginLeft = "90px";
+        content.innerText = data[item];
+        container.appendChild(content);
+        body.appendChild(container);
+    }
+    showDialog("dialogListDataDetail");
 }

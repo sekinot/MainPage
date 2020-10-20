@@ -1,15 +1,17 @@
-Data List
 
-・リストの項目の詳細（全項目）表示
-・リストの読み込みとメニューへの反映
+リストの読み込みとメニューへの反映
+リスト自体のメタデータの表示
 
+Panel CollectionのSave
+Panel CollectionのLoad
 
-
-TimeScaleの追加
 文字や図形の追加
 文字や図形のPreferences
 文字や図形の削除
 Imageの出力
+
+TimeScaleの追加
+About表示
 
 ChartのPreferencesで、目盛りを出すか、目盛りの位置、目盛線の表示に関する設定
 レコードを　クリックすると、Otherも含めてダイアログ表示する仕組み
@@ -95,4 +97,6 @@ PanelCollectionの右クリックからブランクのPanelを生成
 ノードの移動
 JSONデータの出力
 JSONデータの読み込み
+Data List
+リストの項目の詳細（全項目）表示
 
