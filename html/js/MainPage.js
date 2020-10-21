@@ -2686,15 +2686,28 @@ function dImDLOpen () {
     showDialog("dialogImportDataList");
 }
 function dImDLImport () {
+    document.getElementById("statusBar").innerText =　"";
     if (document.getElementById("dImDLLocationRemoteType").checked) {
         let request = new XMLHttpRequest();
-        request.open("GET", document.getElementById("dImDLLocationURL").value, true);
-        request.send();
         request.onreadystatechange = function () {
-            if (request.readyState === 4 && request.status === 200) {
-                getDataList(request.responseText);
+            if (request.readyState === 4) {
+                if (request.status === 200)
+                    getDataList(request.responseText);
+                else {
+                    dImDLOpen();
+                    document.getElementById("statusBar").innerText =
+                        "Please enter or confirm URL and your ID / Password.";
+                }
             }
         }
+        request.open("GET", document.getElementById("dImDLLocationURL").value, true);
+        let id = document.getElementById("dImDLLocationId").value.trim();
+        let pass = document.getElementById("dImDLLocationPass").value.trim();
+        if (id && id.length > 0 && pass && pass.length) {
+            let auth = window.btoa(id + ":" + pass);
+            request.setRequestHeader("Authorization", "Basic " + auth);
+        }
+        request.send();
     }
     else {
         let file = document.getElementById("dImDLLocationFile").files[0];
