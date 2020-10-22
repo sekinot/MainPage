@@ -1,8 +1,10 @@
 
+
 Panel CollectionのSave
 Panel CollectionのLoad
 
 データリスト自体のメタデータの表示
+URLクエリでのデータリストの複数指定
 
 文字や図形の追加
 文字や図形のPreferences
@@ -100,5 +102,6 @@ Data List
 リストの項目の詳細（全項目）表示
 リストの読み込みとメニューへの反映
 認証があるリストへの対応
+URLクエリでのデータリストの指定
 
 

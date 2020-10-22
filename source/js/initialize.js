@@ -54,9 +54,35 @@ function initialize () {    // 全体の初期化
     end.setFullYear(end.getFullYear() + 1);
     hutime.redraw(HuTime.isoToJd(begin.toISOString()), HuTime.isoToJd(end.toISOString()));
 
+    // URLクエリの処理
+    function getUrlQueries () {
+        let queries = {};
+        let queryStr = window.location.search.slice(1);
+        if (!queries)
+            return queries;
 
+        queryStr.split("&").forEach(function (queryStr) {
+            let queryItem = queryStr.split("=");
+            queries[queryItem[0]] = queryItem[1];
+        });
+        return queries;
+    }
+    let urlQueries = getUrlQueries ();
+
+    // データリストの先読み
+    if (urlQueries["dataList"]) {
+        document.getElementById("dImDLLocationRemoteType").checked = true;
+        document.getElementById("dImDLLocationLocalType").checked = false;
+        document.getElementById("dImDLLocationURL").value = urlQueries["dataList"];
+        dImDLImport();
+    }
+
+
+    // debug関係
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
+
+
 
     //showDialog("dialogImportDataList");
 }
