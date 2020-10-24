@@ -84,7 +84,7 @@ function initialize () {    // 全体の初期化
 
 
 
-    //showDialog("dialogSave");
+    //showDialog("dialogLoad");
 }
 
 // **** メニューバーの操作 ****
@@ -2750,7 +2750,7 @@ function dImDLImport () {
 }
 
 // *** Saveダイアログ（dialogSave => dSv）
-function dSvPOpen () {
+function dSvOpen () {
     showDialog("dialogSave");
 }
 function dSvSave () {
@@ -2768,4 +2768,94 @@ function dSvSave () {
     }
     HuTime.JSON.save(pc);
     closeDialog("dialogSave");
+}
+
+// *** Loadダイアログ（dialogLoad => dLd）
+function dLdSwitchLocationType () {
+    if (document.getElementById("dLdLocationRemoteType").checked) {
+        document.getElementById("dLdLocationRemoteFile").style.display = "block";
+        document.getElementById("dLdLocationLocalFile").style.display = "none";
+    }
+    else {
+        document.getElementById("dLdLocationRemoteFile").style.display = "none";
+        document.getElementById("dLdLocationLocalFile").style.display = "block";
+    }
+}
+function dLdOpen () {
+    dLdSwitchLocationType();
+    showDialog("dialogLoad");
+}
+function dLdLoad () {
+    if (document.getElementById("dLdLocationRemoteType").checked) {
+        loadRemoteJsonContainer(document.getElementById("dLdLocationURL").value);
+    }
+    else {
+        loadLocalJsonContainer(document.getElementById("dLdLocationFile").files[0]);
+    }
+    closeDialog("dialogLoad");
+}
+
+// リモートのJSONデータ
+function loadRemoteJsonContainer (url) {
+    let loadJson =
+        HuTime.JSON.load(url,
+            function () {
+                loadObject(loadJson.parsedObject);
+            });
+}
+// ローカルのJSONデータ
+function loadLocalJsonContainer(file) {
+    let result = file;
+    let reader = new FileReader();
+    reader.readAsText(result);
+    reader.addEventListener( 'load', function() {
+        loadObject(HuTime.JSON.parse(reader.result));
+    });
+}
+//　読み込んだデータの表示
+function loadObject (pc) {
+    if (!(pc instanceof HuTime.PanelCollection))
+        return;
+    if (hutime.panelCollections.length > 0) {
+        hutime.removePanelCollection(hutime.panelCollections[0]);
+        removeBranch(document.getElementById("layerTree").querySelector("li"));
+        hutime.redraw();
+    }
+    let rs;
+    for (let i = 0; i < pc.panels.length; ++i) {
+        for (let j = 0; j < pc.panels[i].layers.length; ++j) {
+            if (!pc.panels[i].layers[j].recordsets ||
+                pc.panels[i].layers[j].recordsets.length === 0)
+                continue;
+            for (let k = 0; k < pc.panels[i].layers[j].recordsets.length; ++k) {
+                if (pc.panels[i].layers[j].recordsets[k]) {
+                    rs = pc.panels[i].layers[j].recordsets[k];
+                    break;
+                }
+            }
+            if (rs)
+                break;
+        }
+    }
+    if (!rs) {
+        hutime.appendPanelCollection(pc);
+        addBranch(document.getElementById("layerTree"), hutime.panelCollections[0]);
+        hutime.redraw();
+    }
+    else {
+        rs.onloadend = function () {
+            let tMin = Number.POSITIVE_INFINITY;
+            let tMax = Number.NEGATIVE_INFINITY;
+            for (let i = 0; i < rs.records.length; ++i) {
+                if (rs.records[i].tRange.pBegin < tMin)
+                    tMin = rs.records[i].tRange.pBegin;
+                if (rs.records[i].tRange.pEnd > tMax)
+                    tMax = rs.records[i].tRange.pEnd;
+            }
+            hutime.appendPanelCollection(pc);
+            addBranch(document.getElementById("layerTree"), hutime.panelCollections[0]);
+            hutime.redraw(tMin, tMax);
+            rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
+        };
+    }
 }

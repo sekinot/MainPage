@@ -39,8 +39,8 @@
         <!-- ** File Menu ** -->
         <li>File
           <ul>
-            <li onclick="dSvPOpen()">Save</li>
-            <li>Load</li>
+            <li onclick="dSvOpen()">Save</li>
+            <li onclick="dLdOpen()">Load</li>
 
             <!--li>Clear</li-->
             <!--li>Export &raquo;
@@ -1162,8 +1162,6 @@
       </div>
     </div>
 
-
-
     <!-- Data -->
     <!--
     <div class="dialogContainer">
@@ -1354,9 +1352,48 @@
     });
   </script>
   <div class="dialogBody">
-    <!--
-    メインパネルとツリーの読み込み
-    -->
+    <!-- Source -->
+    <div id="dLdLocation" class="dialogContainer" style="display: block;">
+      <div class="dialogContainerLabel" style="float: left;">Location:</div>
+      <div class="dialogSubContainerGroupBorder" style="margin-left: 70px;">
+
+        <!-- location of the source (Remote | Local) -->
+        <div class="dialogSubContainer">
+          <input id="dLdLocationRemoteType" type="radio" name="dImPLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="dLdLocationRemoteType">Remote</label>
+          <input id="dLdLocationLocalType" type="radio" name="dImPLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="dLdLocationLocalType" >Local</label>
+          <script type="text/javascript">
+            document.getElementById("dLdLocationRemoteType").addEventListener("click", dLdSwitchLocationType);
+            document.getElementById("dLdLocationLocalType").addEventListener("click", dLdSwitchLocationType);
+          </script>
+        </div>
+
+        <!-- URL or path of the source -->
+        <div class="dialogSubContainer">
+          <div style="float: left;">
+            <span id="dLdLocationRemoteFile" style="display: block;">
+              <label class="dialogSubContainerLabel" for="dLdLocationURL">URL</label>
+              <textarea id="dLdLocationURL" style="width: 325px; height: 27px; resize: vertical;"></textarea>
+            </span>
+            <span id="dLdLocationLocalFile" style="display: none; height: 27px;">
+              <label class="dialogSubContainerLabel" for="dLdLocationFile">File</label>
+              <input id="dLdLocationFile" type="file" style="width: 325px;" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Operation buttons -->
+    <div class="dialogContainer">
+      <input id="dLdLoadButton" type="button" value="Load" style="width:80px; height: 30px; float: right;" />
+      <input id="dLdCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+      <script type="text/javascript">
+        document.getElementById("dLdLoadButton").addEventListener("click", dLdLoad);
+        document.getElementById("dLdCancelButton").addEventListener("click", function () {
+            closeDialog("dialogLoad");
+        });
+      </script>
+    </div>
   </div>
 </div>
 <!-- End of Load Dialog -->

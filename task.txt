@@ -1,7 +1,4 @@
-
-
-Panel CollectionのSave
-Panel CollectionのLoad
+URLクエリでのLoad
 
 データリスト自体のメタデータの表示
 URLクエリでのデータリストの複数指定
@@ -103,5 +100,8 @@ Data List
 リストの読み込みとメニューへの反映
 認証があるリストへの対応
 URLクエリでのデータリストの指定
+Panel CollectionのSave
+Panel CollectionのLoad
+
 
 
