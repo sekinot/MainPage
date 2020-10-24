@@ -39,16 +39,16 @@
         <!-- ** File Menu ** -->
         <li>File
           <ul>
-            <li onclick="showDialog('dialogSave')">Save</li>
-            <li onclick="showDialog('dialogLoad')">Load</li>
+            <li onclick="dSvPOpen()">Save</li>
+            <li>Load</li>
 
             <!--li>Clear</li-->
-            <li>Export &raquo;
+            <!--li>Export &raquo;
               <ul>
                 <li>Image</li>
                 <li>Embedding Code</li>
               </ul>
-            </li>
+            </li-->
             <!--li>Settings</li-->
           </ul>
         </li>
@@ -1077,35 +1077,7 @@
     </div>
   </div>
 </div>
-<!-- ** end of Create New Blank Panel Dialog --><!-- **** Save Dialog **** -->
-<div id="dialogSave" class="dialog" style="width: 500px; left: 150px; top: 30px;">
-  <div class="dialogTitle">
-    Save<span class="dialogCloseButton"></span>
-  </div>
-  <div class="dialogBody">
-    <!--
-    メインパネルとツリーの保存
-    データコレクションの保存（オプション？）
-      自分で保存したデータ（ブックマークに相当）
-    -->
-  </div>
-</div>
-<!-- End of Save Dialog -->
-
-<!-- **** Load Dialog **** -->
-<div id="dialogLoad" class="dialog" style="width: 500px; left: 150px; top: 30px;">
-  <div class="dialogTitle">
-    Load<span class="dialogCloseButton"></span>
-  </div>
-  <div class="dialogBody">
-    <!--
-    メインパネルとツリーの読み込み
-    -->
-  </div>
-</div>
-<!-- End of Load Dialog -->
-
-<!-- **** Export Panel Dialog **** -->
+<!-- ** end of Create New Blank Panel Dialog --><!-- **** Export Panel Dialog **** -->
 <div id="dialogExportPanel" class="dialog" style="width: 520px; left: 200px; top: 100px;">
   <div id="dExPanelDialogTitle" class="dialogTitle">
     Export Panel<span class="dialogCloseButton"></span>
@@ -1330,8 +1302,64 @@
   </div>
 
 </div>
-
-
 <!-- End of Import Data List Dialog -->
+
+<!-- **** Save Dialog **** -->
+<div id="dialogSave" class="dialog" style="width: 520px; left: 150px; top: 30px;">
+  <div class="dialogTitle">
+    Save<span class="dialogCloseButton"></span>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("dialogSave").
+      querySelector("span.dialogCloseButton").addEventListener("click", function () {
+            closeDialog("dialogSave");
+    });
+  </script>
+  <div class="dialogBody">
+    <!-- Data -->
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Data:</label>
+      <div style="margin-left: 60px;">
+        <input id="dSvEmbed" type="radio" name="dSvDataEmbed" checked="checked"/>
+        <label for="dSvEmbed">Embed data into the exported data</label><br />
+        <input id="dSvRemoteSource" type="radio" name="dSvDataEmbed" />
+        <label for="dSvRemoteSource">Export only remote source</label>
+      </div>
+    </div>
+
+    <!-- Operation buttons -->
+    <div class="dialogContainer">
+      <input id="dSvSaveButton" type="button" value="Save" style="width:80px; height: 30px; float: right;" />
+      <input id="dSvCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+      <script type="text/javascript">
+        document.getElementById("dSvSaveButton").addEventListener("click", dSvSave);
+        document.getElementById("dSvCancelButton").addEventListener("click", function () {
+            closeDialog("dialogSave");
+        });
+      </script>
+    </div>
+  </div>
+</div>
+<!-- End of Save Dialog -->
+
+<!-- **** Load Dialog **** -->
+<div id="dialogLoad" class="dialog" style="width: 520px; left: 150px; top: 30px;">
+  <div class="dialogTitle">
+    Load<span class="dialogCloseButton"></span>
+  </div>
+  <script type="text/javascript">
+    document.getElementById("dialogLoad").
+      querySelector("span.dialogCloseButton").addEventListener("click", function () {
+            closeDialog("dialogLoad");
+    });
+  </script>
+  <div class="dialogBody">
+    <!--
+    メインパネルとツリーの読み込み
+    -->
+  </div>
+</div>
+<!-- End of Load Dialog -->
+
 </body>
 </html>

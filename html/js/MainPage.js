@@ -84,7 +84,7 @@ function initialize () {    // 全体の初期化
 
 
 
-    //showDialog("dialogImportDataList");
+    //showDialog("dialogSave");
 }
 
 // **** メニューバーの操作 ****
@@ -1081,7 +1081,7 @@ function initDialog () {
         dialogElements[i].querySelector("div.dialogTitle")
             .addEventListener("mousedown", startMoveDialog);
         dialogElements[i].querySelector("span.dialogCloseButton")
-            .addEventListener("click", clockDialogCloseButton);
+            .addEventListener("click", clickDialogCloseButton);
         let resizeDialogElement = dialogElements[i].querySelector("div.dialogResizeHandle");
         if (resizeDialogElement) {
             resizeDialogElement.addEventListener("mousedown", startResizeDialog);
@@ -1101,7 +1101,7 @@ function showDialog (dialogId) {
         dialogElement.style.top = ((window.innerHeight - parseFloat(dialogElement.style.height)) / 2).toString() + "px";
     dialogElement.style.display = "block";
 }
-function clockDialogCloseButton (ev) {
+function clickDialogCloseButton (ev) {
     closeDialog(ev.target.closest("div.dialog").id);
 }
 function closeDialog (dialogId) {
@@ -2486,15 +2486,7 @@ function dCrBLCreate () {
     hutime.redraw();
     addBranch(document.getElementById("treeRoot"), panel);
     closeDialog("dialogNewBlankPanel");
-}// **** Save ダイアログ（dialogSave => dSv）****
-
-// **** Load ダイアログ（dialogLoad => dLd）****
-
-// **** Save ダイアログ（dialogSave => dSv）****
-
-// **** Load ダイアログ（dialogLoad => dLd）****
-
-
+}
 // *** Export Panelダイアログ (dialogExportPanel => dExP)
 function dExPOpen () {
     showDialog("dialogExportPanel");
@@ -2755,4 +2747,25 @@ function dImDLImport () {
         li.innerText = dataObj["title"];
         dataMenu.querySelector("ul").appendChild(li);
     }
+}
+
+// *** Saveダイアログ（dialogSave => dSv）
+function dSvPOpen () {
+    showDialog("dialogSave");
+}
+function dSvSave () {
+    let pc = document.getElementById("layerTree").querySelector("li").hutimeObject;
+
+    let embed = document.getElementById("dSvEmbed").checked;
+    for (let i = 0; i < pc.panels.length; ++i) {
+        for (let j = 0; j < pc.panels[i].layers.length; ++j) {
+            if (!pc.panels[i].layers[j].recordsets)
+                continue;
+            for (let k = 0; k <　pc.panels[i].layers[j].recordsets.length; ++k) {
+                pc.panels[i].layers[j].recordsets[k].useLoadedDataForJSON = embed;
+            }
+        }
+    }
+    HuTime.JSON.save(pc);
+    closeDialog("dialogSave");
 }

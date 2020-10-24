@@ -11,5 +11,4 @@ document.write('<script type="text/javascript" src="' + mainPageJsPath + 'operat
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogBase.js"></script>');
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogPreferences.js"></script>');
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogCreate.js"></script>');
-document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogSaveLoad.js"></script>');
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'dialogData.js"></script>');

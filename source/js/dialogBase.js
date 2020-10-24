@@ -14,7 +14,7 @@ function initDialog () {
         dialogElements[i].querySelector("div.dialogTitle")
             .addEventListener("mousedown", startMoveDialog);
         dialogElements[i].querySelector("span.dialogCloseButton")
-            .addEventListener("click", clockDialogCloseButton);
+            .addEventListener("click", clickDialogCloseButton);
         let resizeDialogElement = dialogElements[i].querySelector("div.dialogResizeHandle");
         if (resizeDialogElement) {
             resizeDialogElement.addEventListener("mousedown", startResizeDialog);
@@ -34,7 +34,7 @@ function showDialog (dialogId) {
         dialogElement.style.top = ((window.innerHeight - parseFloat(dialogElement.style.height)) / 2).toString() + "px";
     dialogElement.style.display = "block";
 }
-function clockDialogCloseButton (ev) {
+function clickDialogCloseButton (ev) {
     closeDialog(ev.target.closest("div.dialog").id);
 }
 function closeDialog (dialogId) {

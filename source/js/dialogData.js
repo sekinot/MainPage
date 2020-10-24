@@ -260,3 +260,24 @@ function dImDLImport () {
         dataMenu.querySelector("ul").appendChild(li);
     }
 }
+
+// *** Saveダイアログ（dialogSave => dSv）
+function dSvPOpen () {
+    showDialog("dialogSave");
+}
+function dSvSave () {
+    let pc = document.getElementById("layerTree").querySelector("li").hutimeObject;
+
+    let embed = document.getElementById("dSvEmbed").checked;
+    for (let i = 0; i < pc.panels.length; ++i) {
+        for (let j = 0; j < pc.panels[i].layers.length; ++j) {
+            if (!pc.panels[i].layers[j].recordsets)
+                continue;
+            for (let k = 0; k <　pc.panels[i].layers[j].recordsets.length; ++k) {
+                pc.panels[i].layers[j].recordsets[k].useLoadedDataForJSON = embed;
+            }
+        }
+    }
+    HuTime.JSON.save(pc);
+    closeDialog("dialogSave");
+}

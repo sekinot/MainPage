@@ -84,6 +84,6 @@ function initialize () {    // 全体の初期化
 
 
 
-    //showDialog("dialogImportDataList");
+    //showDialog("dialogSave");
 }
 
