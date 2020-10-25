@@ -43,16 +43,8 @@ function initialize () {    // 全体の初期化
     document.getElementById("borderTree").addEventListener("mousedown", borderTreeMouseDown);
     initDialog();
 
-    appendTimeScale("101.1");
 
     hutime.addEventListener("porderchanged", changePanelIconOrder);
-
-    // 現在の前後1年を表示
-    let begin = new Date(Date.now());
-    begin.setFullYear(begin.getFullYear() - 1);
-    let end = new Date(Date.now());
-    end.setFullYear(end.getFullYear() + 1);
-    hutime.redraw(HuTime.isoToJd(begin.toISOString()), HuTime.isoToJd(end.toISOString()));
 
     // URLクエリの処理
     function getUrlQueries () {
@@ -77,12 +69,26 @@ function initialize () {    // 全体の初期化
         dImDLImport();
     }
 
+    // load先読み
+    if (urlQueries["load"]) {
+        document.getElementById("dLdLocationRemoteType").checked = true;
+        document.getElementById("dLdLocationLocalType").checked = false;
+        document.getElementById("dLdLocationURL").value = urlQueries["load"];
+        dLdLoad();
+        return;
+    }
+
+    // デフォルト（時間軸目盛りを現在の前後1年で表示）
+    appendTimeScale("101.1");
+    let begin = new Date(Date.now());
+    begin.setFullYear(begin.getFullYear() - 1);
+    let end = new Date(Date.now());
+    end.setFullYear(end.getFullYear() + 1);
+    hutime.redraw(HuTime.isoToJd(begin.toISOString()), HuTime.isoToJd(end.toISOString()));
 
     // debug関係
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
-
-
 
     //showDialog("dialogLoad");
 }
