@@ -15,6 +15,7 @@ type %sourceDir%beginningOfDialogs.html >> %targetFile%
 type %sourceDir%dialogPreferences.html >> %targetFile%
 type %sourceDir%dialogCreate.html >> %targetFile%
 type %sourceDir%dialogData.html >> %targetFile%
+type %sourceDir%dialogOLObject.html >> %targetFile%
 
 type %sourceDir%endOfHtml.html >> %targetFile%
 

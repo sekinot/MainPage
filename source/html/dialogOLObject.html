@@ -1,0 +1,173 @@
+<!-- *** Preferences of Record Item *** -->
+<div id="dialogOLObject" class="dialog"  style="width: 520px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    <span id="dOLODialogTitle">Create Object</span><span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dOLOName" style="float: left;">Name:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 60px;">
+        <div class="dialogSubContainer">
+          <input id="dOLOName" type="text" style="width: 300px;" />
+        </div>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Position:</label>
+      <div class="dialogSubContainerGroup" style="margin-left:60px;">
+        <div class="dialogSubContainer">
+          <input id="dOLOUseX" type="radio" name="dOLOXT" style="margin-left: 10px;" onchange="dOLOSwitchXT()">
+          <label for="dOLOUseX">XY</label>
+          <input id="dOLOUseT" type="radio" name="dOLOXT" checked="checked" onchange="dOLOSwitchXT()" style="margin-left: 15px;">
+          <label for="dOLOUseT">TV</label>
+        </div>
+        <div class="dialogSubContainer" style="display: block;">
+          <label id="dOLOTCalendarLabel" class="dialogSubContainerLabel" for="dOLOTCalendar">Calendar of T</label>
+          <select id="dOLOTCalendar" style="width: 300px;">
+            <option value="101.1">Julian / Gregorian Calendar (modified in 1582)</option>
+            <option value="101.2">Julian / Gregorian Calendar (modified in 1752)</option>
+            <option value="2.1">Gregorian Calendar</option>
+            <option value="1.1">Julian date (real number)</option>
+            <option value="1001.1">Japanese Calendar (Southern Court)</option>
+            <option value="1001.2">Japanese Calendar (Northern Court)</option>
+            <option value="1002.1">Japanese Lunar Calendar (from Meiji)</option>
+            <option value="1004.1">Minguo Calendar</option>
+            <option value="1003.1">Thai Buddhist Calendar</option>
+          </select>
+        </div>
+        <div class="dialogSubContainer">
+          <span id="dOLOXTValueBox" style="display: inline-block;">
+            <label class="dialogSubContainerLabel" for="dOLOTValue">T</label>
+            <input id="dOLOTValue" type="text" style="width: 125px; text-align: right;"> + Offset
+          </span>
+          <label class="dialogSubContainerLabel" for="dOLOXValue">X</label>
+          <input id="dOLOXValue" type="text" style="width: 30px; text-align: right;"> px
+        </div>
+        <div class="dialogSubContainer">
+          <span id="dOLOYVValueBox" style="display: inline-block;">
+            <label class="dialogSubContainerLabel" for="dOLOVValue">V</label>
+            <input id="dOLOVValue" type="text" style="width: 50px; text-align: right;"> + Offset
+          </span>
+          <label class="dialogSubContainerLabel" for="dOLOYValue">Y</label>
+          <input id="dOLOYValue" type="text" style="width: 30px; text-align: right;"> px
+        </div>
+      </div>
+    </div>
+
+    <!-- for Shape -->
+    <div id="dOLOShape" class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Shape:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 60px;">
+        <div class="dialogSubContainer">
+          <label for="dOLOShapeType">Type</label>
+          <select id="dOLOShapeType">
+            <option>Circle</option>
+            <option>Square</option>
+            <!--option>Rectangle</option-->
+            <option>Triangle</option>
+          </select>
+          <script type="text/javascript">
+            document.getElementById("dOLOShapeType").addEventListener(
+                "change", dOLOSwitchShapeType);
+          </script>
+          <label class="dialogSubContainerLabel" for="dOLOShapeSize" style="margin-left: 25px;">Width</label>
+          <input id="dOLOShapeSize" type="text" style="width: 30px; text-align: right;" /> px
+          <label id="dOLOShapeRotateLabel" class="dialogSubContainerLabel" for="dOLOShapeRotate" style="margin-left: 15px;">Rotate</label>
+          <input id="dOLOShapeRotate" type="text" style="width: 30px; text-align: right;" value=""/>
+          <span id="dOLOShapeRotateUnit">deg</span>
+        </div>
+
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dOLOFillColor">Fill Color</label>
+          <input id="dOLOFillColor" type="text" style="width: 150px;" value=""/>
+        </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dOLOEdgeColor">Edge Color</label>
+          <input id="dOLOEdgeColor" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dOLOEdgeWidth" style="margin-left: 15px;">Width</label>
+          <input id="dOLOEdgeWidth" type="text" style="width: 25px; text-align: right;" value=""/> px
+        </div>
+      </div>
+    </div>
+
+    <!-- for String -->
+    <div id="dOLOString" class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">String:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 60px;">
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dOLOStringText">Text</label>
+          <textarea id="dOLOStringText" style="width: 325px; height: 27px; resize: vertical;"></textarea>
+        </div>
+
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dOLOStringFont">Font</label>
+          <input id="dOLOStringFont" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dOLOStringStyle" style="margin-left: 5px;"></label>
+          <select id="dOLOStringStyle" style="width: 90px;" name="labelDecoration">
+            <option value="normal" selected="selected">Normal</option>
+            <option value="bold">Bold</option>
+            <option value="italic">Italic</option>
+            <option value="italic bold">Italic/Bold</option>
+          </select>
+        </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dOLOStringColor">Color</label>
+          <input id="dOLOStringColor" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dOLOStringSize" style="margin-left: 15px;">Size</label>
+          <input id="dOLOStringSize" type="text" style="width: 25px; text-align: right;" value="20"/> px
+          <label for="dOLOStringRotate" style="margin-left: 20px;">Rotate</label>
+          <input id="dOLOStringRotate" type="text" style="width: 25px; text-align: right;" value=""/> deg
+        </div>
+      </div>
+    </div>
+
+    <!-- for Image -->
+    <div id="dOLOImage" class="dialogContainer">
+      <label class="dialogContainerLabel" style="float: left;">Image:</label>
+      <div class="dialogSubContainerGroup" style="margin-left: 60px;">
+        <!--div class="dialogSubContainer">
+          <input id="dOLOImageRemoteType" type="radio" name="dCrSourceLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="dOLOImageRemoteType">Remote</label>
+          <input id="dOLOImageLocalType" type="radio" name="dCrSourceLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="dOLOImageLocalType" >Local</label>
+          <script type="text/javascript">
+            document.getElementById("dOLOImageRemoteType").addEventListener("click", dOLOSwitchSourceLocationType);
+            document.getElementById("dOLOImageLocalType").addEventListener("click", dOLOSwitchSourceLocationType);
+          </script>
+        </div-->
+        <div class="dialogSubContainer">
+          <div style="float: left;">
+            <span id="dOLOImageRemoteFile" style="display: block;">
+              <label class="dialogSubContainerLabel" for="dOLOImageURL">URL</label>
+              <textarea id="dOLOImageURL" style="width: 325px; height: 27px; resize: vertical;"></textarea>
+            </span>
+            <!--span id="dOLOImageLocalFile" style="display: none; height: 27px;">
+              <label class="dialogSubContainerLabel" for="dOLOImageFile">File</label>
+              <input id="dOLOImageFile" type="file" style="width: 325px;" />
+            </span-->
+          </div>
+        </div>
+        <div class="dialogSubContainer">
+          <label for="dOLOImageWidth">Width</label>
+          <input id="dOLOImageWidth" type="text" style="width: 30px" /> px
+          <label for="dOLOImageHeight" style="margin-left: 15px;">Height</label>
+          <input id="dOLOImageHeight" type="text" style="width: 30px" /> px
+          <label class="dialogSubContainerLabel" for="dOLOImageRotate" style="margin-left: 25px;">Rotate</label>
+          <input id="dOLOImageRotate" type="text" style="width: 30px; text-align: right;" value=""/> deg
+        </div>
+        <div class="dialogSubContainer">
+          <label class="dialogSubContainerLabel" for="dOLOImageEdgeColor">Edge Color</label>
+          <input id="dOLOImageEdgeColor" type="text" style="width: 150px;" value=""/>
+          <label class="dialogSubContainerLabel" for="dOLOImageEdgeWidth" style="margin-left: 15px;">Width</label>
+          <input id="dOLOImageEdgeWidth" type="text" style="width: 25px; text-align: right;" value=""/> px
+        </div>
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <input id="dOLOOK" type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dOLOClose()"/>
+      <input id="dOLOApply" type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dOLOApply()" />
+      <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogOLObject')" />
+    </div>
+  </div>
+</div>
