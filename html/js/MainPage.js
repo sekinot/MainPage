@@ -91,7 +91,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
 //    showDialog("dialogOLObject");
-//    dCrOLShapeOpen();
+    dCrOLOOpen();
 
 
 }
@@ -2904,6 +2904,7 @@ function dOLOSwitchShapeType () {
             break;
     }
 }
+/*
 function dOLOSwitchSourceLocationType () {
     if (document.getElementById("dOLOImageRemoteType").checked) {
         document.getElementById("dOLOImageRemoteFile").style.display = "block";
@@ -2914,12 +2915,14 @@ function dOLOSwitchSourceLocationType () {
         document.getElementById("dOLOImageLocalFile").style.display = "block";
     }
 }
+//*/
 
 function dCrOLOOpen (type) {
     document.getElementById("dialogOLObject").type = type;
     document.getElementById("dialogOLObject").operation = "Create";
     document.getElementById("dOLOApply").style.display = "none";
-    document.getElementById("dOLOOK").value = "Create";
+    document.getElementById("dOLOCreate").style.display = "block";
+    document.getElementById("dOLOOk").style.display = "none";
     switch (type) {
         case "Shape" :
             document.getElementById("dOLODialogTitle").innerText = "Create an On-Layer Shape";
@@ -2947,32 +2950,32 @@ function dCrOLOOpen (type) {
     }
     showDialog("dialogOLObject");
 }
-function dOLOApply () {
-    if (document.getElementById("dialogOLObject").operation === "Create") {
-        let position;
-        if (document.getElementById("dOLOUseT").checked) {
-            getTValue().then(function (responseText) {
-                    position = new HuTime.RelativeXYPosition(
-                        new HuTime.TVPosition(
-                            parseFloat(responseText),
-                            parseFloat(document.getElementById("dOLOVValue").value)),
-                        parseFloat(document.getElementById("dOLOXValue").value),
-                        parseFloat(document.getElementById("dOLOYValue").value));
-                    createOLObject(position);
-                }).catch(function (error) {
-                    document.getElementById("statusBar").innerText =
-                        "Error in converting T Value. (" + error.message + ")";
-                });
-        }
-        else {
-            position = new HuTime.XYPosition(
+function dOLOCreate () {
+    let position;
+    if (document.getElementById("dOLOUseT").checked) {
+        getTValue().then(function (responseText) {
+            if (typeof (responseText) !== "string")
+                return;
+            position = new HuTime.RelativeXYPosition(
+                new HuTime.TVPosition(
+                    parseFloat(responseText),
+                    parseFloat(document.getElementById("dOLOVValue").value)),
                 parseFloat(document.getElementById("dOLOXValue").value),
                 parseFloat(document.getElementById("dOLOYValue").value));
             createOLObject(position);
-        }
+        }).catch(function (error) {
+            document.getElementById("statusBar").innerText =
+                "Error in converting T Value. (" + error.message + ")";
+        });
     }
+    else {
+        position = new HuTime.XYPosition(
+            parseFloat(document.getElementById("dOLOXValue").value),
+            parseFloat(document.getElementById("dOLOYValue").value));
+        createOLObject(position);
+    }
+    closeDialog("dialogOLObject");
 }
-
 function createOLObject(position) {
     let obj, size, rotate, style;
     switch (document.getElementById("dialogOLObject").type) {
@@ -3056,6 +3059,9 @@ function getTValue () {
     });
 }
 
+function dOLOApply () {
+
+}
 function dOLOClose () {
     dOLOApply();
     closeDialog("dialogOLObject");

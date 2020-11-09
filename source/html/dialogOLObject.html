@@ -14,6 +14,7 @@
       </div>
     </div>
 
+    <!-- Position -->
     <div class="dialogContainer">
       <label class="dialogContainerLabel" style="float: left;">Position:</label>
       <div class="dialogSubContainerGroup" style="margin-left:60px;">
@@ -40,7 +41,7 @@
         <div class="dialogSubContainer">
           <span id="dOLOXTValueBox" style="display: inline-block;">
             <label class="dialogSubContainerLabel" for="dOLOTValue">T</label>
-            <input id="dOLOTValue" type="text" style="width: 125px; text-align: right;"> + Offset
+            <input id="dOLOTValue" type="text" style="width: 125px;"> + Offset
           </span>
           <label class="dialogSubContainerLabel" for="dOLOXValue">X</label>
           <input id="dOLOXValue" type="text" style="width: 30px; text-align: right;"> px
@@ -149,9 +150,9 @@
         </div>
         <div class="dialogSubContainer">
           <label for="dOLOImageWidth">Width</label>
-          <input id="dOLOImageWidth" type="text" style="width: 30px" /> px
+          <input id="dOLOImageWidth" type="text" style="width: 30px; text-align: right;" /> px
           <label for="dOLOImageHeight" style="margin-left: 15px;">Height</label>
-          <input id="dOLOImageHeight" type="text" style="width: 30px" /> px
+          <input id="dOLOImageHeight" type="text" style="width: 30px; text-align: right;" /> px
           <label class="dialogSubContainerLabel" for="dOLOImageRotate" style="margin-left: 25px;">Rotate</label>
           <input id="dOLOImageRotate" type="text" style="width: 30px; text-align: right;" value=""/> deg
         </div>
@@ -165,7 +166,8 @@
     </div>
 
     <div class="dialogContainer">
-      <input id="dOLOOK" type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dOLOClose()"/>
+      <input id="dOLOOk" type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dOLOClose()"/>
+      <input id="dOLOCreate" type="button" value="Create" style="width:80px; height: 30px; margin-right: 10px; float: right;"  onclick="dOLOCreate()"/>
       <input id="dOLOApply" type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dOLOApply()" />
       <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogOLObject')" />
     </div>

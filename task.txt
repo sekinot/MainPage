@@ -1,8 +1,9 @@
 
 
+
 文字や図形のPreferences
 文字や図形の削除
-
+文字や図形の順番入れ替え
 
 TimeScaleの追加
 About表示
