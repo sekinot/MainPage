@@ -146,6 +146,12 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
     branchSpan.appendChild(knobImg);
     if (targetElement.hutimeObject instanceof HuTime.RecordsetBase)
         knobImg.style.visibility = "hidden";
+    if (hutimeObjType === "string")
+        knobImg.style.visibility = "hidden";
+    if (hutimeObjType === "image")
+        knobImg.style.visibility = "hidden";
+    if (hutimeObjType === "shape")
+        knobImg.style.visibility = "hidden";
 
     // チェックボックスの追加
     let checkbox = document.createElement("img");

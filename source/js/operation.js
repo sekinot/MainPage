@@ -157,3 +157,11 @@ function changePanelIconOrder (ev) {
     // HuTime.PanelCollection.changePanelOrderの改修必要
 }
 
+// On-Layer Objectの削除
+function removeOLObject () {
+    let OLOBranch = document.getElementById("treeContextMenu").treeBranch;
+    let layer = OLOBranch.hutimeObject.parent
+    layer.removeObject(OLOBranch.hutimeObject);
+    layer.redraw();
+    removeBranch(OLOBranch);
+}

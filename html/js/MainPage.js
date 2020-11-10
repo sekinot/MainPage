@@ -91,7 +91,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
 //    showDialog("dialogOLObject");
-    dCrOLOOpen();
+//    dCrOLOOpen();
 
 
 }
@@ -367,6 +367,12 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
     knobImg.addEventListener("click", operateBranch);
     branchSpan.appendChild(knobImg);
     if (targetElement.hutimeObject instanceof HuTime.RecordsetBase)
+        knobImg.style.visibility = "hidden";
+    if (hutimeObjType === "string")
+        knobImg.style.visibility = "hidden";
+    if (hutimeObjType === "image")
+        knobImg.style.visibility = "hidden";
+    if (hutimeObjType === "shape")
         knobImg.style.visibility = "hidden";
 
     // チェックボックスの追加
@@ -1074,6 +1080,14 @@ function changePanelIconOrder (ev) {
     // HuTime.PanelCollection.changePanelOrderの改修必要
 }
 
+// On-Layer Objectの削除
+function removeOLObject () {
+    let OLOBranch = document.getElementById("treeContextMenu").treeBranch;
+    let layer = OLOBranch.hutimeObject.parent
+    layer.removeObject(OLOBranch.hutimeObject);
+    layer.redraw();
+    removeBranch(OLOBranch);
+}
 // **** ダイアログ関係（共通） ****
 // デバッグ用
 ///*
