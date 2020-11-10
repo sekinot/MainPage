@@ -1,7 +1,4 @@
 
-
-
-文字や図形のPreferences
 文字や図形の順番入れ替え
 文字や図形の生成時に一番上に
 
@@ -17,9 +14,10 @@ ChartのPreferencesで、目盛りを出すか、目盛りの位置、目盛線�
 ツリーのラベル、PreferenceのNameが空になったときにuntitledにならない
 ツリーのラベル、untitledは色を変える
 
-JSONへのExport時にローカルファイルが残るのは問題ないか（オプションで消せるようにする？）
+JSONへのExport時にレコードセットの設定にローカルファイルの場所が残るのは問題ないか（オプションで消せるようにする？）
 
 表示時間範囲の最適化機能
+TLineのPreference Open時にラベルのスタイルがきちんと反映できていない？
 
 
 （全体のSetting）
@@ -105,6 +103,8 @@ URLクエリでのデータリストの指定
 Panel CollectionのSave
 Panel CollectionのLoad
 URLクエリでのLoad
-
+文字や図形の生成
+文字や図形の削除
+文字や図形のPreferences
 
 
