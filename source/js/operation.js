@@ -117,6 +117,35 @@ function stopMoveBranch (ev) {
                 hutimeObject, undefined, undefined, undefined,
                 document.selectedBranchElement);
         }
+        else if (hutimeObject instanceof HuTime.OnLayerObjectBase) {
+            if (selectedHutimeObject instanceof HuTime.OnLayerObjectBase &&
+                parent === selectedParent) {
+
+                parent.removeObject(hutimeObject);
+                parent.redraw();
+
+                let obj = [];
+                for (let i = 0; i < selectedParent.objects.length; ++i) {
+                    if (!(selectedParent.objects[i] instanceof HuTime.PanelBorder))
+                       obj.push(selectedParent.objects[i]);
+                }
+                for (let i = 0; i < obj.length; ++i) {
+                    selectedParent.removeObject(obj[i]);
+                }
+                for (let i = 0; i < obj.length; ++i) {
+                    selectedParent.appendObject(obj[i])
+                    selectedParent.redraw();
+                    if (obj[i] === selectedHutimeObject) {
+                        selectedParent.appendObject(hutimeObject);
+                        selectedParent.redraw();
+                    }
+                }
+                removeBranch(document.branchElement);
+                addBranch(document.selectedBranchElement.parentNode.closest("li"),
+                    hutimeObject, undefined, undefined, undefined,
+                    document.selectedBranchElement);
+            }
+        }
     }
     document.branchElement.branchDragging = false;
     document.removeEventListener("mousemove", moveBranch, true);
