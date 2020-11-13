@@ -18,7 +18,7 @@ function loadLocalData (file, operation) {      // ローカルデータの読�
 }
 
 // 時間軸目盛り（暦）の追加
-const DefaultScaleVBreath = 55;
+//const DefaultScaleVBreath = 55;
 function appendTimeScale(calendarId) {
     let layer = new HuTime.CalendarScaleLayer(DefaultScaleVBreath, null, null, calendarId);
     layer.name ="Time Scale"

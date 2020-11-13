@@ -415,7 +415,8 @@ function dCrCreate (ev) {  // Layer生成
         let panel = document.getElementById("dialogCreate").hutimeObject;
         panel.appendLayer(dataLayer);
         addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer,
-            undefined, undefined, undefined, document.getElementById("dialogCreate").treeBranch.querySelector("li"));
+            undefined, undefined, undefined,
+            document.getElementById("dialogCreate").treeBranch.querySelector("li"));
         panel.redraw();
         dCrClose();
         return;
@@ -523,4 +524,46 @@ function dCrBLCreate () {
     hutime.redraw();
     addBranch(document.getElementById("treeRoot"), panel);
     closeDialog("dialogNewBlankPanel");
+}
+
+// **** Create Calendar Scale Panel ダイアログ (dialogNewCalendarScalePanel => dCrCS) ****
+const DefaultScaleVBreath = 55;
+function dCrSCOpen (type) {
+    if (type === "layer") {
+        document.getElementById("dCrCSDialogTitle").innerText =
+            "New Calendar Scale Layer";
+    }
+    else {
+        document.getElementById("dCrCSDialogTitle").innerText =
+            "New Calendar Scale Panel";
+    }
+    document.getElementById("dialogNewCalendarScalePanel").type = type;
+    showDialog("dialogNewCalendarScalePanel");
+}
+function dCrSCCreate () {
+    let layer = new HuTime.CalendarScaleLayer(
+        DefaultScaleVBreath, null, null,
+        document.getElementById("dCrCSCalendar").value);
+    layer.name = document.getElementById("dCrCSName").value;
+
+    let panel;
+    if (document.getElementById("dialogNewCalendarScalePanel").type === "layer") {
+        layer.vMarginBottom = 0;
+        panel = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
+        panel.appendLayer(layer);
+        addBranch(document.getElementById("treeContextMenu").treeBranch, layer,
+            undefined, undefined, undefined,
+            document.getElementById("treeContextMenu").treeBranch.querySelector("li"));
+        panel.redraw();
+    }
+    else {
+        panel = new HuTime.TilePanel(DefaultScaleVBreath);
+        panel.name = document.getElementById("dCrCSName").value;
+        panel.resizable = false;
+        panel.appendLayer(layer);
+        hutime.panelCollections[0].appendPanel(panel);
+        hutime.redraw();
+        addBranch(document.getElementById("treeRoot"), panel);
+    }
+    closeDialog("dialogNewCalendarScalePanel");
 }

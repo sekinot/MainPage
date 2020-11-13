@@ -232,3 +232,47 @@
   </div>
 </div>
 <!-- ** end of Create New Blank Panel Dialog -->
+
+<!-- *** Create New Calendar Scale Panel Dialog *** -->
+<div id="dialogNewCalendarScalePanel" class="dialog" style="width: 520px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    <span id="dCrCSDialogTitle">New Calendar Scale Panel</span><span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dCrCSName" style="float: left;">Name:</label>
+      <div style="margin-left: 50px;">
+        <input id="dCrCSName" type="text" style="width: 300px;" />
+      </div>
+    </div>
+
+    <div class="dialogContainer">
+      <label class="dialogContainerLabel" for="dCrCSCalendar" style="float: left;">Calendar:</label>
+      <div style="margin-left: 75px;">
+        <select id="dCrCSCalendar" style="width: 300px;">
+          <option value="101.1">Julian / Gregorian Calendar (modified in 1582)</option>
+          <option value="101.2">Julian / Gregorian Calendar (modified in 1752)</option>
+          <option value="2.1">Gregorian Calendar</option>
+          <option value="1.1">Julian date (real number)</option>
+          <option value="1001.1">Japanese Calendar (Southern Court)</option>
+          <option value="1001.2">Japanese Calendar (Northern Court)</option>
+          <option value="1002.1">Japanese Lunar Calendar (from Meiji)</option>
+          <option value="1004.1">Minguo Calendar</option>
+          <option value="1003.1">Thai Buddhist Calendar</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Operation buttons -->
+    <div class="dialogContainer">
+      <input id="dCrCSCreateButton" type="button" value="Create" style="width:80px; height: 30px; float: right;" />
+      <input id="dCrCSCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+      <script type="text/javascript">
+        document.getElementById("dCrCSCreateButton").addEventListener("click", dCrSCCreate);
+        document.getElementById("dCrCSCancelButton").addEventListener("click",
+            function () { closeDialog("dialogNewCalendarScalePanel"); });
+      </script>
+    </div>
+  </div>
+</div>
+<!-- ** end of Create Calendar Scale Panel Dialog -->
