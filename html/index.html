@@ -102,7 +102,7 @@
         <!-- ** About Menu ** -->
         <li>Help
           <ul>
-            <li>About</li>
+            <li onclick="showDialog('dialogAbout');">About</li>
           </ul>
         </li>
 
@@ -1571,6 +1571,28 @@
       <input id="dOLOCreate" type="button" value="Create" style="width:80px; height: 30px; margin-right: 10px; float: right;"  onclick="dOLOCreate()"/>
       <input id="dOLOApply" type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dOLOApply()" />
       <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogOLObject')" />
+    </div>
+  </div>
+</div>
+<div id="dialogAbout" class="dialog"  style="width:350px; left: 200px; top: 100px;">
+  <div class="dialogTitle">
+    About HuTime</span><span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+    <div class="dialogContainer">
+      <img src="http://www.hutime.org/common/img/toplogo.gif" alt="logo"/>
+      <div style="float: left; width: 230px; font-size: 10px;">
+        This program was implemented using libraries and services of the HuTime Project.
+      </div>
+      <div style="float: right; text-align: right;">
+        <a href="http://www.hutime.org/"><img src="http://www.hutime.org/about/HuTimeBanner.png" alt="HuTime" height="31" width="88" /></a>
+      </div>
+    </div>
+    <div class="dialogContainer">
+      <div style="font-size: 10px;">
+        All users can copy, modify and redistribute a screen image of this program freely. However, copyrights of data including timelines and charts shown on this program belong to the person or the organization who generated the data.
+      </div>
+
     </div>
   </div>
 </div>
