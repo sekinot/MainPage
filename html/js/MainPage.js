@@ -90,7 +90,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-//    showDialog("dialogNewCalendarScalePanel");
+//    showDialog("dialogPreferencesChartLayer");
 //    dPOLOOpen("Shape");
 
 
@@ -1434,6 +1434,14 @@ function dPTLClose (ev) {
 }
 
 // *** Preferences of Chart Layerダイアログ (dialogPreferencesChartLayer => dPCL)
+/* 書式設定関連 ＝＞ 後ほど実装
+function dPCLScaleShowChanged () {
+    if (document.getElementById("dPCLScaleHidden").checked)
+        document.getElementById("dPCLScaleStyle").disabled = true;
+    else
+        document.getElementById("dPCLScaleStyle").disabled = false
+}
+// */
 function dPCLOpen () {
     let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
     document.getElementById("dPCLName").value = layer.name;
@@ -1457,6 +1465,24 @@ function dPCLOpen () {
     document.getElementById("dPCLVBottom").value = layer.vBottom;
 
     document.getElementById("dPCLBackgroundColor").value = layer.style.backgroundColor;
+
+
+    if (!layer.vScales[0].visible) {
+        document.getElementById("dPCLScaleShowLeft").checked = false;
+        document.getElementById("dPCLScaleShowRight").checked = false;
+        document.getElementById("dPCLScaleHidden").checked = true;
+    }
+    else if (layer.vScales[0].side === 1) {
+        document.getElementById("dPCLScaleShowLeft").checked = false;
+        document.getElementById("dPCLScaleShowRight").checked = true;
+        document.getElementById("dPCLScaleHidden").checked = false;
+    }
+    else {
+        document.getElementById("dPCLScaleShowLeft").checked = true;
+        document.getElementById("dPCLScaleShowRight").checked = false;
+        document.getElementById("dPCLScaleHidden").checked = false;
+    }
+    //dPCLScaleShowChanged();
 
     document.getElementById("dialogPreferencesChartLayer").hutimeObject = layer;
     showDialog("dialogPreferencesChartLayer");
@@ -1503,6 +1529,17 @@ function dPCLApply () {
     layer.vTop = parseFloat(document.getElementById("dPCLVTop").value);
     layer.vBottom = parseFloat(document.getElementById("dPCLVBottom").value);
 
+    if (document.getElementById("dPCLScaleHidden").checked) {
+        layer.vScales[0].visible = false;
+    }
+    else if (document.getElementById("dPCLScaleShowRight").checked) {
+        layer.vScales[0].visible = true;
+        layer.vScales[0].side = 1;
+    }
+    else {
+        layer.vScales[0].visible = true;
+        layer.vScales[0].side = 0;
+    }
     layer.style.backgroundColor = document.getElementById("dPCLBackgroundColor").value;
     hutime.redraw();
 

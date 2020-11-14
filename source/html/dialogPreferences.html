@@ -202,12 +202,35 @@
     </div>
 
     <div class="dialogContainer">
+      <div class="dialogContainerLabel" style="float: left;">Scale:</div>
+      <div style="margin-left: 65px;">
+        <input id="dPCLScaleShowLeft" type="radio" name="dPCLScaleShow" checked="checked" />
+        <label for="dPCLScaleShowLeft">Left</label>
+        <input id="dPCLScaleShowRight" type="radio" name="dPCLScaleShow" style="margin-left: 10px;" />
+        <label for="dPCLScaleShowRight">Right</label>
+        <input id="dPCLScaleHidden" type="radio" name="dPCLScaleShow" style="margin-left: 10px;" />
+        <label for="dPCLScaleHidden">Hidden</label>
+
+        <!--input id="dPCLScaleStyle" type="button" value="Style" style="margin-left: 15px; width: 60px;" /-->
+      </div>
+      <!--script type="text/javascript">
+        document.getElementById("dPCLScaleShowLeft").addEventListener(
+            "click", dPCLScaleShowChanged);
+        document.getElementById("dPCLScaleShowRight").addEventListener(
+            "click", dPCLScaleShowChanged);
+        document.getElementById("dPCLScaleHidden").addEventListener(
+            "click", dPCLScaleShowChanged);
+      </script-->
+    </div>
+    <div class="dialogContainer">
       <input type="button" value="OK" style="width:80px; height: 30px; float: right;"  onclick="dPCLClose()"/>
       <input type="button" value="Apply" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="dPCLApply()" />
       <input type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" onclick="closeDialog('dialogPreferencesChartLayer')" />
     </div>
   </div>
 </div>
+
+
 
 <!-- *** Preferences of Calendar Scale Layer *** -->
 <div id="dialogPreferencesScaleLayer" class="dialog" style="width: 420px; left: 200px; top: 100px;">
