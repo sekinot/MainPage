@@ -123,6 +123,20 @@
   </script>
   <div class="dialogBody">
     <div class="dialogContainer">
+      <div id="dataListTitle" style="float: left; width: 300px; font-size: 14px; font-weight: bold;">
+      </div>
+      <div style="float: right; margin-right: 8px;">
+        <input id="dataListAbout" type="button" value="About" style="width: 60px;" />
+      </div>
+    </div>
+    <script type="text/javascript">
+      document.getElementById("dataListAbout").addEventListener(
+          "click", function () {
+              dADLOpen(document.getElementById("dialogDataList").dataListIndex);
+          });
+    </script>
+
+    <div class="dialogContainer">
       <table id="dataListTable" style="width: 100%;">
       </table>
     </div>
@@ -142,9 +156,20 @@
 <!-- End of Data List Dialog -->
 
 <!--- **** List Data Detail Dialog *** -->
+<div id="dialogAboutDataList" class="dialog" style="width:400px; height:200px; left: 300px; top: 150px;">
+  <div class="dialogTitle">
+    About Data List<span class="dialogCloseButton"></span>
+  </div>
+  <div class="dialogBody">
+  </div>
+  <div class="dialogResizeHandle" style="cursor: se-resize;"></div>
+</div>
+<!-- End of List Data Detail Dialog -->
+
+<!--- **** List Data Detail Dialog *** -->
 <div id="dialogListDataDetail" class="dialog" style="width:400px; height:200px; left: 300px; top: 150px;">
   <div id="dLDDDialogTitle" class="dialogTitle">
-    Data Datail<span class="dialogCloseButton"></span>
+    Data Detail<span class="dialogCloseButton"></span>
   </div>
   <script type="text/javascript">
     document.getElementById("dialogListDataDetail").

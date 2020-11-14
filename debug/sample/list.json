@@ -1,6 +1,7 @@
 {
   "title": "Sample List (A)",
   "rights": "CC-BY",
+  "creator": "Hoge Fuga",
   "items": "title,subject",
   "list": [
     {
