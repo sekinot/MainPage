@@ -409,7 +409,7 @@ function dCrCreate (ev) {  // Layer生成
     }
     dataLayer.name = sourceName + "_" + itemName
     dataLayer.addEventListener("plotclick", dRDOpen);
-
+    dataLayer.useRecodeDetail = true;
 
     // 既存のパネルにレイヤを追加する場合
     if (document.getElementById("dialogCreate").hutimeObject) {

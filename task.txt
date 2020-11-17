@@ -26,7 +26,6 @@ PanelCollection.wheelZoomRatio マウスホイールの回転と拡大縮小率
 
 
 （HuTime API本体）
-レコードを　クリックすると、Otherも含めてダイアログ表示する仕組み
 TLineとChartでRecordsetのT値の設定方法が違う（TLine:Recordsettings内、Chart:RcordsetのtBeginSetting, tEndSetting）
 エラーをログに出力するようにする（なんのエラーで描画できないのかわからない）
 カレンダースケール、西暦、10年毎ラベルの次がエラー（出ない）
@@ -110,5 +109,6 @@ About表示
 TimeScaleの追加機能（パネル、または、レイヤとして）
 ChartのPreferencesで、目盛りを出すか、目盛りの位置
 データリスト自体のメタデータの表示
+レコードを　クリックすると、Otherも含めてダイアログ表示する仕組み
 
 

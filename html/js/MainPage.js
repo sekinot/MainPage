@@ -90,7 +90,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-//    showDialog("dialogRecordDetail");
+//    showDialog("dialogPreferencesTLineLayer");
 //    dPOLOOpen("Shape");
 
 
@@ -1345,6 +1345,16 @@ function dPTLOpen () {
 
     document.getElementById("dPTLBackgroundColor").value = layer.style.backgroundColor;
     document.getElementById("dialogPreferencesTLineLayer").hutimeObject = layer;
+
+    if (layer.useRecodeDetail) {
+        document.getElementById("dPTLseRecordDetail").checked = true;
+        // layerにremoveEventListener関数が実装されるまで削除は不可
+        document.getElementById("dPTLseRecordDetail").disabled = true;
+    }
+    else
+        document.getElementById("dPTLseRecordDetail").checked = false;
+
+
     showDialog("dialogPreferencesTLineLayer");
 }
 function dPTLApply () {
@@ -1395,6 +1405,19 @@ function dPTLApply () {
     layer.vMarginBottom = parseFloat(document.getElementById("dPTLMarginBottom").value);
 
     layer.style.backgroundColor = document.getElementById("dPTLBackgroundColor").value;
+
+    if (document.getElementById("dPTLseRecordDetail").checked) {
+        layer.useRecodeDetail = true;
+        layer.addEventListener("plotclick", dRDOpen);
+        document.getElementById("dPTLseRecordDetail").disabled = true;
+    }
+    /*　layer.removeEventListener関数が実装されるまで利用不可
+    else {
+        layer.useRecodeDetail = false;
+        layer.removeEventListener("plotclick", dRDOpen);
+    }
+    // */
+
     hutime.redraw();
 
     function changeDataItemIcon () {
@@ -1484,6 +1507,14 @@ function dPCLOpen () {
     }
     //dPCLScaleShowChanged();
 
+    if (layer.useRecodeDetail) {
+        document.getElementById("dPCUseRecordDetail").checked = true;
+        // layerにremoveEventListener関数が実装されるまで削除は不可
+        document.getElementById("dPCUseRecordDetail").disabled = true;
+    }
+    else
+        document.getElementById("dPCUseRecordDetail").checked = false;
+
     document.getElementById("dialogPreferencesChartLayer").hutimeObject = layer;
     showDialog("dialogPreferencesChartLayer");
 }
@@ -1528,6 +1559,7 @@ function dPCLApply () {
     layer.vMarginBottom = parseFloat(document.getElementById("dPCLMarginBottom").value);
     layer.vTop = parseFloat(document.getElementById("dPCLVTop").value);
     layer.vBottom = parseFloat(document.getElementById("dPCLVBottom").value);
+    layer.style.backgroundColor = document.getElementById("dPCLBackgroundColor").value;
 
     if (document.getElementById("dPCLScaleHidden").checked) {
         layer.vScales[0].visible = false;
@@ -1540,7 +1572,19 @@ function dPCLApply () {
         layer.vScales[0].visible = true;
         layer.vScales[0].side = 0;
     }
-    layer.style.backgroundColor = document.getElementById("dPCLBackgroundColor").value;
+
+    if (document.getElementById("dPCUseRecordDetail").checked) {
+        layer.useRecodeDetail = true;
+        layer.addEventListener("plotclick", dRDOpen);
+        document.getElementById("dPCUseRecordDetail").disabled = true;
+    }
+    /*　layer.removeEventListener関数が実装されるまで利用不可
+    else {
+        layer.useRecodeDetail = false;
+        layer.removeEventListener("plotclick", dRDOpen);
+    }
+    // */
+
     hutime.redraw();
 
     // ツリーメニューのアイコンを更新
@@ -2461,7 +2505,7 @@ function dCrCreate (ev) {  // Layer生成
     }
     dataLayer.name = sourceName + "_" + itemName
     dataLayer.addEventListener("plotclick", dRDOpen);
-
+    dataLayer.useRecodeDetail = true;
 
     // 既存のパネルにレイヤを追加する場合
     if (document.getElementById("dialogCreate").hutimeObject) {
