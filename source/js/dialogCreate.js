@@ -408,6 +408,7 @@ function dCrCreate (ev) {  // Layer生成
             return;
     }
     dataLayer.name = sourceName + "_" + itemName
+    dataLayer.addEventListener("plotclick", dRDOpen);
 
 
     // 既存のパネルにレイヤを追加する場合

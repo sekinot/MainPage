@@ -90,7 +90,7 @@ function initialize () {    // 全体の初期化
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-//    showDialog("dialogPreferencesChartLayer");
+//    showDialog("dialogRecordDetail");
 //    dPOLOOpen("Shape");
 
 
@@ -2460,6 +2460,7 @@ function dCrCreate (ev) {  // Layer生成
             return;
     }
     dataLayer.name = sourceName + "_" + itemName
+    dataLayer.addEventListener("plotclick", dRDOpen);
 
 
     // 既存のパネルにレイヤを追加する場合
@@ -2833,7 +2834,6 @@ function openListDataDetail (listIndex, dataIndex) {
     }
 
     let data = dataList[listIndex].list[dataIndex];
-    //document.getElementById("statusBar").innerText = "";
     for (let item in data) {
         let container = document.createElement("div");
         container.className = "dialogContainer";
@@ -3022,7 +3022,58 @@ function loadObject (pc) {
         };
     }
 }
-// *** dialog OLObject
+
+// *** Detail of the Record（dialogRecordDetail => dRD）
+function dRDOpen (ev) {
+    let body = document.getElementById("dialogRecordDetail").querySelector("div.dialogBody");
+    while (body.firstChild) {
+        body.removeChild(body.firstChild);
+    }
+    body.appendChild(createDataRow("Begin", getDateValue(
+        ev.records[0].record.tRange.pBegin,
+        ev.records[0].record.tRange.rBegin)));
+    body.appendChild(createDataRow("End", getDateValue(
+        ev.records[0].record.tRange.pEnd,
+        ev.records[0].record.tRange.rEnd)));
+    function getDateValue(date1, date2) {
+    if (Math.abs(date2 - date1) <= 1)
+        return jdToISO(date1, 1);
+    else
+        return jdToISO(date1, 1) + " - " + jdToISO(date2, 1);
+    }
+    function jdToISO (jd, calendar) {
+        let time = HuTime.jdToTime(jd, calendar);
+        return time.year < 0 ? "-" : "" +
+            Math.abs(time.year) > 9999 ? Math.abs(time.year) :
+                ("000" + Math.abs(time.year).toString()).slice(-4) + "-" +
+                ("0" + time.month.toString()).slice(-2) + "-" +
+                ("0" + time.day.toString()).slice(-2);
+    }
+
+    let data = ev.records[0].record.data;
+    for (let item in data) {
+        body.appendChild(createDataRow(item, data[item].text));
+    }
+    function createDataRow (item, value) {
+        let container = document.createElement("div");
+        container.className = "dialogContainer";
+        let label = document.createElement("div");
+        label.className = "dialogContainerLabel";
+        label.style.float = "left";
+        label.innerText = item + ":";
+        container.appendChild(label);
+        let content = document.createElement("div");
+        content.style.marginLeft = "90px";
+        content.innerText = value;
+        container.appendChild(content);
+        return container;
+    }
+
+    let dialog = document.getElementById("dialogRecordDetail");
+    dialog.style.left = (ev.clientX + 10).toString() + "px";
+    dialog.style.top = (ev.clientY + 10).toString() + "px";
+    showDialog("dialogRecordDetail");
+}// *** dialog OLObject
 function dOLOSwitchXT () {
     if (document.getElementById("dOLOUseX").checked) {
         document.getElementById("dOLOXTValueBox").style.display = "none";
