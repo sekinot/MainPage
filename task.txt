@@ -1,17 +1,10 @@
 
-
-
-
-
 URLクエリでのデータリストの複数指定
 ツリーのラベル、PreferenceのNameが空になったときにuntitledにならない
 ツリーのラベル、untitledは色を変える
-
 JSONへのExport時にレコードセットの設定にローカルファイルの場所が残るのは問題ないか（オプションで消せるようにする？）
-
 表示時間範囲の最適化機能
 TLineのPreference Open時にラベルのスタイルがきちんと反映できていない？
-
 文字や図形の生成時に一番上に
 グラフの目盛りの書式
 
@@ -26,9 +19,11 @@ PanelCollection.wheelZoomRatio マウスホイールの回転と拡大縮小率
 
 
 （HuTime API本体）
+カレンダースケール、西暦、10年毎ラベルの次がエラー（出ない）
+
+
 TLineとChartでRecordsetのT値の設定方法が違う（TLine:Recordsettings内、Chart:RcordsetのtBeginSetting, tEndSetting）
 エラーをログに出力するようにする（なんのエラーで描画できないのかわからない）
-カレンダースケール、西暦、10年毎ラベルの次がエラー（出ない）
 Headerなしの時、1行目のレコードを読まない（line skipのエラー）
 積み重ねグラフにした時のv軸の計算がおかしい（合計にすべきところを、1つ目の値だけで計算している）
 eval関数を使った処理を、セキュリティ情報配慮から削除する（HuTime.parse）

@@ -88,12 +88,11 @@ function stopMoveBranch (ev) {
                 }
                 for (let i = 0; i < layers.length; ++i) {
                     selectedParent.appendLayer(layers[i])
-                    selectedParent.redraw();    // まとめてredrawすると順番が変わることがあるため（今後修正）
                     if (layers[i] === selectedHutimeObject) {
                         selectedParent.appendLayer(hutimeObject);
-                        selectedParent.redraw();
                     }
                 }
+                selectedParent.redraw();
                 removeBranch(document.branchElement);
                 addBranch(document.selectedBranchElement.parentNode.closest("li"),
                     hutimeObject, undefined, undefined, undefined,
