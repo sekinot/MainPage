@@ -3283,7 +3283,9 @@ function createOLObject(position) {
             break;
     }
     obj.name = document.getElementById("dOLOName").value;
-    addBranch(document.getElementById("treeContextMenu").treeBranch, obj);
+    addBranch(document.getElementById("treeContextMenu").treeBranch, obj, null, null, null,
+        document.getElementById("treeContextMenu").treeBranch.
+        querySelector("ul").querySelector("li"));
     let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
     layer.appendObject(obj);
     layer.redraw();
@@ -3307,7 +3309,6 @@ function getTValue () {
         request.send();
     });
 }
-
 
 function dPOLOOpen (type) {
     let obj = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
@@ -3415,7 +3416,6 @@ function dPOLOOpen (type) {
     }
     showDialog("dialogOLObject");
 }
-
 function dOLOApply () {
     let obj = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
     switch (document.getElementById("dialogOLObject").type) {
