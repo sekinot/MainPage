@@ -193,6 +193,8 @@ function dADLOpen (listIndex) {
     let data = dataList[listIndex];
     //document.getElementById("statusBar").innerText = "";
     for (let item in data) {
+        if (!data.hasOwnProperty(item))
+            continue;
         if (item === "list" || item === "id" || item === "pass")
             continue;
         let container = document.createElement("div");
@@ -341,7 +343,14 @@ function dLdOpen () {
 }
 function dLdLoad () {
     if (document.getElementById("dLdLocationRemoteType").checked) {
-        loadRemoteJsonContainer(document.getElementById("dLdLocationURL").value);
+        let id = document.getElementById("dLdLocationId").value;
+        let pass = document.getElementById("dLdLocationPass").value;
+
+        if (id && id.length > 0 && pass && pass.length)
+            loadRemoteJsonContainer(document.getElementById("dLdLocationURL").value,
+                id, pass);
+        else
+            loadRemoteJsonContainer(document.getElementById("dLdLocationURL").value);
     }
     else {
         loadLocalJsonContainer(document.getElementById("dLdLocationFile").files[0]);
@@ -350,12 +359,13 @@ function dLdLoad () {
 }
 
 // リモートのJSONデータ
-function loadRemoteJsonContainer (url) {
+function loadRemoteJsonContainer (url, id, pass) {
     let loadJson =
         HuTime.JSON.load(url,
             function () {
                 loadObject(loadJson.parsedObject);
-            });
+            },
+            id, pass);
 }
 // ローカルのJSONデータ
 function loadLocalJsonContainer(file) {

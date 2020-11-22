@@ -314,16 +314,22 @@
         </div>
 
         <!-- URL or path of the source -->
-        <div class="dialogSubContainer">
-          <div style="float: left;">
-            <span id="dLdLocationRemoteFile" style="display: block;">
-              <label class="dialogSubContainerLabel" for="dLdLocationURL">URL</label>
-              <textarea id="dLdLocationURL" style="width: 325px; height: 27px; resize: vertical;"></textarea>
-            </span>
-            <span id="dLdLocationLocalFile" style="display: none; height: 27px;">
-              <label class="dialogSubContainerLabel" for="dLdLocationFile">File</label>
-              <input id="dLdLocationFile" type="file" style="width: 325px;" />
-            </span>
+        <div id="dLdLocationRemoteFile" style="display: block; float: left;">
+          <div class="dialogSubContainer">
+            <label class="dialogSubContainerLabel" for="dImDLLocationURL">URL</label>
+            <textarea id="dLdLocationURL" style="width: 325px; height: 27px; resize: vertical;"></textarea>
+          </div>
+          <div class="dialogSubContainer">
+            <label class="dialogSubContainerLabel" for="dImDLLocationId">ID</label>
+            <input id="dLdLocationId" type="text" style="width: 125px;">
+            <label class="dialogSubContainerLabel" for="dImDLLocationPass" style="margin-left: 25px;">PASS</label>
+            <input id="dLdLocationPass" type="text" style="width: 125px;">
+          </div>
+        </div>
+        <div id="dLdLocationLocalFile" style="display: none; height: 27px; float: left;">
+          <div class="dialogSubContainer">
+            <label class="dialogSubContainerLabel" for="dImDLLocationFile">File</label>
+            <input id="dLdLocationFile" type="file" style="width: 325px;" />
           </div>
         </div>
       </div>
