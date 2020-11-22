@@ -180,9 +180,30 @@ function selectMoveBranch (ev) {
         document.selectedBranchElement = null;
     }
 }
-function changePanelIconOrder (ev) {
-    // evにsourceとtargetのパネルの情報が含まれてから実装
-    // HuTime.PanelCollection.changePanelOrderの改修必要
+function changePanelIconOrder (ev) {    // メインパネル上でのSHIFT+ドラッグ操作によるパネル順序変更をTreeMenuに反映
+    let rootBranch = document.getElementById("treeRoot");
+    let branchList = rootBranch.querySelector("ul").querySelectorAll("li");
+    let branches = [];      // TilePanelのBranchのみの配列
+    branchList.forEach(branch => {
+        if (branch.hutimeObject instanceof HuTime.TilePanel)
+            branches.push(branch);
+    });
+    let sourceIndex, destinationIndex;
+    for (sourceIndex = 0; sourceIndex < branches.length; ++sourceIndex) {
+        if (branches[sourceIndex].hutimeObject === ev.sourcePanel)
+            break;
+    }
+    for (destinationIndex = 0; destinationIndex < branches.length; ++destinationIndex) {
+        if (branches[destinationIndex].hutimeObject === ev.destinationPanel)
+            break;
+    }
+    removeBranch(branches[sourceIndex]);
+    if (destinationIndex === branches.length - 1)    // 末尾
+        addBranch(rootBranch, ev.sourcePanel);
+    else if (destinationIndex < sourceIndex)    // 上に移動
+        addBranch(rootBranch, ev.sourcePanel, null, null, null, branches[destinationIndex]);
+    else                                        // 下に移動
+        addBranch(rootBranch, ev.sourcePanel, null, null, null, branches[destinationIndex + 1]);
 }
 
 // On-Layer Objectの削除
