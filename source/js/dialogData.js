@@ -44,12 +44,13 @@ function dImPImport () {
 }
 
 // リモートのJSONデータ
-function importRemoteJsonContainer (url) {
+function importRemoteJsonContainer (url, id, pass) {
     let loadJson =
         HuTime.JSON.load(url,
             function () {
                 importObject(loadJson.parsedObject);
-            });
+            },
+            id, pass);
 }
 // ローカルのJSONデータ
 function importLocalJsonContainer(file) {
@@ -168,8 +169,14 @@ function dDLOpen (index) {
         let button = document.createElement("input");
         button.type = "button";
         button.value = "Import";
+        let accessInfo = "'" + list[i]["url"] + "'";
+        if (list[i]["id"] && list[i]["id"].length > 0 &&
+            list[i]["pass"] && list[i]["pass"].length)
+            accessInfo += ",'" + list[i]["id"] + "','" + list[i]["pass"] + "'";
+        else if (dataList[index].id && dataList[index].pass)
+            accessInfo += ",'" + dataList[index].id + "','" + dataList[index].pass + "'";
         button.setAttribute("onclick",
-            "importRemoteJsonContainer('" + list[i]["url"] + "')");
+            "importRemoteJsonContainer(" + accessInfo + ")");
         td.appendChild(button);
         tr.appendChild(td);
         document.getElementById("dataListTable").appendChild(tr);
@@ -186,7 +193,7 @@ function dADLOpen (listIndex) {
     let data = dataList[listIndex];
     //document.getElementById("statusBar").innerText = "";
     for (let item in data) {
-        if (item === "list")
+        if (item === "list" || item === "id" || item === "pass")
             continue;
         let container = document.createElement("div");
         container.className = "dialogContainer";
@@ -280,6 +287,12 @@ function dImDLImport () {
 
     function getDataList (jsonData) {
         let dataObj = JSON.parse(jsonData);
+        let id = document.getElementById("dImDLLocationId").value;
+        let pass = document.getElementById("dImDLLocationPass").value;
+        if (id && id.length > 0 && pass && pass.length) {
+            dataObj.id = id;
+            dataObj.pass = pass;
+        }
         let index = dataList.push(dataObj) - 1;
         let dataMenu = document.getElementById("mainMenuData");
         let li = document.createElement("li");
