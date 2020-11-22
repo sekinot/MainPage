@@ -239,8 +239,9 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
         labelSpan.appendChild(document.createTextNode(hutimeObj));
     }
     else {
-        labelSpan.style.fontStyle = "italic";
         labelSpan.appendChild(document.createTextNode("untitled"));
+        labelSpan.style.fontStyle = "italic";
+        labelSpan.style.color = "blue";
     }
     selectSpan.appendChild(labelSpan);
 
@@ -307,6 +308,21 @@ function updateBranch () {
     addBranch(targetElement.parentNode.closest("li"),
         targetElement.hutimeObject, undefined, undefined, undefined, targetElement);
     targetElement.remove();
+}
+
+// ツリーの項目名を変更
+function renameBranch (branch, name) {
+    let labelSpan = branch.querySelector("span.branchLabelSpan")
+    if (!name || name.length === 0) {
+        labelSpan.innerText = "untitled";
+        labelSpan.style.fontStyle = "italic";
+        labelSpan.style.color = "blue";
+    }
+    else {
+        labelSpan.innerText = name;
+        labelSpan.style.fontStyle = "normal";
+        labelSpan.style.color = "black";
+    }
 }
 
 // Record Itemアイコンの取得

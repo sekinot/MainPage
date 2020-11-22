@@ -461,8 +461,9 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
         labelSpan.appendChild(document.createTextNode(hutimeObj));
     }
     else {
-        labelSpan.style.fontStyle = "italic";
         labelSpan.appendChild(document.createTextNode("untitled"));
+        labelSpan.style.fontStyle = "italic";
+        labelSpan.style.color = "blue";
     }
     selectSpan.appendChild(labelSpan);
 
@@ -529,6 +530,21 @@ function updateBranch () {
     addBranch(targetElement.parentNode.closest("li"),
         targetElement.hutimeObject, undefined, undefined, undefined, targetElement);
     targetElement.remove();
+}
+
+// ツリーの項目名を変更
+function renameBranch (branch, name) {
+    let labelSpan = branch.querySelector("span.branchLabelSpan")
+    if (!name || name.length === 0) {
+        labelSpan.innerText = "untitled";
+        labelSpan.style.fontStyle = "italic";
+        labelSpan.style.color = "blue";
+    }
+    else {
+        labelSpan.innerText = name;
+        labelSpan.style.fontStyle = "normal";
+        labelSpan.style.color = "black";
+    }
 }
 
 // Record Itemアイコンの取得
@@ -1308,9 +1324,8 @@ function dPPCOpen() {
 }
 function dPPCApply() {
     let panelCollection = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
-    panelCollection.name = document.getElementById("dPPCName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = panelCollection.name;
+    panelCollection.name = document.getElementById("dPPCName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, panelCollection.name);
     panelCollection.style.backgroundColor = document.getElementById("dPPCBackgroundColor").value;
     hutime.redraw();
 }
@@ -1338,10 +1353,8 @@ function dPTPOpen() {
 }
 function dPTPApply() {
     let panel = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
-    panel.name = document.getElementById("dPTPName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = panel.name;
-
+    panel.name = document.getElementById("dPTPName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, panel.name);
     panel.resizable = document.getElementById("dPTPResizable").checked;
     panel.repositionable = document.getElementById("dPTPRepositionable").checked;
     panel.tRatio = parseFloat(document.getElementById("dPTPTRatio").value);
@@ -1401,9 +1414,8 @@ function dPTLOpen () {
 }
 function dPTLApply () {
     let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
-    layer.name = document.getElementById("dPTLName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = layer.name;
+    layer.name = document.getElementById("dPTLName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, layer.name);
 
     if (document.getElementById("dPTLTypeBand").checked !== layer.useBandStyle) {
         layer.useBandStyle = document.getElementById("dPTLTypeBand").checked;
@@ -1562,9 +1574,8 @@ function dPCLOpen () {
 }
 function dPCLApply () {
     let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
-    layer.name = document.getElementById("dPCLName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = layer.name;
+    layer.name = document.getElementById("dPCLName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, layer.name);
 
     let type = document.getElementById("dPCLType").value;
     if (type !== layer.constructor.name.replace("Layer", "")) {
@@ -1812,9 +1823,8 @@ function dPSLOpen () {
 }
 function dPSLApply () {
     let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
-    layer.name = document.getElementById("dPSLName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = layer.name;
+    layer.name = document.getElementById("dPSLName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, layer.name);
 
     if (document.getElementById("dPSLCalendar").value === "1.1" &&
         layer instanceof HuTime.CalendarScaleLayer) {
@@ -1876,9 +1886,8 @@ function dPBLOpen () {
 }
 function dPBLApply () {
     let layer = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
-    layer.name = document.getElementById("dPBLName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = layer.name;
+    layer.name = document.getElementById("dPBLName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, layer.name);
 
     layer.vBreadth = parseFloat(document.getElementById("dPBLHeight").value);
     layer.vMarginTop = parseFloat(document.getElementById("dPBLMarginTop").value);
@@ -1908,9 +1917,8 @@ function dPRSOpen () {
 }
 function dPRSLApply () {
     let recordset = document.getElementById("treeContextMenu").treeBranch.hutimeObject;
-    recordset.name = document.getElementById("dPRSName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = recordset.name;
+    recordset.name = document.getElementById("dPRSName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, recordset.name);
 }
 function dPRSClose() {
     dPRSLApply();
@@ -2095,9 +2103,8 @@ function dPRIApply () {
     }
 
     // ラベル（Name）変更
-    item.recordDataName = document.getElementById("dPRIName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = item.recordDataName;
+    item.recordDataName = document.getElementById("dPRIName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, item.recordDataName);
 
     if (recordset._tBeginDataSetting && recordset._tBeginDataSetting.itemName === item.itemName ||
         recordset._tEndDataSetting && recordset._tEndDataSetting.itemName === item.itemName ||
@@ -3355,7 +3362,7 @@ function createOLObject(position) {
                 parseFloat(document.getElementById("dOLOImageRotate").value));
             break;
     }
-    obj.name = document.getElementById("dOLOName").value;
+    obj.name = document.getElementById("dOLOName").value.trim();
     addBranch(document.getElementById("treeContextMenu").treeBranch, obj, null, null, null,
         document.getElementById("treeContextMenu").treeBranch.
         querySelector("ul").querySelector("li"));
@@ -3552,9 +3559,8 @@ function dOLOApply () {
             parseFloat(document.getElementById("dOLOYValue").value));
         obj.parent.redraw();
     }
-    obj.name = document.getElementById("dOLOName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = obj.name;
+    obj.name = document.getElementById("dOLOName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, obj.name);
 }
 function dOLOClose () {
     dOLOApply();

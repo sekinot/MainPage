@@ -1,8 +1,4 @@
 
-ツリーのラベル、PreferenceのNameが空になったときにuntitledにならない
-ツリーのラベル、untitledは色を変える？
-
-
 パネルおよびPCのJSON入出力を再度確認
 Load後のパネル移動が固まる
 Treeでパネル移動をすると、パネルが増える
@@ -53,3 +49,6 @@ Headerなしの時、1行目のレコードを読まない（line skipのエラ�
 リモートのJSON呼び出し時に、Basic認証を実施（パネルおよびパネルコレクションとも）
 Load時にvisibleのチェックボックスが反映されていない
 TLineのPreference Open時にラベルのスタイル（ボールド）がきちんと反映できていない？
+ツリーのラベル、PreferenceのNameが空になったときにuntitledにならない
+ツリーのラベル、untitledは色を変える？
+

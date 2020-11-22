@@ -164,7 +164,7 @@ function createOLObject(position) {
                 parseFloat(document.getElementById("dOLOImageRotate").value));
             break;
     }
-    obj.name = document.getElementById("dOLOName").value;
+    obj.name = document.getElementById("dOLOName").value.trim();
     addBranch(document.getElementById("treeContextMenu").treeBranch, obj, null, null, null,
         document.getElementById("treeContextMenu").treeBranch.
         querySelector("ul").querySelector("li"));
@@ -361,9 +361,8 @@ function dOLOApply () {
             parseFloat(document.getElementById("dOLOYValue").value));
         obj.parent.redraw();
     }
-    obj.name = document.getElementById("dOLOName").value;
-    document.getElementById("treeContextMenu").treeBranch.  // treeメニューのラベルを変更
-        querySelector("span.branchLabelSpan").innerText = obj.name;
+    obj.name = document.getElementById("dOLOName").value.trim();
+    renameBranch(document.getElementById("treeContextMenu").treeBranch, obj.name);
 }
 function dOLOClose () {
     dOLOApply();
