@@ -19,8 +19,6 @@ PanelCollection.wheelZoomRatio マウスホイールの回転と拡大縮小率
 
 
 （HuTime API本体）
-チャートの目盛りがチェックの操作で残る
-RcordsetBaseのshowRecordset, visibleが機能してない（少なくともTLineでは）
 Layerの位置、上下マージンを指定した後、再度、高さ優先で指定しても、高さの設定ができない
 
 リモートのJSON呼び出し時に、Basic認証を実施（パネルおよびパネルコレクションとも）
@@ -46,71 +44,11 @@ Panelに表示時間範囲を記録
 eval関数を使った処理を、セキュリティ情報配慮から削除する（HuTime.parse）
 
 ＝＝＝済＝＝＝
-最初の表示はｔ値の範囲を合わせる
-JDの場合、1.1でCalendarRSを使うと、WebAPIを使ってしまうので、オリジナルのRSを使うべき
-item Other の処理
-複数valueの処理
-アイコンの種類ごとに色を変える（from;to;from/to, value, label, other）
-recordset tableもソートする（または、時間、値、その他の順にする？）
-recordsetIcon from, toの順番で並ぶようにする
-from, to, from/toは１つしか入らないようにする（labelも）
-ダイアログが開くとき、閉じるときに実行する関数の指定
-Previewの処理実装
-Previewボタン有効化のタイミング、
-Previewダイアログ、Createダイアログと同時に閉じる
-Headerが無いＣＳＶの処理
-Item選択が不十分な場合の処理（value, labelなし、時間項目なしなど）
-要素ＩＤや関数名のcreateをdCr
-時間目盛り組み込みの処理を整理する
-createダイアログをレイヤタイプ別に３つに分ける
-Create時にタイトルなどを入れるPlainレイヤを載せておく（タイトルの追加も）
-BlankのCreateのタイトル設定
-最初にBlankLayerが入った時、次のレイヤでのRedrawの範囲
-立ち上げ時にＪＧスケールを表示
-プレーンレイヤのオブジェクトをツリーに表示
-ツリーにitem Otherを表示
-ツリーにプロットの種類、色、線を表示
-itemの並び順、tRange関係は最後で良いかも（preferenceを変更する機会があまりない）
-メインメニューのPreferenceはSettingsに
-コンテキストメニューのrenameは削除（Preferenceで操作）
-Time Scaleは開く（＞）アイコンは不要
-ツリーメニュー、右クリックでも選択するようにする（preferenceがどこを指しているのかわからない）
-TLineのpreference、Labelの書式がdefaultを変更している可能性あり
-チャートの種類を変更したときに、ツリーのアイコンも更新
-Record Itemのチェック操作による表示、非表示
-tRange関係はチェックボックスを使用不可に
-TLineの線表示にした場合のツリーのアイコンを対応させる
-帯の太さの設定をPreferencesに
-ツリーやメニューに合わせてCreateダイアログを修正
-PanelCollectionの右クリックからブランクのPanelを生成
-ツリーの各ノードを表示順にする
-ノードの削除
-ノードの順番の入れ替え
-ノードの移動
-JSONデータの出力
-JSONデータの読み込み
-Data List
-リストの項目の詳細（全項目）表示
-リストの読み込みとメニューへの反映
-認証があるリストへの対応
-URLクエリでのデータリストの指定
-Panel CollectionのSave
-Panel CollectionのLoad
-URLクエリでのLoad
-文字や図形の生成
-文字や図形の削除
-文字や図形のPreferences
-文字や図形の順番入れ替え
-About表示
-TimeScaleの追加機能（パネル、または、レイヤとして）
-ChartのPreferencesで、目盛りを出すか、目盛りの位置
-データリスト自体のメタデータの表示
-レコードを　クリックすると、Otherも含めてダイアログ表示する仕組み
-
 Redraw時の並び替え（特にz-index関係）に問題があり、配列順にならなかったり、順番が変に書き換えられたりするらしい
 Layerの順番を入れ替えたときのredraw動作（PanelBorderを含めた順番の入れ替わり）
 OLOを新規に作成すると最前面になるが、追加されたツリーブランチが一番上にならない
 パネルの順番をメインパネルで変えたときに、ツリーも変更
 パネルの順番を入れ替えたときのイベントオブジェクトにソースとターゲットを追加
 
-
+チャートの目盛りがチェックの操作で残る
+RcordsetBaseのshowRecordset, visibleが機能してない（少なくともTLineでは）

@@ -491,27 +491,28 @@ function clickBranchCheckBox (ev) {
 
         let li = ev.target.closest("li");
         if (li.objType === "RecordItem" && getObjType(li.hutimeObject, li) === "recordDataItem") {
-            let recordset, layer;
+            let recordset;
             let parentBranch = li;
             while (parentBranch) {
-                if (parentBranch.objType === "Recordset")
+                if (parentBranch.objType === "Recordset") {
                     recordset = parentBranch.hutimeObject;
-                if (parentBranch.hutimeObject instanceof HuTime.Layer) {
-                    layer = parentBranch.hutimeObject;
                     break;
                 }
-                parentBranch = parentBranch.parentNode.closest("li")
+                if (parentBranch.parentNode instanceof HTMLElement)
+                    parentBranch = parentBranch.parentNode.closest("li")
             }
-            if (layer instanceof HuTime.TLineLayer) {
-                recordset.showRecordset = false;    // 機能せず
-                recordset.showLabel = false;
-            }
-            else {
+            if (recordset instanceof HuTime.ChartRecordset) {
                 recordset.setItemShowPlot(li.hutimeObject.itemName, false);
                 recordset.setItemShowLine(li.hutimeObject.itemName, false);
             }
+            else if (recordset instanceof HuTime.TLineRecordset) {
+                recordset.showRecordset = false;    // TLineはItem別での実装がないので、Recordset全体を設定
+            }
         }
-        li.hutimeObject.visible = false;
+        else if (li.hutimeObject instanceof HuTime.TLineRecordset)
+            li.hutimeObject.showRecordset = false;
+        else
+            li.hutimeObject.visible = false;
     }
     else {
         ev.target.src
@@ -520,27 +521,28 @@ function clickBranchCheckBox (ev) {
 
         let li = ev.target.closest("li");
         if (li.objType === "RecordItem" && getObjType(li.hutimeObject, li) === "recordDataItem") {
-            let recordset, layer;
+            let recordset;
             let parentBranch = li;
             while (parentBranch) {
-                if (parentBranch.objType === "Recordset")
+                if (parentBranch.objType === "Recordset") {
                     recordset = parentBranch.hutimeObject;
-                if (parentBranch.hutimeObject instanceof HuTime.Layer) {
-                    layer = parentBranch.hutimeObject;
                     break;
                 }
-                parentBranch = parentBranch.parentNode.closest("li")
+                if (parentBranch.parentNode instanceof HTMLElement)
+                    parentBranch = parentBranch.parentNode.closest("li")
             }
-            if (layer instanceof HuTime.TLineLayer) {
-                recordset.showRecordset = true;     // 機能せず
-                recordset.showLabel = true;
-            }
-            else {
+            if (recordset instanceof HuTime.ChartRecordset) {
                 recordset.setItemShowPlot(li.hutimeObject.itemName, true);
                 recordset.setItemShowLine(li.hutimeObject.itemName, true);
             }
+            else if (recordset instanceof HuTime.TLineRecordset) {
+                recordset.showRecordset = true;    // TLineはItem別での実装がないので、Recordset全体を設定
+            }
         }
-        li.hutimeObject.visible = true;
+        else if (li.hutimeObject instanceof HuTime.TLineRecordset)
+            li.hutimeObject.showRecordset = true;
+        else
+            li.hutimeObject.visible = true;
     }
     hutime.redraw();
 }
