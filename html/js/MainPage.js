@@ -382,7 +382,20 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
     }
     else {
         checkbox.addEventListener("click", clickBranchCheckBox);
-        if (check === 0)
+
+        let visible;
+        if (hutimeObjType === "recordDataItem") {
+            if (targetElement.hutimeObject instanceof HuTime.TLineRecordset)
+                visible = targetElement.hutimeObject.showRecordset;
+            else
+                visible = targetElement.hutimeObject.getItemShowPlot(hutimeObj.itemName);
+        }
+        else if (hutimeObj instanceof HuTime.TLineRecordset)
+            visible = hutimeObj.showRecordset;
+        else
+            visible = hutimeObj.visible;
+
+        if (check === 0 || !visible)
             checkbox.src = "img/uncheck.png";
         else
             checkbox.src = "img/check.png";
@@ -493,8 +506,15 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
     if (knobImg.style.visibility === "hidden")
         return;     // treeの末尾の場合は子要素は無し
     li.appendChild(document.createElement("ul"));
-    for (let i = 0; i < childObj.length; ++i) {
-        addBranch(li, childObj[i])
+    if (hutimeObjType === "panelCollection") {   // TilePanelは配列の方向と逆になるため（暫定措置）
+        for (let i = childObj.length - 1; i >= 0 ; --i) {
+            addBranch(li, childObj[i])
+        }
+    }
+    else {
+        for (let i = 0; i < childObj.length; ++i) {
+            addBranch(li, childObj[i])
+        }
     }
 }
 

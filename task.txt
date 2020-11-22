@@ -3,8 +3,9 @@ TLineのPreference Open時にラベルのスタイル（ボールド）がきち
 ツリーのラベル、PreferenceのNameが空になったときにuntitledにならない
 ツリーのラベル、untitledは色を変える？
 
-Save時にvisibleのチェックボックスが反映されてい
+
 パネルおよびPCのJSON入出力を再度確認
+Load後のパネル移動が固まる
 
 
 JSONへのExport時にレコードセットの設定にローカルファイルの場所が残るのは問題ないか（オプションで消せるようにする？）
@@ -50,3 +51,4 @@ RcordsetBaseのshowRecordset, visibleが機能してない（少なくともTLin
 Layerの位置、上下マージンを指定した後、再度、高さ優先で指定しても、高さの設定ができない
 Headerなしの時、1行目のレコードを読まない（line skipのエラー）
 リモートのJSON呼び出し時に、Basic認証を実施（パネルおよびパネルコレクションとも）
+Load時にvisibleのチェックボックスが反映されていない
