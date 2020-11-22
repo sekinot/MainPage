@@ -662,7 +662,12 @@ function dPRIOpen () {
         document.getElementById("dPRILabel").style.display = "block";
         let style = recordset.labelStyle;
         document.getElementById("dPRILabelFont").value =  style.fontFamily;
-        document.getElementById("dPRILabelStyle").value = style.fontStyle;
+        if (style.fontWeight === 700 || style.fontWeight === "bold")
+            document.getElementById("dPRILabelStyle").value =
+                style.fontStyle === "italic" ? "italic bold" : "bold";
+        else
+            document.getElementById("dPRILabelStyle").value =
+                style.fontStyle === "italic" ? "italic" : "normal";
         document.getElementById("dPRILabelColor").value = style.fillColor;
         document.getElementById("dPRILabelSize").value = parseFloat(style.fontSize);
     }
