@@ -306,12 +306,14 @@ function dCrCreate (ev) {  // Layer生成
     let source, sourceName;
     if (document.getElementById("dCrSourceRemoteType").checked) {
         let url = document.getElementById("dCrSourceURL").value;
-        source = new HuTime.CsvReader(url, true);
+        source = new HuTime.CsvReader(url,
+            document.getElementById("dCrSourceHeading").checked);
         sourceName = url.substr(url.lastIndexOf("/") + 1);
     }
     else {
         source = new HuTime.CsvReader(
-            document.getElementById("dCrSourceFile").files[0], true);
+            document.getElementById("dCrSourceFile").files[0],
+            document.getElementById("dCrSourceHeading").checked);
         sourceName = source.source.name;
     }
 
