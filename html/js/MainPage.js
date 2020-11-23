@@ -87,10 +87,10 @@ function initialize () {    // 全体の初期化
     hutime.redraw(HuTime.isoToJd(begin.toISOString()), HuTime.isoToJd(end.toISOString()));
 
     // debug関係
-    importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
-    importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
+    //importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
+    //importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-//    showDialog("dialogPreferencesTLineLayer");
+//    showDialog("dialogImportPanel");
 //    dPOLOOpen("Shape");
 
 
@@ -2753,6 +2753,9 @@ function dImPSwitchLocationType () {
 function dImPOpen () {
     //document.getElementById("dImUseRemoteData").checked = false;
     dImPSwitchLocationType();
+    // FileListの初期化（直接操作できないので、typeを変えて元に戻す）
+    document.getElementById("dImPLocationFile").type = "text";
+    document.getElementById("dImPLocationFile").type = "file";
     showDialog("dialogImportPanel");
 }
 function dImPImport () {

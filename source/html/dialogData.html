@@ -51,7 +51,6 @@
     });
   </script>
   <div class="dialogBody">
-
     <!-- Source -->
     <div id="dImPLocation" class="dialogContainer" style="display: block;">
       <div class="dialogContainerLabel" style="float: left;">Location:</div>
@@ -106,7 +105,6 @@
       </script>
     </div>
   </div>
-
 </div>
 <!-- End of Import Panel Dialog -->
 
@@ -305,8 +303,8 @@
 
         <!-- location of the source (Remote | Local) -->
         <div class="dialogSubContainer">
-          <input id="dLdLocationRemoteType" type="radio" name="dImPLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="dLdLocationRemoteType">Remote</label>
-          <input id="dLdLocationLocalType" type="radio" name="dImPLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="dLdLocationLocalType" >Local</label>
+          <input id="dLdLocationRemoteType" type="radio" name="dLdPLocationType" value="remote" checked="checked" /><label class="dialogSubContainerLabel" for="dLdLocationRemoteType">Remote</label>
+          <input id="dLdLocationLocalType" type="radio" name="dLdPLocationType" value="local" style="margin-left: 10px;" /><label class="dialogSubContainerLabel" for="dLdLocationLocalType" >Local</label>
           <script type="text/javascript">
             document.getElementById("dLdLocationRemoteType").addEventListener("click", dLdSwitchLocationType);
             document.getElementById("dLdLocationLocalType").addEventListener("click", dLdSwitchLocationType);

@@ -31,6 +31,9 @@ function dImPSwitchLocationType () {
 function dImPOpen () {
     //document.getElementById("dImUseRemoteData").checked = false;
     dImPSwitchLocationType();
+    // FileListの初期化（直接操作できないので、typeを変えて元に戻す）
+    document.getElementById("dImPLocationFile").type = "text";
+    document.getElementById("dImPLocationFile").type = "file";
     showDialog("dialogImportPanel");
 }
 function dImPImport () {
