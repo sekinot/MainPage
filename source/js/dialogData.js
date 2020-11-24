@@ -98,7 +98,7 @@ function importObject (panel) {
     }
     if (!rs || !isInitRedraw()) {
         hutime.panelCollections[0].appendPanel(panel);
-        addBranch(document.getElementById("treeRoot"), panel);
+        addBranch(document.getElementById("layerTree").querySelector("li"), panel);
         hutime.redraw();
     }
     else {

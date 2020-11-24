@@ -1,16 +1,16 @@
-作成したTLineのターンアラウンドが失敗
 レイヤのタイトルは出力しなくてよいかも
+
+Import時に詳細ダイアログのチェックが正しくない
+　import時にdetailがOKならDetailed Dialogのイベントを追加する。
+RecordItemのOtherはチェックを無効化する
+Loadすると、PC（Root）がチェック不可になってない
+
+
 
 ＝＝済＝＝
 ＝＝＝＝
 
 
-パネルおよびPCのJSON入出力を再度確認
-Load後のパネル移動が固まる
-Treeでパネル移動をすると、パネルが増える
-
-RecordItemのOtherはチェックを無効化する
-Import時に詳細ダイアログのチェックが正しくない
 
 ＝＝＝＝再現性不明＝＝＝＝
 TLineのラベルを非表示にした後にOKすると、再び表示できないことがある
@@ -35,6 +35,7 @@ PanelCollection.wheelZoomRatio マウスホイールの回転と拡大縮小率
 darwPRangeAsRがOffの時、縮小していっても点表示にならない（1日のデータ＝全期間PRange）
 TLineのラベル位置が、端点に幅がある場合におかしい？（Rbで計算しているがOKか？）
 
+時間軸データ、サーバ側からの供給時、CORSの問題。
 
 TLineとChartでRecordsetのT値の設定方法が違う（TLine:Recordsettings内、Chart:RcordsetのtBeginSetting, tEndSetting）
 TLineのRecordsetでプロットの表示・非表示を制御する方法を検討

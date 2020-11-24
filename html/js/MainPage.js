@@ -1072,10 +1072,7 @@ function stopMoveBranch (ev) {
         }
         else if (hutimeObject instanceof HuTime.TilePanel) {
             hutime.panelCollections[0].changePanelOrder(hutimeObject, selectedHutimeObject);
-            removeBranch(document.branchElement);
-            addBranch(document.selectedBranchElement.parentNode.closest("li"),
-                hutimeObject, undefined, undefined, undefined,
-                document.selectedBranchElement);
+            // porderchangedイベントが発火するので、Treeはイベントハンドラ（changePanelIconOrder）で更新される
         }
         else if (hutimeObject instanceof HuTime.OnLayerObjectBase) {
             if (selectedHutimeObject instanceof HuTime.OnLayerObjectBase &&
@@ -1142,7 +1139,7 @@ function selectMoveBranch (ev) {
     }
 }
 function changePanelIconOrder (ev) {    // メインパネル上でのSHIFT+ドラッグ操作によるパネル順序変更をTreeMenuに反映
-    let rootBranch = document.getElementById("treeRoot");
+    let rootBranch = document.getElementById("layerTree").querySelector("li");
     let branchList = rootBranch.querySelector("ul").querySelectorAll("li");
     let branches = [];      // TilePanelのBranchのみの配列
     branchList.forEach(branch => {
@@ -2824,7 +2821,7 @@ function importObject (panel) {
     }
     if (!rs || !isInitRedraw()) {
         hutime.panelCollections[0].appendPanel(panel);
-        addBranch(document.getElementById("treeRoot"), panel);
+        addBranch(document.getElementById("layerTree").querySelector("li"), panel);
         hutime.redraw();
     }
     else {
