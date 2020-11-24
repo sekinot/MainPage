@@ -155,8 +155,11 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
 
     // チェックボックスの追加
     let checkbox = document.createElement("img");
-    if (check < 0 || hutimeObjType === "recordTValueItem") {
-        checkbox.src = "img/discheck.png";
+    if (check < 0 ||
+        hutimeObjType === "recordTValueItem" ||
+        hutimeObjType === "panelCollection" ||
+        hutimeObjType === "recordItem") {
+            checkbox.src = "img/discheck.png";
     }
     else {
         checkbox.addEventListener("click", clickBranchCheckBox);

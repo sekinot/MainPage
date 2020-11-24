@@ -1,9 +1,5 @@
 レイヤのタイトルは出力しなくてよいかも
 
-Import時に詳細ダイアログのチェックが正しくない
-　import時にdetailがOKならDetailed Dialogのイベントを追加する。
-RecordItemのOtherはチェックを無効化する
-Loadすると、PC（Root）がチェック不可になってない
 
 
 
@@ -65,7 +61,6 @@ Load時にvisibleのチェックボックスが反映されていない
 TLineのPreference Open時にラベルのスタイル（ボールド）がきちんと反映できていない？
 ツリーのラベル、PreferenceのNameが空になったときにuntitledにならない
 ツリーのラベル、untitledは色を変える？
-
 Stringオブジェクトのtextが未指定の場合の処理（型チェックの追加）
 ユーザイベントがJSONに出力されてしまう（プロットクリック時のハンドラ）
 ImportPanelのRemote/Localボタンが初期状態でどちらも非選択
@@ -73,3 +68,5 @@ ImportのFileListを開くたびに初期化
 チャートのv値設定（min,max）
 目盛りの位置（左右）と表示・非表示
 
+Load/Import時にPanelCollectionとその他のデータ項目のツリーのチェックを無効化
+Load/Import時にdetailがOKならDetailed Dialogのイベントを追加する。

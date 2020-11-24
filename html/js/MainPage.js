@@ -377,8 +377,11 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
 
     // チェックボックスの追加
     let checkbox = document.createElement("img");
-    if (check < 0 || hutimeObjType === "recordTValueItem") {
-        checkbox.src = "img/discheck.png";
+    if (check < 0 ||
+        hutimeObjType === "recordTValueItem" ||
+        hutimeObjType === "panelCollection" ||
+        hutimeObjType === "recordItem") {
+            checkbox.src = "img/discheck.png";
     }
     else {
         checkbox.addEventListener("click", clickBranchCheckBox);
@@ -2835,7 +2838,11 @@ function importObject (panel) {
                     tMax = rs.records[i].tRange.pEnd;
             }
             hutime.panelCollections[0].appendPanel(panel);
-            addBranch(document.getElementById("treeRoot"), panel);
+            for (let i = 0; i < panel.layers.length; ++i) {
+                if (panel.layers[i].useRecodeDetail)
+                    panel.layers[i].addEventListener("plotclick", dRDOpen);
+            }
+        addBranch(document.getElementById("treeRoot"), panel);
             hutime.redraw(tMin, tMax);
             rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
         };
@@ -3147,6 +3154,14 @@ function loadObject (pc) {
             hutime.redraw(tMin, tMax);
             rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
         };
+    }
+
+    // 詳細ダイアログのイベントリスナーをセット
+    for (let i = 0; i < pc.panels.length; ++i) {
+        for (let j = 0; j < pc.panels[i].layers.length; ++j) {
+            if (pc.panels[i].layers[j].useRecodeDetail)
+                pc.panels[i].layers[j].addEventListener("plotclick", dRDOpen);
+        }
     }
 }
 
