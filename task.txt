@@ -69,4 +69,6 @@ Stringオブジェクトのtextが未指定の場合の処理（型チェック�
 ユーザイベントがJSONに出力されてしまう（プロットクリック時のハンドラ）
 ImportPanelのRemote/Localボタンが初期状態でどちらも非選択
 ImportのFileListを開くたびに初期化
+チャートのv値設定（min,max）
+目盛りの位置（左右）と表示・非表示
 

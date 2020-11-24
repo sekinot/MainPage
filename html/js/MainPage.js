@@ -1610,8 +1610,12 @@ function dPCLApply () {
     layer.vBreadth = parseFloat(document.getElementById("dPCLHeight").value);
     layer.vMarginTop = parseFloat(document.getElementById("dPCLMarginTop").value);
     layer.vMarginBottom = parseFloat(document.getElementById("dPCLMarginBottom").value);
-    layer.vTop = parseFloat(document.getElementById("dPCLVTop").value);
-    layer.vBottom = parseFloat(document.getElementById("dPCLVBottom").value);
+
+    let vTop = parseFloat(document.getElementById("dPCLVTop").value);
+    let vBottom = parseFloat(document.getElementById("dPCLVBottom").value);
+    layer.vTop = vTop;
+    layer.vBottom = vBottom;
+    layer.autoAdjustV = (!vTop || isNaN(vTop)) && (!vBottom || isNaN(vBottom));
     layer.style.backgroundColor = document.getElementById("dPCLBackgroundColor").value;
 
     if (document.getElementById("dPCLScaleHidden").checked) {
