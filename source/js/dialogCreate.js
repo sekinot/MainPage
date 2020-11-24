@@ -385,11 +385,13 @@ function dCrCreate (ev) {  // Layer生成
 
     // Data Layer
     let dataLayer;
-    let layerMarginTop
+    let layerMarginTop = 0;
+    /*
     if (document.getElementById("dialogCreate").hutimeObject)
         layerMarginTop = 0;
     else
         layerMarginTop = PanelTitleVBreadth;
+    // */
 
     switch (dCrLayerType) {
         case "TLine" :
@@ -431,7 +433,7 @@ function dCrCreate (ev) {  // Layer生成
     panel.appendLayer(dataLayer);
 
     // Title Layer
-    panel.appendLayer(dCrCreateTitleLayer(title));
+    //panel.appendLayer(dCrCreateTitleLayer(title));
 
     // 最初のパネルの場合は、時間範囲を取得してから描画
     function isInitRedraw () {
