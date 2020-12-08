@@ -3,7 +3,8 @@
 ///*
 const dCrSourceURLDefault =
 //    "http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/kyotoNoHead.csv";
-    "http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/kyoto.csv";
+//    "http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/kyoto.csv";
+    "";
 // */
 
 // *** ダイアログ基本構造 ***

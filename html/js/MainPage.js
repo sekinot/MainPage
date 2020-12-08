@@ -1180,7 +1180,8 @@ function removeOLObject () {
 ///*
 const dCrSourceURLDefault =
 //    "http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/kyotoNoHead.csv";
-    "http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/kyoto.csv";
+//    "http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/kyoto.csv";
+    "";
 // */
 
 // *** ダイアログ基本構造 ***
@@ -2830,24 +2831,22 @@ function importObject (panel) {
         hutime.redraw();
     }
     else {
-        rs.onloadend = function () {
-            let tMin = Number.POSITIVE_INFINITY;
-            let tMax = Number.NEGATIVE_INFINITY;
-            for (let i = 0; i < rs.records.length; ++i) {
-                if (rs.records[i].tRange.pBegin < tMin)
-                    tMin = rs.records[i].tRange.pBegin;
-                if (rs.records[i].tRange.pEnd > tMax)
-                    tMax = rs.records[i].tRange.pEnd;
-            }
-            hutime.panelCollections[0].appendPanel(panel);
-            for (let i = 0; i < panel.layers.length; ++i) {
-                if (panel.layers[i].useRecodeDetail)
-                    panel.layers[i].addEventListener("plotclick", dRDOpen);
-            }
+        let tMin = Number.POSITIVE_INFINITY;
+        let tMax = Number.NEGATIVE_INFINITY;
+        for (let i = 0; i < rs.records.length; ++i) {
+            if (rs.records[i].tRange.pBegin < tMin)
+                tMin = rs.records[i].tRange.pBegin;
+            if (rs.records[i].tRange.pEnd > tMax)
+                tMax = rs.records[i].tRange.pEnd;
+        }
+        hutime.panelCollections[0].appendPanel(panel);
+        for (let i = 0; i < panel.layers.length; ++i) {
+            if (panel.layers[i].useRecodeDetail)
+                panel.layers[i].addEventListener("plotclick", dRDOpen);
+        }
         addBranch(document.getElementById("treeRoot"), panel);
             hutime.redraw(tMin, tMax);
             rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
-        };
     }
 }
 
