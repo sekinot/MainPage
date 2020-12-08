@@ -2827,26 +2827,36 @@ function importObject (panel) {
     }
     if (!rs || !isInitRedraw()) {
         hutime.panelCollections[0].appendPanel(panel);
-        addBranch(document.getElementById("layerTree").querySelector("li"), panel);
-        hutime.redraw();
-    }
-    else {
-        let tMin = Number.POSITIVE_INFINITY;
-        let tMax = Number.NEGATIVE_INFINITY;
-        for (let i = 0; i < rs.records.length; ++i) {
-            if (rs.records[i].tRange.pBegin < tMin)
-                tMin = rs.records[i].tRange.pBegin;
-            if (rs.records[i].tRange.pEnd > tMax)
-                tMax = rs.records[i].tRange.pEnd;
-        }
-        hutime.panelCollections[0].appendPanel(panel);
         for (let i = 0; i < panel.layers.length; ++i) {
             if (panel.layers[i].useRecodeDetail)
                 panel.layers[i].addEventListener("plotclick", dRDOpen);
         }
-        addBranch(document.getElementById("treeRoot"), panel);
-            hutime.redraw(tMin, tMax);
-            rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
+        addBranch(document.getElementById("layerTree").querySelector("li"), panel);
+        hutime.redraw();
+    }
+    else {
+        let initTempRange = function initTempRange () {
+            let tMin = Number.POSITIVE_INFINITY;
+            let tMax = Number.NEGATIVE_INFINITY;
+            for (let i = 0; i < rs.records.length; ++i) {
+                if (rs.records[i].tRange.pBegin < tMin)
+                    tMin = rs.records[i].tRange.pBegin;
+                if (rs.records[i].tRange.pEnd > tMax)
+                    tMax = rs.records[i].tRange.pEnd;
+            }
+            hutime.panelCollections[0].appendPanel(panel);
+            for (let i = 0; i < panel.layers.length; ++i) {
+                if (panel.layers[i].useRecodeDetail)
+                    panel.layers[i].addEventListener("plotclick", dRDOpen);
+            }
+            addBranch(document.getElementById("treeRoot"), panel);
+                hutime.redraw(tMin, tMax);
+                rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
+        }
+        if (rs.records.length > 0)
+            initTempRange();
+        else
+            rs.onloadend = initTempRange;
     }
 }
 

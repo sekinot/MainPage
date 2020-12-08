@@ -1,4 +1,5 @@
-
+・データ項目名を変更すると（CSVの項目名と異なると）、Export/Importが正しく動作しない。・データインポートした後の詳細ダイアログが開かない
+・
 
 ＝＝＝＝再現性不明＝＝＝＝
 TLineのラベルを非表示にした後にOKすると、再び表示できないことがある
@@ -62,3 +63,5 @@ ImportのFileListを開くたびに初期化
 
 Load/Import時にPanelCollectionとその他のデータ項目のツリーのチェックを無効化
 Load/Import時にdetailがOKならDetailed Dialogのイベントを追加する。
+初回Import時に表示されない
+インポート時の詳細ダイアログが機能しない場合がある
