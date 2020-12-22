@@ -90,7 +90,7 @@ function initialize () {    // 全体の初期化
     //importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/TLinePanel.json");
     //importRemoteJsonContainer("http://localhost:63342/WebHuTimeIDE/MainPage/debug/sample/LineChartPanel.json");
 
-//    showDialog("dialogImportPanel");
+//     showDialog("dialogDataList");
 //    dPOLOOpen("Shape");
 
 
@@ -1287,16 +1287,34 @@ function resizeDialog (ev) {
         resizeDirection = "se-resize";
     let newWidth = parseInt(dialogElement.style.width) - dialogElement.originX + ev.pageX;
     let newHeight = parseInt(dialogElement.style.height) - dialogElement.originY + ev.pageY;
-    if (newWidth > dialogElement.minWidth && resizeDirection !== "ns-resize")
-        dialogElement.style.width = newWidth + "px";
-    if (newHeight > dialogElement.minHeight && resizeDirection !== "ew-resize") {
-        dialogElement.style.height = newHeight + "px";
-        if (bodyElement.style.height)
-            bodyElement.style.height =
-                (parseInt(bodyElement.style.height) - dialogElement.originY + ev.pageY) + "px";
+
+    if (resizeDirection !== "ns-resize") {
+        if (newWidth > dialogElement.minWidth) {
+            dialogElement.style.width = newWidth + "px";
+            dialogElement.originX = ev.pageX;
+        }
+        else {
+            if (newWidth < dialogElement.minWidth - 5)  // -5 は、変更中止の操作バッファ
+                stopResizeDialog(ev);   // 既定の大きさ以下になる場合は、サイズ変更を中止
+        }
     }
-    dialogElement.originX = ev.pageX;
-    dialogElement.originY = ev.pageY;
+    if (resizeDirection !== "ew-resize") {
+        if (newHeight > dialogElement.minHeight) {
+            dialogElement.style.height = newHeight + "px";
+            if (bodyElement.style.height)
+                bodyElement.style.height =
+                    (parseInt(bodyElement.style.height) - dialogElement.originY + ev.pageY) + "px";
+            dialogElement.originY = ev.pageY;
+        }
+        else {
+            if (newHeight < dialogElement.minHeight - 5)
+                stopResizeDialog(ev);
+        }
+    }
+
+    if (dialogElement.resizeDialog)     // 個別のダイアログに固有の動作
+        dialogElement.resizeDialog();
+
     ev.preventDefault();
     ev.stopPropagation();
     return false;

@@ -1278,7 +1278,7 @@
 <!-- End of Import Panel Dialog -->
 
 <!-- **** Data List Dialog **** -->
-<div id="dialogDataList" class="dialog" style="width:400px; left: 200px; top: 100px;">
+<div id="dialogDataList" class="dialog" style="width:400px; height:200px; left: 200px; top: 100px;">
   <div id="dDLDialogTitle" class="dialogTitle">
     Data List<span class="dialogCloseButton"></span>
   </div>
@@ -1303,7 +1303,7 @@
           });
     </script>
 
-    <div class="dialogContainer">
+    <div id="dialogDataListContent" class="dialogContainer" style="overflow: auto; height: 120px;">
       <table id="dataListTable" style="width: 100%;">
       </table>
     </div>
@@ -1320,6 +1320,19 @@
   </div>
   <div class="dialogResizeHandle" style="cursor: se-resize;"></div>
 </div>
+<script type="text/javascript">
+  let dialog = document.getElementById("dialogDataList");
+  dialog.resizeDialog = function () {
+      let parentHeight = parseFloat(document.getElementById("dialogDataList").style.height);
+      document.getElementById("dialogDataListContent").style.height =
+          (parentHeight - 80).toString() + "px";
+
+      document.getElementById("statusBar").innerText = "たゆん";
+
+
+
+  }
+</script>
 <!-- End of Data List Dialog -->
 
 <!--- **** List Data Detail Dialog *** -->
