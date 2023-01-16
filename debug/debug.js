@@ -1,4 +1,5 @@
-let mainPageJsPath = "/WebHuTimeIDE/MainPage/source/js/";
+// let mainPageJsPath = "/WebHuTimeIDE/MainPage/source/js/";
+var mainPageJsPath = "../source/js/";
 // 関連ファイルの読み込み
 document.write('<script type="text/javascript" src="' + mainPageJsPath + 'initialize.js"></script>');
 
