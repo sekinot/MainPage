@@ -364,14 +364,19 @@ function dCrCreate (ev) {  // Layer生成
         if (calendarOfSource === "1.1")
             rs = new HuTime.TLineRecordset(source, from, to, label);
         else
-            rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource);
+            // rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource);
+            // TODO: othersの一つ目の要素をグループ分けの元の情報として渡す(冨ヶ原)
+            // ohtersは仮のものとして使用。将来的にはダイアログにグループわけに用いるアイテムに指定されたヘッダ名を使用?(冨ヶ原)
+            rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource, null, null, others[0]);
     else
         if (calendarOfSource === "1.1")
             rs = new HuTime.ChartRecordset(source, from, to, values[0],
                 new HuTime.FigureStyle(plotColor[0], plotColor[0], 0));
         else
-            rs = new HuTime.CalendarChartRecordset(source, from, to, values[0], calendarOfSource,
-                new HuTime.FigureStyle(plotColor[0], plotColor[0], 0));
+            // rs = new HuTime.CalendarChartRecordset(source, from, to, values[0], calendarOfSource,
+            //     new HuTime.FigureStyle(plotColor[0], plotColor[0], 0));
+            // TODO: othersの一つ目の要素をグループ分けの元の情報として渡す(冨ヶ原)
+            rs = new HuTime.CalendarChartRecordset(source, from, to, values[0], calendarOfSource, new HuTime.FigureStyle(plotColor[0], plotColor[0], 0), null, others[0]);
     rs.name = sourceName;
     for (let i = 1; i < values.length; ++i) {   // values[0]はコンストラクタで指定済み
         rs.recordSettings.appendDataSetting(new HuTime.RecordDataSetting(values[i]));
