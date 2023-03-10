@@ -276,6 +276,7 @@ function dCrOpen (type, hutimeObject, treeBranch) {
     dCrLayerType = type;
     document.getElementById("dCrTypeTLine").style.display = type === "TLine" ? "block" : "none";
     document.getElementById("dCrTypeChart").style.display = type === "Chart" ? "block" : "none";
+    document.getElementById("dCrTypeMask").style.display = type === "Mask" ? "block" : "none";
     document.getElementById("dCrTypeBlank").style.display = type === "Blank" ? "block" : "none";
     document.getElementById("dCrSource").style.display = type !== "Blank" ? "block" : "none";
     document.getElementById("dCrItem").style.display = type !== "Blank" ? "block" : "none";
@@ -349,7 +350,8 @@ function dCrCreate (ev) {  // Layer生成
                 break;
         }
     }
-    if (!from || !to || (dCrLayerType !== "TLine" && values.length === 0) ||
+    if (!from || !to ||
+        ((dCrLayerType === "LineChart" || dCrLayerType === "BarChart" || dCrLayerType === "PlotChart") && values.length === 0) ||
         (dCrLayerType === "TLine" && !label)) {     // item指定のエラー
         document.getElementById("statusBar").innerText = "Error: Required items are not specified.";
         dCrClose();
@@ -368,6 +370,8 @@ function dCrCreate (ev) {  // Layer生成
             // TODO: othersの一つ目の要素をグループ分けの元の情報として渡す(冨ヶ原)
             // ohtersは仮のものとして使用。将来的にはダイアログにグループわけに用いるアイテムに指定されたヘッダ名を使用?(冨ヶ原)
             rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource, null, null, others[0]);
+    else if (dCrLayerType === "Mask")
+        rs = new HuTime.MaskRecordset(source, from, to, calendarOfSource, null, others[0]);
     else
         if (calendarOfSource === "1.1")
             rs = new HuTime.ChartRecordset(source, from, to, values[0],
@@ -413,6 +417,9 @@ function dCrCreate (ev) {  // Layer生成
         case "PlotChart" :
             dataLayer = new HuTime.PlotChartLayer(rs, null, layerMarginTop, null);
             break;
+        case "Mask" :
+            dataLayer = new HuTime.MaskLayer(rs, null, layerMarginTop, null);
+            break;
         default :
             return;
     }
@@ -433,7 +440,13 @@ function dCrCreate (ev) {  // Layer生成
     }
 
     // Panel
-    let panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
+    let panel = null;
+    if (dCrLayerType === "Mask") {
+        panel = new HuTime.TilePanel(dataLayer.vBreadth);
+        panel.resizable = false;
+    } else {
+        panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
+    }
     panel.name = title;
     panel.appendLayer(dataLayer);
 
@@ -467,7 +480,7 @@ function dCrCreate (ev) {  // Layer生成
             }
             hutime.panelCollections[0].appendPanel(panel);
             hutime.redraw(tMin, tMax);
-            rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
+            rs.onloadend = HuTime.RecordBase.prototype.onloadend;// 元に戻す
         };
     }
     else {

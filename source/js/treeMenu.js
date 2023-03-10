@@ -255,6 +255,7 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
             childObj = hutimeObj.recordSettings.dataSettings.slice();
             // 今後、TLineとChartで異なっているt値の項目の設定を統一のこと
             if (hutimeObj instanceof HuTime.ChartRecordset ||
+                hutimeObj instanceof HuTime.MaskRecordset ||
                 hutimeObj instanceof HuTime.TLineRecordset && !hutimeObj.recordSettings.tSetting) {
                 childObj.push(hutimeObj._tBeginDataSetting);
                 childObj.push(hutimeObj._tEndDataSetting);

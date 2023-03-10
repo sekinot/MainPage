@@ -63,6 +63,7 @@
               <ul>
                 <li onclick="dCrOpen('TLine')">Time Line</li>
                 <li onclick="dCrOpen('Chart')">Chart</li>
+                <li onclick="dCrOpen('Mask')">Mask</li>
                 <li onclick="dCrSCOpen('panel')">Time Scale</li>
               </ul>
             </li>
@@ -130,6 +131,7 @@
               <li onclick="dCrBLOpen()">Blank Panel</li>
               <li onclick="dCrOpen('TLine')">Panel with Time Line</li>
               <li onclick="dCrOpen('Chart')">Panel with Chart</li>
+              <li onclick="dCrOpen('Mask')">Panel with Mask</li>
               <li onclick="dCrSCOpen('panel')">Panel with Calendar</li>
             </ul>
           </li>
@@ -149,6 +151,7 @@
             <ul>
               <li id="tCMNewTlineLayer">Time Line Layer</li>
               <li id="tCMNewChartLayer">Chart Layer</li>
+              <li id="tCMNewMaskLayer">Mask Layer</li>
               <li id="tCMNewBlankLayer">Blank Layer</li>
               <li onclick="dCrSCOpen('layer')">Calendar Scale Layer</li>
               <script type="text/javascript">
@@ -158,6 +161,10 @@
                       document.getElementById("treeContextMenu").treeBranch); });
                 document.getElementById("tCMNewChartLayer").addEventListener("click",
                   function () { dCrOpen("Chart",
+                      document.getElementById("treeContextMenu").treeBranch.hutimeObject,
+                      document.getElementById("treeContextMenu").treeBranch); });
+                document.getElementById("tCMNewMaskLayer").addEventListener("click",
+                  function () { dCrOpen("Mask",
                       document.getElementById("treeContextMenu").treeBranch.hutimeObject,
                       document.getElementById("treeContextMenu").treeBranch); });
                 document.getElementById("tCMNewBlankLayer").addEventListener("click",
@@ -917,6 +924,9 @@
         <!-- Layer Type -->
         <div id="dCrTypeTLine" class="dialogSubContainer" style="line-height: 20px; display: none;">
           Time Line
+        </div>
+        <div id="dCrTypeMask" class="dialogSubContainer" style="line-height: 20px; display: none;">
+          Mask
         </div>
         <div id="dCrTypeChart" class="dialogSubContainer" style="display: block;">
           <select id="dCrLayerType" style="width: 120px;">
