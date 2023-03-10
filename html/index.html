@@ -110,6 +110,13 @@
           </ul>
         </li>
 
+        <!-- ** Search ** -->
+        <li>Search
+            <ul>
+                <li onclick="showDialog('dialogSearchString');" onmouseover="return mainPanelCollection.createCheckbox(event)" >String</li>
+            </ul>
+        </li>
+
       </ul>
     </div>
 <!-- End of Menu Bar -->
@@ -1742,5 +1749,35 @@
     </div>
   </div>
 </div>
+<div id="dialogSearchString" class="dialog"  style="block-size: fit-content; left: 200px; top: 100px;">
+    <div class="dialogTitle">
+      Search String</span><span class="dialogCloseButton"></span>
+    </div>
+    <div class="dialogBody">
+      <div class="dialogContainer">
+        <div class="dialogSubContainer">
+            <div class="dialogContainerLabel" style="float:left;">Which layer(s):</div>
+                <div class="dialogSubContainerGroup">
+                    <div id="checkboxContainer"></div>
+                </div>
+        </div>
+        <div class="dialogSubContainer" style="margin-top: 6px; margin-bottom: 6px;">
+            <div class="dialogContainerLabel" style="float:left;">Highlight color:</div>
+            <div class="dialogSubContainerGroup">
+                <input type="color" id="highlightColor" value="#ff00ff" style="height: 20px;">
+                <label for="highlightColor"></label>
+            </div>
+        </div>
+        <div class="dialogSubContainer">
+            <div class="dialogContainerLabel" style="float:left;">Search for:</div>
+            <div class="dialogSubContainerGroup">
+                <input type="text" id="searchedString">
+                <label for="searchedString"></label>
+                <input type="button" value="Search" id="searchingString" onclick="return mainPanelCollection.searchingString(event)">
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
