@@ -113,7 +113,38 @@
         <!-- ** Search ** -->
         <li>Search
             <ul>
-                <li onclick="showDialog('dialogSearchString');" onmouseover="return mainPanelCollection.createCheckbox(event)" >String</li>
+                <li onclick="showDialog('dialogSearchString');" onmouseover="return createCheckbox();" >String</li>
+                <script type="text/javascript">
+                    // TODO: 文字列検索ダイアログにレイヤーのチェックボックスを生成(冨ヶ原)
+                    const createCheckbox = () => {
+                        const checkboxContainer = document.getElementById("checkboxContainer");
+
+                        while (checkboxContainer.firstChild) {
+                            checkboxContainer.removeChild(checkboxContainer.firstChild);
+                        }
+
+                        const searchedLayersNames = mainPanelCollection.createSearchedLayersNames();
+
+                        for (const searchedLayerName of searchedLayersNames) {
+                            const checkbox = document.createElement("input");
+                            checkbox.type = "checkbox";
+                            checkbox.id = searchedLayerName;
+                            checkbox.value = searchedLayerName;
+
+                            const label = document.createElement("label");
+                            label.htmlFor = searchedLayerName;
+                            label.appendChild(document.createTextNode(searchedLayerName));
+
+                            const checkboxItemContainer = document.createElement("div");
+                            checkboxItemContainer.className = "checkboxItemContainer";
+
+                            checkboxContainer.appendChild(checkboxItemContainer);
+                            checkboxItemContainer.appendChild(checkbox);
+                            checkboxItemContainer.appendChild(label);
+                        }
+
+                    };
+                </script>
             </ul>
         </li>
 
@@ -1767,8 +1798,8 @@
         <div class="dialogSubContainer" style="margin-top: 6px; margin-bottom: 6px;">
             <div class="dialogContainerLabel" style="float:left;">Highlight color:</div>
             <div class="dialogSubContainerGroup">
-                <input type="color" id="highlightColor" value="#ff00ff" style="height: 20px;">
-                <label for="highlightColor"></label>
+                <input type="color" id="searchHighlightColor" value="#ff00ff" style="height: 20px;">
+                <label for="searchHighlightColor"></label>
             </div>
         </div>
         <div class="dialogSubContainer">
@@ -1776,7 +1807,31 @@
             <div class="dialogSubContainerGroup">
                 <input type="text" id="searchedString">
                 <label for="searchedString"></label>
-                <input type="button" value="Search" id="searchingString" onclick="return mainPanelCollection.searchingString(event)">
+                <input type="button" value="Search" id="searchingString" onclick="return passInfoForSearch();">
+                <script type="text/javascript">
+                    // TODO: searchingStringに必要な情報を渡す(冨ヶ原)
+                    const passInfoForSearch = () => {
+                        const searchedLayers = []; // チェックが入ったレイヤーの名前を格納する
+                        let searchedString = document.getElementById("searchedString").value.toLowerCase();
+                        const searchHighlightColor = document.getElementById("searchHighlightColor").value;
+                        const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemContainer > input"));
+
+                        if (typeof searchedString !== "string" || checkboxItems.length === 0 ||
+                        checkboxItems.every(checkboxItem => checkboxItem.checked === false)) {
+                            return false;
+                        } else if (!searchedString) {
+                            searchedString = null; // 空文字で検索した場合はnullを格納して前回の検索結果をリセットする
+                        }
+
+                        for (const checkboxItem of checkboxItems) {
+                            if (checkboxItem.checked && checkboxItem.type === "checkbox") {
+                                searchedLayers.push(checkboxItem.value);
+                            }
+                        }
+
+                        mainPanelCollection.searchingString(searchedLayers, searchedString, searchHighlightColor);
+                    };
+                </script>
             </div>
         </div>
       </div>
