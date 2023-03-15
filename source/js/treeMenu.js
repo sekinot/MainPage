@@ -32,6 +32,8 @@ function getObjType (obj, branch) {
 
     if (obj instanceof HuTime.TLineLayer)
         return "tlineLayer";
+    if (obj instanceof HuTime.MaskLayer)
+        return "maskLayer";
     if (obj instanceof HuTime.RecordLayerBase)
         return "chartLayer";    // TLine以外のRecordLayerBase
     if (obj instanceof HuTime.TickScaleLayer)
@@ -78,6 +80,7 @@ function getObjType (obj, branch) {
 
 // ツリーの項目を追加
 function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
+    if (!hutimeObj) return;
     // targetElement: 追加する先のli要素
     // hutimeObj: HuTimeオブジェクト (PanelCollection, Panel, Layer, Recordset)
 
@@ -93,6 +96,8 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
 
         tlineLayer: {
             iconSrc: "img/tlineLayer.png", iconAlt: "TLine Layer", menuType: "TLineLayer"},
+        maskLayer: {
+            iconSrc: "img/tlineLayer.png", iconAlt: "Mask Layer", menuType: "MaskLayer"},
         chartLayer: {
             iconSrc: "img/chartLayer.png", iconAlt: "Chart Layer", menuType: "ChartLayer"},
         scaleLayer: {
@@ -209,7 +214,7 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
         while (parentBranch) {
             if (parentBranch.objType === "Recordset")
                 recordset = parentBranch.hutimeObject;
-            if (parentBranch.objType === "ChartLayer" || parentBranch.objType === "TLineLayer") {
+            if (parentBranch.objType === "ChartLayer" || parentBranch.objType === "TLineLayer" || parentBranch.objType === "MaskLayer") {
                 layer = parentBranch.hutimeObject;
                 break;
             }
@@ -259,6 +264,15 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
                 hutimeObj instanceof HuTime.TLineRecordset && !hutimeObj.recordSettings.tSetting) {
                 childObj.push(hutimeObj._tBeginDataSetting);
                 childObj.push(hutimeObj._tEndDataSetting);
+            } else if (hutimeObj instanceof HuTime.MaskRecordset) {
+                childObj.push(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNamePBegin, "tBBegin"));
+                childObj.push(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNameRBegin, "tBEnd"));
+                childObj.push(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNameREnd, "tEBegin"));
+                childObj.push(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNamePEnd, "tEEnd"));
             }
             else {
                 childObj.push(new HuTime.RecordDataSetting(
@@ -268,6 +282,7 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
             }
             break;
         case "tlineLayer":
+        case "maskLayer":
         case "chartLayer":
             childObj = hutimeObj.recordsets;
             break;
@@ -389,6 +404,7 @@ function getRecordDataItemIcon (item, recordset, layer) {
     canvas.width = 24;
     canvas.title = "Record Data Item";
     switch (layer.constructor.name) {
+        case "MaskLayer":
         case "TLineLayer":
             drawIconPeriod(canvas, recordset.rangeStyle, layer);
             drawIconLabel(canvas, recordset.labelStyle);
