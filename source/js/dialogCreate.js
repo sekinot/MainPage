@@ -429,6 +429,8 @@ function dCrCreate (ev) {  // Layer生成
 
     // 既存のパネルにレイヤを追加する場合
     if (document.getElementById("dialogCreate").hutimeObject) {
+        // TODO: 追加時にTitleに入力された値がレイヤの名前となるよう追加(冨ヶ原)
+        dataLayer.name = title;
         let panel = document.getElementById("dialogCreate").hutimeObject;
         panel.appendLayer(dataLayer);
         addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer,
