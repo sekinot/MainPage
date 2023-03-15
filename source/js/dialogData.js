@@ -456,9 +456,12 @@ function dRDOpen (ev) {
     body.appendChild(createDataRow("Begin", getDateValue(
         ev.records[0].record.tRange.pBegin,
         ev.records[0].record.tRange.rBegin)));
+    // body.appendChild(createDataRow("End", getDateValue(
+    //     ev.records[0].record.tRange.pEnd,
+    //     ev.records[0].record.tRange.rEnd)));// TODO: TRangeのcreateFromBeginEnd関数ではEndのほうはr, pの順となっているので入れ替えた（林）
     body.appendChild(createDataRow("End", getDateValue(
-        ev.records[0].record.tRange.pEnd,
-        ev.records[0].record.tRange.rEnd)));
+        ev.records[0].record.tRange.rEnd,
+        ev.records[0].record.tRange.pEnd)));
     function getDateValue(date1, date2) {
     if (Math.abs(date2 - date1) <= 1)
         return jdToISO(date1, 1);

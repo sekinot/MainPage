@@ -157,10 +157,26 @@ function dCrSelectItemRole (ev, role) {    // 項目の役割を選択
             document.getElementById("dCrItemRoleMenu").querySelector("li[value='from/to']").
                 style.display = "none";
             break;
+        case "afrom":
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='afrom']").
+                style.display = "none";
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='from/to']").
+                style.display = "none";
+            break;
+        case "ato":
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='ato']").
+                style.display = "none";
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='from/to']").
+                style.display = "none";
+            break;
         case "from/to":
             document.getElementById("dCrItemRoleMenu").querySelector("li[value='from']").
                 style.display = "none";
             document.getElementById("dCrItemRoleMenu").querySelector("li[value='to']").
+                style.display = "none";
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='afrom']").
+                style.display = "none";
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='ato']").
                 style.display = "none";
             document.getElementById("dCrItemRoleMenu").querySelector("li[value='from/to']").
                 style.display = "none";
@@ -319,7 +335,7 @@ function dCrCreate (ev) {  // Layer生成
     }
 
     // item設定
-    let from, to, label;
+    let from, to, afrom, ato, label;
     let values = [];
     let others = [];
     let itemName;
@@ -336,6 +352,12 @@ function dCrCreate (ev) {  // Layer生成
                 break;
             case "to":
                 to = icons[i].closest("tr").querySelector("td.itemName div").innerText;
+                break;
+            case "afrom":
+                afrom = icons[i].closest("tr").querySelector("td.itemName div").innerText;
+                break;
+            case "ato":
+                ato = icons[i].closest("tr").querySelector("td.itemName div").innerText;
                 break;
             case "value":
                 values.push(icons[i].closest("tr").querySelector("td.itemName div").innerText);
@@ -371,7 +393,7 @@ function dCrCreate (ev) {  // Layer生成
             // ohtersは仮のものとして使用。将来的にはダイアログにグループわけに用いるアイテムに指定されたヘッダ名を使用?(冨ヶ原)
             rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource, null, null, others[0]);
     else if (dCrLayerType === "Mask")
-        rs = new HuTime.MaskRecordset(source, from, to, calendarOfSource, null, others[0]);
+        rs = new HuTime.MaskRecordset(source, afrom, from, to, ato, calendarOfSource, null, others[0]);
     else
         if (calendarOfSource === "1.1")
             rs = new HuTime.ChartRecordset(source, from, to, values[0],

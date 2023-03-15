@@ -247,12 +247,12 @@ div.itemRoleMenu {
 div.itemRoleMenu ul {
     margin: 0;
     padding: 0;
-    width: 100px;
+    width: 200px;
     position: absolute;
     white-space: normal;
 }
 div.itemRoleMenu li {
-    width: 100px;
+    width: 200px;
     height: 16px;
     list-style-type: none;
     position: relative;
