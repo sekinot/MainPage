@@ -1805,31 +1805,29 @@
         <div class="dialogSubContainer">
             <div class="dialogContainerLabel" style="float:left;">Search for:</div>
             <div class="dialogSubContainerGroup">
-                <input type="text" id="searchedString">
-                <label for="searchedString"></label>
+                <input type="text" id="searchedStrings">
+                <label for="searchedStrings"></label>
                 <input type="button" value="Search" id="searchingString" onclick="return passInfoForSearch();">
                 <script type="text/javascript">
                     // TODO: searchingStringに必要な情報を渡す(冨ヶ原)
                     const passInfoForSearch = () => {
-                        const searchedLayers = []; // チェックが入ったレイヤーの名前を格納する
-                        let searchedString = document.getElementById("searchedString").value.toLowerCase();
+                        const checkedLayersNames = [];
+                        const searchedStrings = document.getElementById("searchedStrings").value.trim();
                         const searchHighlightColor = document.getElementById("searchHighlightColor").value;
                         const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemContainer > input"));
 
-                        if (typeof searchedString !== "string" || checkboxItems.length === 0 ||
+                        if (typeof searchedStrings !== "string" || checkboxItems.length === 0 ||
                         checkboxItems.every(checkboxItem => checkboxItem.checked === false)) {
                             return false;
-                        } else if (!searchedString) {
-                            searchedString = null; // 空文字で検索した場合はnullを格納して前回の検索結果をリセットする
                         }
 
                         for (const checkboxItem of checkboxItems) {
                             if (checkboxItem.checked && checkboxItem.type === "checkbox") {
-                                searchedLayers.push(checkboxItem.value);
+                                checkedLayersNames.push(checkboxItem.value);
                             }
                         }
 
-                        mainPanelCollection.searchingString(searchedLayers, searchedString, searchHighlightColor);
+                        mainPanelCollection.searchingString(checkedLayersNames, searchedStrings, searchHighlightColor);
                     };
                 </script>
             </div>
