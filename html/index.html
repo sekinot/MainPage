@@ -125,15 +125,15 @@
 
                         const searchedLayersNames = mainPanelCollection.createSearchedLayersNames();
 
-                        for (const searchedLayerName of searchedLayersNames) {
+                        for (const key in searchedLayersNames) {
                             const checkbox = document.createElement("input");
                             checkbox.type = "checkbox";
-                            checkbox.id = searchedLayerName;
-                            checkbox.value = searchedLayerName;
+                            checkbox.id = key;
+                            checkbox.value = searchedLayersNames[key];
 
                             const label = document.createElement("label");
-                            label.htmlFor = searchedLayerName;
-                            label.appendChild(document.createTextNode(searchedLayerName));
+                            label.htmlFor = key;
+                            label.appendChild(document.createTextNode(searchedLayersNames[key]));
 
                             const checkboxItemContainer = document.createElement("div");
                             checkboxItemContainer.className = "checkboxItemContainer";
@@ -142,7 +142,6 @@
                             checkboxItemContainer.appendChild(checkbox);
                             checkboxItemContainer.appendChild(label);
                         }
-
                     };
                 </script>
             </ul>
@@ -1811,23 +1810,22 @@
                 <script type="text/javascript">
                     // TODO: searchingStringに必要な情報を渡す(冨ヶ原)
                     const passInfoForSearch = () => {
-                        const checkedLayersNames = [];
-                        const searchedStrings = document.getElementById("searchedStrings").value.trim();
+                        const checkedLayersIds = [];
+                        const search = new HuTime.Search(document.getElementById("searchedStrings").value.trim());
                         const searchHighlightColor = document.getElementById("searchHighlightColor").value;
                         const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemContainer > input"));
 
-                        if (typeof searchedStrings !== "string" || checkboxItems.length === 0 ||
-                        checkboxItems.every(checkboxItem => checkboxItem.checked === false)) {
+                        if (checkboxItems.length === 0 || checkboxItems.every(checkboxItem => checkboxItem.checked === false)) {
                             return false;
                         }
 
                         for (const checkboxItem of checkboxItems) {
                             if (checkboxItem.checked && checkboxItem.type === "checkbox") {
-                                checkedLayersNames.push(checkboxItem.value);
+                                checkedLayersIds.push(checkboxItem.id);
                             }
                         }
 
-                        mainPanelCollection.searchingString(checkedLayersNames, searchedStrings, searchHighlightColor);
+                        mainPanelCollection.searchingString(checkedLayersIds, search.calledBySearchingString.bind(search), new HuTime.FigureStyle(searchHighlightColor));
                     };
                 </script>
             </div>
