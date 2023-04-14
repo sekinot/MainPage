@@ -144,6 +144,7 @@
                         }
                     };
                 </script>
+                <li onclick="showDialog('dialogSearchNum');" onmouseover="return createCheckboxOfNumber();">Number</li>
             </ul>
         </li>
 
@@ -1833,5 +1834,116 @@
       </div>
     </div>
   </div>
+    <div id="dialogSearchNum" class="dialog" style="block-size: fit-content; left: 200px; top: 100px;">
+        <div class="dialogTitle">
+            <span>Search Number</span>
+            <span class="dialogCloseButton"></span>
+        </div>
+        <div class="dialogBody">
+            <div class="dialogContainer">
+                <div class="dialogSubContainer">
+                    <div class="dialogContainerLabel" style="float:left;">Which layer(s):</div>
+                    <div class="dialogSubContainerGroup">
+                        <div id="checkboxContainerOfNumber"></div>
+                    </div>
+                </div>
+                <div class="dialogSubContainer" style="margin-top: 6px; margin-bottom: 6px;">
+                    <div class="dialogContainerLabel" style="float:left;">Highlight color:</div>
+                    <div class="dialogSubContainerGroup">
+                        <input type="color" id="searchHighlightColorOfNumber" value="#ff00ff" style="height: 20px;">
+                        <label for="searchHighlightColor"></label>
+                    </div>
+                </div>
+                <div class="dialogSubContainer">
+                    <div class="dialogContainerLabel" style="float:left;">Search for:</div>
+                    <div class="dialogSubContainerGroup">
+                        <input type="text" id="searchedGte">greater than or equal to<br>
+                        <input type="text" id="searchedLte">less than or equal to<br>
+                        <input type="button" value="Search" onclick="return passInfoForSearchOfNum();">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        const createCheckboxOfNumber = () => {
+            const checkboxContainer = document.getElementById("checkboxContainerOfNumber");
+
+            while (checkboxContainer.firstChild) {
+                checkboxContainer.removeChild(checkboxContainer.firstChild);
+            }
+
+            const searchedLayersNames = mainPanelCollection.createSearchedLayersNames();
+
+            for (const key in searchedLayersNames) {
+                const checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.id = key;
+                checkbox.value = searchedLayersNames[key];
+
+                const label = document.createElement("label");
+                label.htmlFor = key;
+                label.appendChild(document.createTextNode(searchedLayersNames[key]));
+
+                const checkboxItemContainer = document.createElement("div");
+                checkboxItemContainer.className = "checkboxItemContainer";
+
+                checkboxContainer.appendChild(checkboxItemContainer);
+                checkboxItemContainer.appendChild(checkbox);
+                checkboxItemContainer.appendChild(label);
+            }
+
+        };
+
+        const passInfoForSearchOfNum = () => {
+
+            console.log("作成中");
+
+            // TODO:検索処理が確定したら、以下の処理のコメント解除とソースコードの修正(強口)
+            // const checkedLayersIds = [];
+            // let searchedGte = null;
+            // let searchedLte = null;
+
+            // const searchedGteStr = document.getElementById("searchedGte").value.trim();
+            // const searchedLteStr = document.getElementById("searchedLte").value.trim();
+            // const searchHighlightColor = document.getElementById("searchHighlightColorOfNumber").value;
+            // const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemContainer > input"));
+
+            // // 全て空欄の場合は終了
+            // if ((!searchedGteStr || searchedGteStr == null) && (!searchedLteStr || searchedLteStr == null)) {
+            //     return false;
+            // }
+
+            // // 空欄でない、数値である場合は、数値変換
+            // if (searchedGteStr) {
+            //     if (searchedGteStr.match(/^([0-9][0-9]*|((0|[1-9][0-9])\.[0-9]+))$/)) {
+            //         searchedGte = Number.parseFloat(searchedGteStr);
+            //     // 数値でない場合は、終了
+            //     } else {
+            //         return false;
+            //     }
+            // }
+            // if (searchedLteStr) {
+            //     if (searchedLteStr.match(/^([0-9][0-9]*|((0|[1-9][0-9])\.[0-9]+))$/)) {
+            //         searchedLte = Number.parseFloat(searchedLteStr);
+            //     // 数値でない場合は、終了
+            //     } else {
+            //         return false;
+            //     }
+            // }
+
+            // if (checkboxItems.length === 0 || checkboxItems.every(checkboxItem => checkboxItem.checked === false)) {
+            //     return false;
+            // }
+
+            // for (const checkboxItem of checkboxItems) {
+            //     if (checkboxItem.checked && checkboxItem.type === "checkbox") {
+            //         checkedLayersIds.push(checkboxItem.id);
+            //     }
+            // }
+
+            // Container.jsの検索関数の呼び出し（強口）
+        };
+    </script>
 </body>
 </html>
