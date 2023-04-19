@@ -445,8 +445,8 @@ function dCrCreate (ev) {  // Layer生成
         default :
             return;
     }
-    dataLayer.name = sourceName + "_" + itemName
-    dataLayer.addEventListener("plotclick", dRDOpen);
+    dataLayer.name = sourceName + "_" + itemName;
+    dataLayer.addEventListener("plotclick", dRDOpen);//dRDOpenはdialogData.jsに定義されている。
     dataLayer.useRecodeDetail = true;
 
     // 既存のパネルにレイヤを追加する場合
