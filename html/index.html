@@ -86,22 +86,23 @@
 
         <!--li onclick="showDialog('dialogImportLocal')">Export</li-->
         <!-- ** Analysis Menu ** -->
-        <!--li title="Analysis Menu">Analysis
-          <ul>
-            <li>Search &raquo;
-              <ul>
-                <li>Text</li>
-                <li>Value</li>
-              </ul>
-            </li>
-            <li>Record Extraction &raquo;
-              <ul>
-                <li>Other</li>
-              </ul>
-            </li>
-            <li>Mask</li>
-          </ul>
-        </li-->
+        <li title="Analysis Menu">Analysis
+            <ul>
+                <!--li>Search &raquo;
+                    <ul>
+                    <li>Text</li>
+                    <li>Value</li>
+                    </ul>
+                </li-->
+                <li>Record Extraction &raquo;
+                    <ul>
+                    <!--li>Other</li-->
+                    <li onclick="showDialog('dialogRecordExtractionByMask');aggregateLayerForAnalysisByMask();">By Mask</li>
+                    </ul>
+                </li>
+                <!--li>Mask</li-->
+            </ul>
+        </li>
 
         <!-- ** About Menu ** -->
         <li>Help
@@ -1945,5 +1946,325 @@
             // Container.jsの検索関数の呼び出し（強口）
         };
     </script>
+
+
+
+
+
+
+
+
+<div id="dialogRecordExtractionByMask" class="dialog"  style="block-size: fit-content; left: 200px; top: 100px;">
+    <div class="dialogTitle">
+      Record Extraction By Mask</span><span class="dialogCloseButton"></span>
+    </div>
+    <div class="dialogBody">
+        <div class="dialogContainer">
+            <div class="dialogSubContainer">
+                <div class="dialogContainerLabel" style="float:left;">Which layer:</div>
+                    <div class="dialogSubContainerGroup">
+                        <div id="checkboxLayerForRecordExtractionByMask">no layers</div>
+                    </div>
+            </div>
+            <div class="dialogSubContainer">
+                <div class="dialogContainerLabel" style="float:left;">Which mask:</div>
+                    <div class="dialogSubContainerGroup">
+                        <div id="checkboxMaskForRecordExtractionByMask">no masks</div>
+                    </div>
+            </div>
+        </div>
+        <div class="dialogContainer">
+            <input id="extExtractButton" type="button" value="Extract" style="width:80px; height: 30px; float: right;" />
+            <input id="extCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
+            <script type="text/javascript">
+                document.getElementById("extExtractButton").addEventListener("click", extExtract);
+                document.getElementById("extCancelButton").addEventListener("click", function () {
+                    closeDialog("dialogRecordExtractionByMask");
+                });
+                function extExtract() {
+                    // layerForExt, maskForExt
+                    let elements = document.getElementsByName('layerForExt');
+                    let layerId = '';
+                    for (let i = 0; i < elements.length; i++){
+                        if (elements.item(i).checked){
+                            layerId = elements.item(i).value;
+                        }
+                    }
+                    elements = document.getElementsByName('maskForExt');
+                    let maskId = '';
+                    for (let i = 0; i < elements.length; i++){
+                        if (elements.item(i).checked){
+                            maskId = elements.item(i).value;
+                        }
+                    }
+                    let layer = null;
+                    let mask = null;
+                    const panels =  mainPanelCollection.contents;
+                    for (const panelsKey in panels) {
+                        if (!panels[panelsKey].visible)
+                            continue;
+                        const ls = panels[panelsKey].contents;
+                        for (const layersKey in ls) {
+                            const l = ls[layersKey];
+                            if (!(l.visible) || !(l instanceof HuTime.RecordLayerBase)) {
+                                continue;
+                            }
+                            if (l instanceof HuTime.MaskLayer) {
+                                if (l.id === maskId) {
+                                    mask = l;
+                                }
+                            } else {
+                                if (l.id === layerId) {
+                                    layer = l;
+                                }
+                            }
+                        }
+                    }
+                    let copiedLayerRecords = [];
+                    const lrecordsets = layer.recordsets;
+                    for (const recordset of lrecordsets) {
+                        for (const record of recordset.records) {
+                            copiedLayerRecords.push(record);
+                        }
+                        // copiedLayerRecords = copiedLayerRecords.concat(recordset.records);
+                    }
+                    let newRecordsets = null;
+                    let newRecords = [];
+                    const mrecordsets = mask.recordsets;
+                    for (const mrecordset of mrecordsets) {
+                        for (const mrecord of mrecordset.records) {
+                            for (const pos in copiedLayerRecords) {
+                                const lrecord = copiedLayerRecords[pos];
+                                if (newRecords.indexOf(lrecord) === -1) {
+                                    if (newRecordsets === null) {
+                                        const clone = Object.assign(Object.create(Object.getPrototypeOf(lrecordsets[0])), lrecordsets[0]);
+                                        newRecordsets = clone;
+                                        newRecordsets.records = [];
+                                    }
+                                    // recordの時間範囲にlrecordがある場合に抽出
+                                    const ms = mrecord.tRange.pBegin;
+                                    const me = mrecord.tRange.pEnd;
+                                    let ls = null;
+                                    let le = null;
+                                    if (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer || layer instanceof HuTime.PlotChartLayer) {
+                                        ls = lrecord.tRange.centralValue;
+                                        le = lrecord.tRange.centralValue;
+                                    } else {
+                                        ls = lrecord.tRange.pBegin;
+                                        le = lrecord.tRange.pEnd;
+                                    }
+                                    // console.log(ms + "<=" +  ls + "<=" +  le + "<=" +  me + " == " +   + (ms <= ls && le <= me));
+                                    if (ms <= ls && le <= me) {
+                                        newRecords.push(lrecord);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    let x = newRecords.length;
+                    newRecordsets.records = newRecords;
+                    addNewLayer(newRecordsets, layer, "new layer from extracted by mask");
+                    closeDialog("dialogRecordExtractionByMask");
+                }
+
+                function newLayerForm(layer, rs) {
+                    let dataLayer = null;
+                    let layerMarginTop = 0;
+                    if (layer instanceof HuTime.TLineLayer) {
+                        dataLayer = new HuTime.TLineLayer(rs, null, layerMarginTop, null);
+                    } else if (layer instanceof HuTime.LineChartLayer) {
+                        dataLayer = new HuTime.LineChartLayer(rs, null, layerMarginTop, null);
+                    } else if (layer instanceof HuTime.BarChartLayer) {
+                        rs.plotWidthType = 1;
+                            dataLayer = new HuTime.BarChartLayer(rs, null, layerMarginTop, null);
+                    } else if (layer instanceof HuTime.PlotChartLayer) {
+                        dataLayer = new HuTime.PlotChartLayer(rs, null, layerMarginTop, null);
+                    } else if (layer instanceof HuTime.MaskLayer) {
+                        dataLayer = new HuTime.MaskLayer(rs, null, layerMarginTop, null);
+                    }
+                    return dataLayer;
+                }
+
+                function addNewLayer(rs, layer, title) {
+                        // Data Layer
+                    let dataLayer = newLayerForm(layer, rs);
+                    if (dataLayer === null) {
+                        lo.error("layer is null. not supported layer: " + layer);
+                        return;
+                    }
+                    // let layerMarginTop = 0;
+                    /*
+                    if (document.getElementById("dialogCreate").hutimeObject)
+                        layerMarginTop = 0;
+                    else
+                        layerMarginTop = PanelTitleVBreadth;
+                    // */
+
+                    // switch (dCrLayerType) {
+                    //     case "TLine" :
+                    //         dataLayer = new HuTime.TLineLayer(rs, null, layerMarginTop, null);
+                    //         break;
+                    //     case "LineChart" :
+                    //         dataLayer = new HuTime.LineChartLayer(rs, null, layerMarginTop, null);
+                    //         break;
+                    //     case "BarChart" :
+                    //         // plotWidthType: 可能範囲（pBegin - pEnd）で描画（rBegin - rEndだと、from/toが同じ日付だと逆転する）
+                    //         rs.plotWidthType = 1;
+                    //         dataLayer = new HuTime.BarChartLayer(rs, null, layerMarginTop, null);
+                    //         break;
+                    //     case "PlotChart" :
+                    //         dataLayer = new HuTime.PlotChartLayer(rs, null, layerMarginTop, null);
+                    //         break;
+                    //     case "Mask" :
+                    //         dataLayer = new HuTime.MaskLayer(rs, null, layerMarginTop, null);
+                    //         break;
+                    //     default :
+                    //         return;
+                    // }
+                    dataLayer.name = title;
+                    // dataLayer.addEventListener("plotclick", dRDOpen);
+                    dataLayer.useRecodeDetail = true;
+
+                    // 既存のパネルにレイヤを追加する場合
+                    // if (document.getElementById("dialogCreate").hutimeObject) {
+                    //     // TODO: 追加時にTitleに入力された値がレイヤの名前となるよう追加(冨ヶ原)
+                    //     dataLayer.name = title;
+                    //     let panel = document.getElementById("dialogCreate").hutimeObject;
+                    //     panel.appendLayer(dataLayer);
+                    //     addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer,
+                    //         // undefined, undefined, undefined,
+                    //         // TODO: 追加時にTitleに入力された値がツリーに表示されるよう変更(冨ヶ原)
+                    //         title, undefined, undefined,
+                    //         document.getElementById("dialogCreate").treeBranch.querySelector("li"));
+                    //     panel.redraw();
+                    //     dCrClose();
+                    //     return;
+                    // }
+
+                    // Panel
+                    let panel = null;
+                    if (dCrLayerType === "Mask") {
+                        panel = new HuTime.TilePanel(dataLayer.vBreadth);
+                        panel.resizable = false;
+                    } else {
+                        panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
+                    }
+                    panel.name = title;
+                    panel.appendLayer(dataLayer);
+
+                    // Title Layer
+                    //panel.appendLayer(dCrCreateTitleLayer(title));
+
+                    // 最初のパネルの場合は、時間範囲を取得してから描画
+                    function isInitRedraw () {
+                        // 最初のPanel追加の場合、既存がBlankのみの場合は、Dataの時間範囲でredraw
+                        let result = true;
+                        hutime.panelCollections[0].panels.forEach(panel => {
+                            panel.layers.forEach(layer => {
+                                if (layer.constructor !== HuTime.Layer &&
+                                    layer.constructor !== HuTime.PanelBorder &&
+                                    layer.constructor !== HuTime.CalendarScaleLayer)
+                                    result = false;     // 時間範囲を持ったデータLayerがあるとき
+                            });
+                        });
+                        return result;
+                    }
+                    if (isInitRedraw()) {
+                        rs.onloadend = function () {
+                            let tMin, tMax;
+                            tMin = Number.POSITIVE_INFINITY;
+                            tMax = Number.NEGATIVE_INFINITY;
+                            for (let i = 0; i < rs.records.length; ++i) {
+                                if (rs.records[i].tRange.pBegin < tMin)
+                                    tMin = rs.records[i].tRange.pBegin;
+                                if (rs.records[i].tRange.pEnd > tMax)
+                                    tMax = rs.records[i].tRange.pEnd;
+                            }
+                            hutime.panelCollections[0].appendPanel(panel);
+                            hutime.redraw(tMin, tMax);
+                            rs.onloadend = HuTime.RecordBase.prototype.onloadend;// 元に戻す
+                        };
+                    } else {
+                        hutime.panelCollections[0].appendPanel(panel);
+                        hutime.redraw();
+                    }
+                    addBranch(document.getElementById("treeRoot"), panel);
+                }
+
+                function aggregateLayerForAnalysisByMask() {
+                    // alert('aggregateLayerForAnalysisByMask');
+                    const execButton = document.getElementById('extExtractButton');
+                    execButton.disabled = false;
+                    // reset checkboxes
+                    const checkboxContainerForLayers = document.getElementById("checkboxLayerForRecordExtractionByMask");
+                    while (checkboxContainerForLayers.firstChild) {
+                        checkboxContainerForLayers.removeChild(checkboxContainerForLayers.firstChild);
+                    }
+                    const checkboxContainerForMasks = document.getElementById("checkboxMaskForRecordExtractionByMask");
+                    while (checkboxContainerForMasks.firstChild) {
+                        checkboxContainerForMasks.removeChild(checkboxContainerForMasks.firstChild);
+                    }
+
+                    // aggregate layers
+                    const layers = {};
+                    const masks = {};
+                    const panels =  mainPanelCollection.contents;
+                    for (const panelsKey in panels) {
+                        if (!panels[panelsKey].visible)
+                            continue;
+                        const ls = panels[panelsKey].contents;
+                        for (const layersKey in ls) {
+                            const l = ls[layersKey];
+                            if (!(l.visible) || !(l instanceof HuTime.RecordLayerBase)) {
+                                continue;
+                            }
+                            if (l instanceof HuTime.MaskLayer) {
+                                masks[l.id] = l.name;
+                            } else {
+                                layers[l.id] = l.name;
+                            }
+                        }
+                    }
+
+                    if (Object.keys(layers).length > 0) {
+                        for (const key in layers) {
+                            makeRadioForMaskExt(checkboxContainerForLayers, "layerForExt", key, layers[key]);
+                        }
+                    } else {
+                        checkboxContainerForLayers.textContent  = "no layers";
+                        execButton.disabled = true;
+                    }
+
+                    // make checkbox(radio button)
+                    if (Object.keys(masks).length > 0) {
+                        for (const key in masks) {
+                            makeRadioForMaskExt(checkboxContainerForMasks, "maskForExt", key, masks[key]);
+                        }
+                    } else {
+                        checkboxContainerForMasks.textContent  = "no masks";
+                        execButton.disabled = true;
+                    }
+                }
+                function makeRadioForMaskExt(elem, name, key, val) {
+                    const checkbox = document.createElement("input");
+                    checkbox.type = "radio";// 複数選択できたほうがよいと思うので最終的にはチェックボックスにする必要あり
+                    checkbox.name = name;
+                    checkbox.value = key;
+
+                    const label = document.createElement("label");
+                    label.htmlFor = key;
+                    label.appendChild(document.createTextNode(val));
+
+                    const checkboxItemContainer = document.createElement("div");
+                    checkboxItemContainer.className = "checkboxItemContainer";
+
+                    elem.appendChild(checkboxItemContainer);
+                    checkboxItemContainer.appendChild(checkbox);
+                    checkboxItemContainer.appendChild(label);
+                }
+            </script>
+          </div>
+    </div>
+</div>
 </body>
 </html>
