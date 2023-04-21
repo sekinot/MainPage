@@ -88,12 +88,12 @@
         <!-- ** Analysis Menu ** -->
         <li title="Analysis Menu">Analysis
             <ul>
-                <!--li>Search &raquo;
+                <li>Search &raquo;
                     <ul>
-                    <li>Text</li>
-                    <li>Value</li>
+                    <li onclick="showDialog('dialogSearchString');" onmouseover="return createCheckboxOfString();">Text</li>
+                    <li onclick="showDialog('dialogSearchNum');" onmouseover="return createCheckboxOfNumber();">Value</li>
                     </ul>
-                </li-->
+                </li>
                 <li>Record Extraction &raquo;
                     <ul>
                     <!--li>Other</li-->
@@ -112,42 +112,12 @@
         </li>
 
         <!-- ** Search ** -->
-        <li>Search
+        <!-- <li>Search
             <ul>
-                <li onclick="showDialog('dialogSearchString');" onmouseover="return createCheckbox();" >String</li>
-                <script type="text/javascript">
-                    // TODO: 文字列検索ダイアログにレイヤーのチェックボックスを生成(冨ヶ原)
-                    const createCheckbox = () => {
-                        const checkboxContainer = document.getElementById("checkboxContainer");
-
-                        while (checkboxContainer.firstChild) {
-                            checkboxContainer.removeChild(checkboxContainer.firstChild);
-                        }
-
-                        const searchedLayersNames = mainPanelCollection.createSearchedLayersNames();
-
-                        for (const key in searchedLayersNames) {
-                            const checkbox = document.createElement("input");
-                            checkbox.type = "checkbox";
-                            checkbox.id = key;
-                            checkbox.value = searchedLayersNames[key];
-
-                            const label = document.createElement("label");
-                            label.htmlFor = key;
-                            label.appendChild(document.createTextNode(searchedLayersNames[key]));
-
-                            const checkboxItemContainer = document.createElement("div");
-                            checkboxItemContainer.className = "checkboxItemContainer";
-
-                            checkboxContainer.appendChild(checkboxItemContainer);
-                            checkboxItemContainer.appendChild(checkbox);
-                            checkboxItemContainer.appendChild(label);
-                        }
-                    };
-                </script>
+                <li onclick="showDialog('dialogSearchString');" onmouseover="return createCheckboxOfString();" >String</li>
                 <li onclick="showDialog('dialogSearchNum');" onmouseover="return createCheckboxOfNumber();">Number</li>
             </ul>
-        </li>
+        </li> -->
 
       </ul>
     </div>
@@ -1786,14 +1756,14 @@
 </div>
 <div id="dialogSearchString" class="dialog"  style="block-size: fit-content; left: 200px; top: 100px;">
     <div class="dialogTitle">
-      Search String</span><span class="dialogCloseButton"></span>
+      Search Text</span><span class="dialogCloseButton"></span>
     </div>
     <div class="dialogBody">
       <div class="dialogContainer">
         <div class="dialogSubContainer">
             <div class="dialogContainerLabel" style="float:left;">Which layer(s):</div>
                 <div class="dialogSubContainerGroup">
-                    <div id="checkboxContainer"></div>
+                    <div id="checkboxContainerOfString"></div>
                 </div>
         </div>
         <div class="dialogSubContainer" style="margin-top: 6px; margin-bottom: 6px;">
@@ -1808,26 +1778,60 @@
             <div class="dialogSubContainerGroup">
                 <input type="text" id="searchedStrings">
                 <label for="searchedStrings"></label>
-                <input type="button" value="Search" id="searchingString" onclick="return passInfoForSearch();">
+                <input type="button" value="Search" id="search" onclick="return passInfoForSearchOfStr();">
                 <script type="text/javascript">
-                    // TODO: searchingStringに必要な情報を渡す(冨ヶ原)
-                    const passInfoForSearch = () => {
-                        const checkedLayersIds = [];
-                        const search = new HuTime.Search(document.getElementById("searchedStrings").value.trim());
-                        const searchHighlightColor = document.getElementById("searchHighlightColor").value;
-                        const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemContainer > input"));
+                    // TODO: 文字列検索ダイアログにレイヤーのチェックボックスを生成(冨ヶ原)
+                    const createCheckboxOfString = () => {
+                        const checkboxContainer = document.getElementById("checkboxContainerOfString");
 
-                        if (checkboxItems.length === 0 || checkboxItems.every(checkboxItem => checkboxItem.checked === false)) {
+                        while (checkboxContainer.firstChild) {
+                            checkboxContainer.removeChild(checkboxContainer.firstChild);
+                        }
+
+                        const searchedLayersNames = (() => {
+                            const searchedLayersNames = {};
+                            const panels = mainPanelCollection.contents.filter(panel => panel.visible);
+                            panels.forEach(panel => {
+                                const layers = panel.contents.filter(layer => layer.visible && layer instanceof HuTime.TLineLayer);
+                                layers.forEach(layer => searchedLayersNames[layer.id] = layer.name);
+                            });
+                            return searchedLayersNames;
+                        })();
+
+                        for (const key in searchedLayersNames) {
+                            const checkbox = document.createElement("input");
+                            checkbox.type = "checkbox";
+                            checkbox.id = key;
+                            checkbox.value = searchedLayersNames[key];
+                            checkbox.name = "searchedLayer";
+
+                            const label = document.createElement("label");
+                            label.htmlFor = key;
+                            label.appendChild(document.createTextNode(searchedLayersNames[key]));
+
+                            const checkboxItemForSearchStringContainer = document.createElement("div");
+                            checkboxItemForSearchStringContainer.className = "checkboxItemForSearchStringContainer";
+
+                            checkboxContainer.appendChild(checkboxItemForSearchStringContainer);
+                            checkboxItemForSearchStringContainer.appendChild(checkbox);
+                            checkboxItemForSearchStringContainer.appendChild(label);
+                        }
+                    };
+                    // TODO: searchに必要な情報を渡す(冨ヶ原)
+                    const passInfoForSearchOfStr = () => {
+                        const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemForSearchStringContainer > input[name=searchedLayer]:checked"));
+                        if (checkboxItems.length === 0)
                             return false;
-                        }
+                        const checkedLayersIds = checkboxItems.map(checkboxItem => checkboxItem.id);
+                        const search = new HuTime.Search(document.getElementById("searchedStrings").value.trim(), "co");    // labelitemに設定したカラムのみ、部分一致(co)、大文字小文字無視
+                        const searchHighlightColor = document.getElementById("searchHighlightColor").value;
 
-                        for (const checkboxItem of checkboxItems) {
-                            if (checkboxItem.checked && checkboxItem.type === "checkbox") {
-                                checkedLayersIds.push(checkboxItem.id);
-                            }
-                        }
-
-                        mainPanelCollection.searchingString(checkedLayersIds, search.calledBySearchingString.bind(search), new HuTime.FigureStyle(searchHighlightColor));
+                        const panels = mainPanelCollection.contents.filter(panel => panel.visible);
+                        panels.forEach(panel => {
+                            const layers = panel.contents.filter(layer => layer.visible && layer instanceof HuTime.TLineLayer);
+                            layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.searchFlag = true : layer.searchFlag = false);
+                        });
+                        mainPanelCollection.search(search.calledBySearchingString.bind(search), new HuTime.FigureStyle(searchHighlightColor));
                     };
                 </script>
             </div>
@@ -1837,7 +1841,7 @@
   </div>
     <div id="dialogSearchNum" class="dialog" style="block-size: fit-content; left: 200px; top: 100px;">
         <div class="dialogTitle">
-            <span>Search Number</span>
+            <span>Search Value</span>
             <span class="dialogCloseButton"></span>
         </div>
         <div class="dialogBody">
@@ -1874,76 +1878,92 @@
                 checkboxContainer.removeChild(checkboxContainer.firstChild);
             }
 
-            const searchedLayersNames = mainPanelCollection.createSearchedLayersNames();
+            const searchedLayersNames = (() => {
+                const searchedLayersNames = {};
+                const panels = mainPanelCollection.contents.filter(panel => panel.visible);
+                panels.forEach(panel => {
+                    const layers = panel.contents.filter(layer => layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer));
+                    layers.forEach(layer => searchedLayersNames[layer.id] = layer.name);
+                });
+                return searchedLayersNames;
+            })();
 
             for (const key in searchedLayersNames) {
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.id = key;
                 checkbox.value = searchedLayersNames[key];
+                checkbox.name = "searchedLayer";
 
                 const label = document.createElement("label");
                 label.htmlFor = key;
                 label.appendChild(document.createTextNode(searchedLayersNames[key]));
 
-                const checkboxItemContainer = document.createElement("div");
-                checkboxItemContainer.className = "checkboxItemContainer";
+                const checkboxItemForSearchNumberContainer = document.createElement("div");
+                checkboxItemForSearchNumberContainer.className = "checkboxItemForSearchNumberContainer";
 
-                checkboxContainer.appendChild(checkboxItemContainer);
-                checkboxItemContainer.appendChild(checkbox);
-                checkboxItemContainer.appendChild(label);
+                checkboxContainer.appendChild(checkboxItemForSearchNumberContainer);
+                checkboxItemForSearchNumberContainer.appendChild(checkbox);
+                checkboxItemForSearchNumberContainer.appendChild(label);
             }
 
         };
 
         const passInfoForSearchOfNum = () => {
+            const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemForSearchNumberContainer > input[name=searchedLayer]:checked"));
+            if (checkboxItems.length === 0)
+                return false;
+            const checkedLayersIds = checkboxItems.map(checkboxItem => checkboxItem.id);
+            let searchedGte = null;
+            let searchedLte = null;
+            let search = null;  // 検索の関数を格納(冨ヶ原)
 
-            console.log("作成中");
+            const searchedGteStr = document.getElementById("searchedGte").value.trim();
+            const searchedLteStr = document.getElementById("searchedLte").value.trim();
+            const searchHighlightColor = document.getElementById("searchHighlightColorOfNumber").value;
 
-            // TODO:検索処理が確定したら、以下の処理のコメント解除とソースコードの修正(強口)
-            // const checkedLayersIds = [];
-            // let searchedGte = null;
-            // let searchedLte = null;
-
-            // const searchedGteStr = document.getElementById("searchedGte").value.trim();
-            // const searchedLteStr = document.getElementById("searchedLte").value.trim();
-            // const searchHighlightColor = document.getElementById("searchHighlightColorOfNumber").value;
-            // const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemContainer > input"));
-
+            // TODO: 空文字で検索結果のリセットを行う為コメントアウトしています(冨ヶ原)
             // // 全て空欄の場合は終了
             // if ((!searchedGteStr || searchedGteStr == null) && (!searchedLteStr || searchedLteStr == null)) {
             //     return false;
             // }
 
-            // // 空欄でない、数値である場合は、数値変換
-            // if (searchedGteStr) {
-            //     if (searchedGteStr.match(/^([0-9][0-9]*|((0|[1-9][0-9])\.[0-9]+))$/)) {
-            //         searchedGte = Number.parseFloat(searchedGteStr);
-            //     // 数値でない場合は、終了
-            //     } else {
-            //         return false;
-            //     }
-            // }
-            // if (searchedLteStr) {
-            //     if (searchedLteStr.match(/^([0-9][0-9]*|((0|[1-9][0-9])\.[0-9]+))$/)) {
-            //         searchedLte = Number.parseFloat(searchedLteStr);
-            //     // 数値でない場合は、終了
-            //     } else {
-            //         return false;
-            //     }
-            // }
+            // 空欄でない、数値である場合は、数値変換
+            if (searchedGteStr) {
+                if (searchedGteStr.match(/^([0-9][0-9]*|((0|[1-9][0-9])\.[0-9]+))$/)) {
+                    searchedGte = Number.parseFloat(searchedGteStr);
+                // 数値でない場合は、終了
+                } else {
+                    return false;
+                }
+            }
+            if (searchedLteStr) {
+                if (searchedLteStr.match(/^([0-9][0-9]*|((0|[1-9][0-9])\.[0-9]+))$/)) {
+                    searchedLte = Number.parseFloat(searchedLteStr);
+                // 数値でない場合は、終了
+                } else {
+                    return false;
+                }
+            }
 
-            // if (checkboxItems.length === 0 || checkboxItems.every(checkboxItem => checkboxItem.checked === false)) {
-            //     return false;
-            // }
+            if (searchedGte && searchedLte) {
+                search = new HuTime.Search(searchedGte, "ge");
+                search.searchValues = searchedLte;
+                search.operators = "le";
+            } else if (searchedGte) {
+                search = new HuTime.Search(searchedGte, "ge");
+            } else {
+                search = new HuTime.Search(searchedLte, "le");
+            }
 
-            // for (const checkboxItem of checkboxItems) {
-            //     if (checkboxItem.checked && checkboxItem.type === "checkbox") {
-            //         checkedLayersIds.push(checkboxItem.id);
-            //     }
-            // }
+            const panels = mainPanelCollection.contents.filter(panel => panel.visible);
+            panels.forEach(panel => {
+                const layers = panel.contents.filter(layer => layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer));
+                layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.searchFlag = true : layer.searchFlag = false);
+            });
 
             // Container.jsの検索関数の呼び出し（強口）
+            mainPanelCollection.search(search.calledBySearchingNumber.bind(search), new HuTime.FigureStyle(searchHighlightColor));
         };
     </script>
 
