@@ -393,7 +393,7 @@ function dCrCreate (ev) {  // Layer生成
             // ohtersは仮のものとして使用。将来的にはダイアログにグループわけに用いるアイテムに指定されたヘッダ名を使用?(冨ヶ原)
             rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource, null, null, others[0]);
     else if (dCrLayerType === "Mask")
-        rs = new HuTime.MaskRecordset(source, afrom, from, to, ato, calendarOfSource, null, others[0]);
+        rs = new HuTime.MaskRecordset(source, afrom, from, to, ato, calendarOfSource, null);
     else
         if (calendarOfSource === "1.1")
             rs = new HuTime.ChartRecordset(source, from, to, values[0],
