@@ -1798,16 +1798,16 @@
                             return searchedLayersNames;
                         })();
 
-                        for (const key in searchedLayersNames) {
+                        Object.keys(searchedLayersNames).forEach(id => {
                             const checkbox = document.createElement("input");
                             checkbox.type = "checkbox";
-                            checkbox.id = key;
-                            checkbox.value = searchedLayersNames[key];
+                            checkbox.id = id;
+                            checkbox.value = searchedLayersNames[id];
                             checkbox.name = "searchedLayer";
 
                             const label = document.createElement("label");
-                            label.htmlFor = key;
-                            label.appendChild(document.createTextNode(searchedLayersNames[key]));
+                            label.htmlFor = id;
+                            label.appendChild(document.createTextNode(searchedLayersNames[id]));
 
                             const checkboxItemForSearchStringContainer = document.createElement("div");
                             checkboxItemForSearchStringContainer.className = "checkboxItemForSearchStringContainer";
@@ -1815,7 +1815,7 @@
                             checkboxContainer.appendChild(checkboxItemForSearchStringContainer);
                             checkboxItemForSearchStringContainer.appendChild(checkbox);
                             checkboxItemForSearchStringContainer.appendChild(label);
-                        }
+                        });
                     };
                     // TODO: searchに必要な情報を渡す(冨ヶ原)
                     const passInfoForSearchOfStr = () => {
@@ -1829,7 +1829,7 @@
                         const panels = mainPanelCollection.contents.filter(panel => panel.visible);
                         panels.forEach(panel => {
                             const layers = panel.contents.filter(layer => layer.visible && layer instanceof HuTime.TLineLayer);
-                            layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.searchFlag = true : layer.searchFlag = false);
+                            layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.isSearched = true : layer.isSearched = false);
                         });
                         mainPanelCollection.search(search.calledBySearchingString.bind(search), new HuTime.FigureStyle(searchHighlightColor));
                     };
@@ -1888,16 +1888,16 @@
                 return searchedLayersNames;
             })();
 
-            for (const key in searchedLayersNames) {
+            Object.keys(searchedLayersNames).forEach(id => {
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
-                checkbox.id = key;
-                checkbox.value = searchedLayersNames[key];
+                checkbox.id = id;
+                checkbox.value = searchedLayersNames[id];
                 checkbox.name = "searchedLayer";
 
                 const label = document.createElement("label");
-                label.htmlFor = key;
-                label.appendChild(document.createTextNode(searchedLayersNames[key]));
+                label.htmlFor = id;
+                label.appendChild(document.createTextNode(searchedLayersNames[id]));
 
                 const checkboxItemForSearchNumberContainer = document.createElement("div");
                 checkboxItemForSearchNumberContainer.className = "checkboxItemForSearchNumberContainer";
@@ -1905,8 +1905,7 @@
                 checkboxContainer.appendChild(checkboxItemForSearchNumberContainer);
                 checkboxItemForSearchNumberContainer.appendChild(checkbox);
                 checkboxItemForSearchNumberContainer.appendChild(label);
-            }
-
+            });
         };
 
         const passInfoForSearchOfNum = () => {
@@ -1959,7 +1958,7 @@
             const panels = mainPanelCollection.contents.filter(panel => panel.visible);
             panels.forEach(panel => {
                 const layers = panel.contents.filter(layer => layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer));
-                layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.searchFlag = true : layer.searchFlag = false);
+                layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.isSearched = true : layer.isSearched = false);
             });
 
             // Container.jsの検索関数の呼び出し（強口）
