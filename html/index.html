@@ -1971,7 +1971,6 @@
                 layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.isSearched = true : layer.isSearched = false);
             });
 
-            // Container.jsの検索関数の呼び出し（強口）
             mainPanelCollection.search(search.calledBySearchingNumber.bind(search), new HuTime.FigureStyle(searchHighlightColor));
         };
     </script>
