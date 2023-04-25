@@ -410,7 +410,8 @@ function dCrCreate (ev) {  // Layer生成
             new HuTime.FigureStyle(plotColor[i % 5], plotColor[i % 5], 0),
             new HuTime.FigureStyle(null, "black", 1), i);
     }
-    for (let i = 0; i < others.length; ++i) {       // Otherの処理
+    // for (let i = 0; i < others.length; ++i) {       // Otherの処理
+    for (let i = 1; i < others.length; ++i) {       // othersの一つ目の要素をグループ分けの元の情報としたのでindexは1から
         rs.recordSettings.appendDataSetting(new HuTime.RecordDataSetting(others[i]));
     }
 

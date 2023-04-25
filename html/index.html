@@ -1828,7 +1828,12 @@
 
                         const panels = mainPanelCollection.contents.filter(panel => panel.visible);
                         panels.forEach(panel => {
-                            const layers = panel.contents.filter(layer => layer.visible && layer instanceof HuTime.TLineLayer);
+                            // const layers = panel.contents.filter(layer => layer.visible && layer instanceof HuTime.TLineLayer);
+                            const layers = panel.contents.map(layer => {
+                            layer.isSearched = false;
+                            if (layer.visible && layer.visible && layer instanceof HuTime.TLineLayer)
+                                return layer;
+                        }).filter(layer => layer);
                             layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.isSearched = true : layer.isSearched = false);
                         });
                         mainPanelCollection.search(search.calledBySearchingString.bind(search), new HuTime.FigureStyle(searchHighlightColor));
@@ -1957,7 +1962,12 @@
 
             const panels = mainPanelCollection.contents.filter(panel => panel.visible);
             panels.forEach(panel => {
-                const layers = panel.contents.filter(layer => layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer));
+                // const layers = panel.contents.filter(layer => layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer));
+                const layers = panel.contents.map(layer => {
+                    layer.isSearched = false;
+                    if (layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer))
+                        return layer;
+                }).filter(layer => layer);
                 layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.isSearched = true : layer.isSearched = false);
             });
 
