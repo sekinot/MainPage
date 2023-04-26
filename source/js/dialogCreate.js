@@ -389,8 +389,7 @@ function dCrCreate (ev) {  // Layer生成
             rs = new HuTime.TLineRecordset(source, from, to, label);
         else
             // rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource);
-            // TODO: othersの一つ目の要素をグループ分けの元の情報として渡す(冨ヶ原)
-            // ohtersは仮のものとして使用。将来的にはダイアログにグループわけに用いるアイテムに指定されたヘッダ名を使用?(冨ヶ原)
+            // TODO: othersの一つ目の要素をグループ分けの元の情報として渡す
             rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource, null, null, others[0]);
     else if (dCrLayerType === "Mask")
         rs = new HuTime.MaskRecordset(source, afrom, from, to, ato, calendarOfSource, null);
@@ -401,7 +400,7 @@ function dCrCreate (ev) {  // Layer生成
         else
             // rs = new HuTime.CalendarChartRecordset(source, from, to, values[0], calendarOfSource,
             //     new HuTime.FigureStyle(plotColor[0], plotColor[0], 0));
-            // TODO: othersの一つ目の要素をグループ分けの元の情報として渡す(冨ヶ原)
+            // TODO: othersの一つ目の要素をグループ分けの元の情報として渡す
             rs = new HuTime.CalendarChartRecordset(source, from, to, values[0], calendarOfSource, new HuTime.FigureStyle(plotColor[0], plotColor[0], 0), null, others[0]);
     rs.name = sourceName;
     for (let i = 1; i < values.length; ++i) {   // values[0]はコンストラクタで指定済み
@@ -452,13 +451,13 @@ function dCrCreate (ev) {  // Layer生成
 
     // 既存のパネルにレイヤを追加する場合
     if (document.getElementById("dialogCreate").hutimeObject) {
-        // TODO: 追加時にTitleに入力された値がレイヤの名前となるよう追加(冨ヶ原)
+        // TODO: 追加時にTitleに入力された値がレイヤの名前となるよう追加
         dataLayer.name = title;
         let panel = document.getElementById("dialogCreate").hutimeObject;
         panel.appendLayer(dataLayer);
         addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer,
             // undefined, undefined, undefined,
-            // TODO: 追加時にTitleに入力された値がツリーに表示されるよう変更(冨ヶ原)
+            // TODO: 追加時にTitleに入力された値がツリーに表示されるよう変更
             title, undefined, undefined,
             document.getElementById("dialogCreate").treeBranch.querySelector("li"));
         panel.redraw();

@@ -1780,7 +1780,7 @@
                 <label for="searchedStrings"></label>
                 <input type="button" value="Search" id="search" onclick="return passInfoForSearchOfStr();">
                 <script type="text/javascript">
-                    // TODO: 文字列検索ダイアログにレイヤーのチェックボックスを生成(冨ヶ原)
+                    // TODO: 文字列検索ダイアログにレイヤーのチェックボックスを生成
                     const createCheckboxOfString = () => {
                         const checkboxContainer = document.getElementById("checkboxContainerOfString");
 
@@ -1817,7 +1817,7 @@
                             checkboxItemForSearchStringContainer.appendChild(label);
                         });
                     };
-                    // TODO: searchに必要な情報を渡す(冨ヶ原)
+                    // TODO: searchに必要な情報を渡す
                     const passInfoForSearchOfStr = () => {
                         const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemForSearchStringContainer > input[name=searchedLayer]:checked"));
                         if (checkboxItems.length === 0)
@@ -1920,13 +1920,13 @@
             const checkedLayersIds = checkboxItems.map(checkboxItem => checkboxItem.id);
             let searchedGte = null;
             let searchedLte = null;
-            let search = null;  // 検索の関数を格納(冨ヶ原)
+            let search = null;  // 検索の関数を格納
 
             const searchedGteStr = document.getElementById("searchedGte").value.trim();
             const searchedLteStr = document.getElementById("searchedLte").value.trim();
             const searchHighlightColor = document.getElementById("searchHighlightColorOfNumber").value;
 
-            // TODO: 空文字で検索結果のリセットを行う為コメントアウトしています(冨ヶ原)
+            // TODO: 空文字での検索により検索結果をリセットする為コメントアウト
             // // 全て空欄の場合は終了
             // if ((!searchedGteStr || searchedGteStr == null) && (!searchedLteStr || searchedLteStr == null)) {
             //     return false;
@@ -2155,13 +2155,13 @@
 
                     // 既存のパネルにレイヤを追加する場合
                     // if (document.getElementById("dialogCreate").hutimeObject) {
-                    //     // TODO: 追加時にTitleに入力された値がレイヤの名前となるよう追加(冨ヶ原)
+                    //     // TODO: 追加時にTitleに入力された値がレイヤの名前となるよう追加
                     //     dataLayer.name = title;
                     //     let panel = document.getElementById("dialogCreate").hutimeObject;
                     //     panel.appendLayer(dataLayer);
                     //     addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer,
                     //         // undefined, undefined, undefined,
-                    //         // TODO: 追加時にTitleに入力された値がツリーに表示されるよう変更(冨ヶ原)
+                    //         // TODO: 追加時にTitleに入力された値がツリーに表示されるよう変更
                     //         title, undefined, undefined,
                     //         document.getElementById("dialogCreate").treeBranch.querySelector("li"));
                     //     panel.redraw();
