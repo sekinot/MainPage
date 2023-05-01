@@ -1823,12 +1823,13 @@
                         if (checkboxItems.length === 0)
                             return false;
                         const checkedLayersIds = checkboxItems.map(checkboxItem => checkboxItem.id);
-                        const search = new HuTime.Search(document.getElementById("searchedStrings").value.trim(), "co");    // labelitemに設定したカラムのみ、部分一致(co)、大文字小文字無視
+                        let searchedStrings = document.getElementById("searchedStrings").value.trim();
+                        searchedStrings = searchedStrings ? searchedStrings.split(/[\s|　]/) : [null];
+                        const search = new HuTime.Search(searchedStrings, ["co"]);    // labelitemに設定したカラムのみ、部分一致(co)、大文字小文字無視
                         const searchHighlightColor = document.getElementById("searchHighlightColor").value;
 
                         const panels = mainPanelCollection.contents.filter(panel => panel.visible);
                         panels.forEach(panel => {
-                            // const layers = panel.contents.filter(layer => layer.visible && layer instanceof HuTime.TLineLayer);
                             const layers = panel.contents.map(layer => {
                             layer.isSearched = false;
                             if (layer.visible && layer.visible && layer instanceof HuTime.TLineLayer)
@@ -1836,7 +1837,7 @@
                         }).filter(layer => layer);
                             layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.isSearched = true : layer.isSearched = false);
                         });
-                        mainPanelCollection.search(search.calledBySearchingString.bind(search), new HuTime.FigureStyle(searchHighlightColor));
+                        mainPanelCollection.search(search.searchString.bind(search), new HuTime.FigureStyle(searchHighlightColor));
                     };
                 </script>
             </div>
@@ -1926,11 +1927,10 @@
             const searchedLteStr = document.getElementById("searchedLte").value.trim();
             const searchHighlightColor = document.getElementById("searchHighlightColorOfNumber").value;
 
-            // TODO: 空文字での検索により検索結果をリセットする為コメントアウト
-            // // 全て空欄の場合は終了
-            // if ((!searchedGteStr || searchedGteStr == null) && (!searchedLteStr || searchedLteStr == null)) {
-            //     return false;
-            // }
+            // 全て空欄の場合は検索結果をリセット
+            if ((!searchedGteStr || searchedGteStr == null) && (!searchedLteStr || searchedLteStr == null)) {
+                search = new HuTime.Search([null]);
+            }
 
             // 空欄でない、数値である場合は、数値変換
             if (searchedGteStr) {
@@ -1951,18 +1951,15 @@
             }
 
             if (searchedGte && searchedLte) {
-                search = new HuTime.Search(searchedGte, "ge");
-                search.searchValues = searchedLte;
-                search.operators = "le";
+                search = new HuTime.Search([searchedGte, searchedLte], ["ge", "le"]);
             } else if (searchedGte) {
-                search = new HuTime.Search(searchedGte, "ge");
-            } else {
-                search = new HuTime.Search(searchedLte, "le");
+                search = new HuTime.Search([searchedGte], ["ge"]);
+            } else if (searchedLte) {
+                search = new HuTime.Search([searchedLte], ["le"]);
             }
 
             const panels = mainPanelCollection.contents.filter(panel => panel.visible);
             panels.forEach(panel => {
-                // const layers = panel.contents.filter(layer => layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer));
                 const layers = panel.contents.map(layer => {
                     layer.isSearched = false;
                     if (layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer))
@@ -1971,7 +1968,7 @@
                 layers.forEach(layer => checkedLayersIds.includes(layer.id) ? layer.isSearched = true : layer.isSearched = false);
             });
 
-            mainPanelCollection.search(search.calledBySearchingNumber.bind(search), new HuTime.FigureStyle(searchHighlightColor));
+            mainPanelCollection.search(search.searchNumber.bind(search), new HuTime.FigureStyle(searchHighlightColor));
         };
     </script>
 
