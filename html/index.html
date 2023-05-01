@@ -2009,6 +2009,11 @@
                 document.getElementById("extCancelButton").addEventListener("click", function () {
                     closeDialog("dialogRecordExtractionByMask");
                 });
+
+                /**
+                 * マスク（期間）レイヤによるデータ抽出実行メソッド
+                 * @method
+                 */
                 function extExtract() {
                     // layerForExt, maskForExt
                     let elements = document.getElementsByName('layerForExt');
@@ -2048,6 +2053,7 @@
                             }
                         }
                     }
+                    // レイヤーのレコードのコピーを作成する
                     let copiedLayerRecords = [];
                     const lrecordsets = layer.recordsets;
                     for (const recordset of lrecordsets) {
@@ -2056,18 +2062,18 @@
                         }
                         // copiedLayerRecords = copiedLayerRecords.concat(recordset.records);
                     }
-                    let newRecordsets = null;
-                    let newRecords = [];
+                    let newRecordsets = null;// 抽出したレコードを格納するレコードをセット
+                    let newRecords = [];// 抽出したレコードを格納する配列
                     const mrecordsets = mask.recordsets;
                     for (const mrecordset of mrecordsets) {
                         for (const mrecord of mrecordset.records) {
                             for (const pos in copiedLayerRecords) {
                                 const lrecord = copiedLayerRecords[pos];
                                 if (newRecords.indexOf(lrecord) === -1) {
-                                    if (newRecordsets === null) {
+                                    if (newRecordsets === null) {// 抽出したレコードを格納するレコードをセットを初期化する
                                         const clone = Object.assign(Object.create(Object.getPrototypeOf(lrecordsets[0])), lrecordsets[0]);
-                                        newRecordsets = clone;
-                                        newRecordsets.records = [];
+                                        newRecordsets = clone;// レコード以外の情報は元のレコードセットから引き継ぐため、比較対象のレコードセットのコピーを作成して格納する
+                                        newRecordsets.records = [];// レコードは空の配列で初期化する（後でnewRecordsで上書きするのでこの処理か、newRecordsが必要ない。）
                                     }
                                     // recordの時間範囲にlrecordがある場合に抽出
                                     const ms = mrecord.tRange.pBegin;
@@ -2083,18 +2089,23 @@
                                     }
                                     // console.log(ms + "<=" +  ls + "<=" +  le + "<=" +  me + " == " +   + (ms <= ls && le <= me));
                                     if (ms <= ls && le <= me) {
-                                        newRecords.push(lrecord);
+                                        newRecords.push(lrecord);// ここでnewRecordsets.recordsにpushすればnewRecordsは必要ない
                                     }
                                 }
                             }
                         }
                     }
-                    let x = newRecords.length;
                     newRecordsets.records = newRecords;
                     addNewLayer(newRecordsets, layer, "new layer from extracted by mask");
                     closeDialog("dialogRecordExtractionByMask");
                 }
 
+                /**
+                 * 既存のレイヤーと新しいレコードセットから新しいレイヤーを作成する
+                 * @method
+                 * @param {HuTime.RecordLayerBase} 既存のレイヤー
+                 * @param {HuTime.RecordsetBase[]} 新しいレコードセット
+                 */
                 function newLayerForm(layer, rs) {
                     let dataLayer = null;
                     let layerMarginTop = 0;
@@ -2113,61 +2124,22 @@
                     return dataLayer;
                 }
 
+                /**
+                 * 指定された既存のレイヤー、新しいレコードセット、タイトルから新しいレイヤーを追加する
+                 * @method
+                 * @param {HuTime.RecordLayerBase} 既存のレイヤー
+                 * @param {HuTime.RecordsetBase[]} 新しいレコードセット
+                 * @param {string} タイトル
+                 */
                 function addNewLayer(rs, layer, title) {
-                        // Data Layer
+                    // Data Layer
                     let dataLayer = newLayerForm(layer, rs);
                     if (dataLayer === null) {
                         lo.error("layer is null. not supported layer: " + layer);
                         return;
                     }
-                    // let layerMarginTop = 0;
-                    /*
-                    if (document.getElementById("dialogCreate").hutimeObject)
-                        layerMarginTop = 0;
-                    else
-                        layerMarginTop = PanelTitleVBreadth;
-                    // */
-
-                    // switch (dCrLayerType) {
-                    //     case "TLine" :
-                    //         dataLayer = new HuTime.TLineLayer(rs, null, layerMarginTop, null);
-                    //         break;
-                    //     case "LineChart" :
-                    //         dataLayer = new HuTime.LineChartLayer(rs, null, layerMarginTop, null);
-                    //         break;
-                    //     case "BarChart" :
-                    //         // plotWidthType: 可能範囲（pBegin - pEnd）で描画（rBegin - rEndだと、from/toが同じ日付だと逆転する）
-                    //         rs.plotWidthType = 1;
-                    //         dataLayer = new HuTime.BarChartLayer(rs, null, layerMarginTop, null);
-                    //         break;
-                    //     case "PlotChart" :
-                    //         dataLayer = new HuTime.PlotChartLayer(rs, null, layerMarginTop, null);
-                    //         break;
-                    //     case "Mask" :
-                    //         dataLayer = new HuTime.MaskLayer(rs, null, layerMarginTop, null);
-                    //         break;
-                    //     default :
-                    //         return;
-                    // }
                     dataLayer.name = title;
-                    // dataLayer.addEventListener("plotclick", dRDOpen);
                     dataLayer.useRecodeDetail = true;
-
-                    // 既存のパネルにレイヤを追加する場合
-                    // if (document.getElementById("dialogCreate").hutimeObject) {
-                    //     // TODO: 追加時にTitleに入力された値がレイヤの名前となるよう追加
-                    //     dataLayer.name = title;
-                    //     let panel = document.getElementById("dialogCreate").hutimeObject;
-                    //     panel.appendLayer(dataLayer);
-                    //     addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer,
-                    //         // undefined, undefined, undefined,
-                    //         // TODO: 追加時にTitleに入力された値がツリーに表示されるよう変更
-                    //         title, undefined, undefined,
-                    //         document.getElementById("dialogCreate").treeBranch.querySelector("li"));
-                    //     panel.redraw();
-                    //     dCrClose();
-                    //     return;
-                    // }
 
                     // Panel
                     let panel = null;
@@ -2179,9 +2151,6 @@
                     }
                     panel.name = title;
                     panel.appendLayer(dataLayer);
-
-                    // Title Layer
-                    //panel.appendLayer(dCrCreateTitleLayer(title));
 
                     // 最初のパネルの場合は、時間範囲を取得してから描画
                     function isInitRedraw () {
@@ -2219,6 +2188,10 @@
                     addBranch(document.getElementById("treeRoot"), panel);
                 }
 
+                /**
+                 * 選択可能なレイヤーとマスクを集めて一覧にする
+                 * @method
+                 */
                 function aggregateLayerForAnalysisByMask() {
                     // alert('aggregateLayerForAnalysisByMask');
                     const execButton = document.getElementById('extExtractButton');
