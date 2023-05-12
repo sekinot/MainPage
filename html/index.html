@@ -1837,7 +1837,7 @@
                         }).filter(layer => layer);
                             layers.forEach(layer => layer.isSearched = checkedLayersIds.includes(layer.id));
                         });
-                        mainPanelCollection.search(search.searchString.bind(search), new HuTime.FigureStyle(searchHighlightColor));
+                        mainPanelCollection.search(search.searchString.bind(search), new HuTime.FigureStyle(searchHighlightColor, searchHighlightColor));
                     };
                 </script>
             </div>
