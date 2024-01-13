@@ -8,7 +8,9 @@
 
   <!--script type="text/javascript" src="http://web.hutime.org/js/HuTime.min.js"></script-->
   <!--script type="text/javascript" src="js/HuTime.js"></script-->
-  <script type="text/javascript" src="../../debugMainPage.js"></script>
+  <!--script type="text/javascript" src="../../debugMainPage.js"></script-->
+  <!-- the upper line was replaced with the below line by Sekino on 20240113 -->
+  <script type="text/javascript" src="../../debug.js"></script>
 
   <!--script type="text/javascript" src="js/MainPage.js"></script-->
   <script type="text/javascript" src="../debug/debug.js"></script>
@@ -63,7 +65,6 @@
               <ul>
                 <li onclick="dCrOpen('TLine')">Time Line</li>
                 <li onclick="dCrOpen('Chart')">Chart</li>
-                <li onclick="dCrOpen('Mask')">Mask</li>
                 <li onclick="dCrSCOpen('panel')">Time Scale</li>
               </ul>
             </li>
@@ -86,23 +87,22 @@
 
         <!--li onclick="showDialog('dialogImportLocal')">Export</li-->
         <!-- ** Analysis Menu ** -->
-        <li title="Analysis Menu">Analysis
-            <ul>
-                <li>Search &raquo;
-                    <ul>
-                    <li onclick="showDialog('dialogSearchString');" onmouseover="return createCheckboxOfString();">Text</li>
-                    <li onclick="showDialog('dialogSearchNum');" onmouseover="return createCheckboxOfNumber();">Value</li>
-                    </ul>
-                </li>
-                <li>Record Extraction &raquo;
-                    <ul>
-                    <!--li>Other</li-->
-                    <li onclick="showDialog('dialogRecordExtractionByMask');aggregateLayerForAnalysisByMask();">By Mask</li>
-                    </ul>
-                </li>
-                <!--li>Mask</li-->
-            </ul>
-        </li>
+        <!--li title="Analysis Menu">Analysis
+          <ul>
+            <li>Search &raquo;
+              <ul>
+                <li>Text</li>
+                <li>Value</li>
+              </ul>
+            </li>
+            <li>Record Extraction &raquo;
+              <ul>
+                <li>Other</li>
+              </ul>
+            </li>
+            <li>Mask</li>
+          </ul>
+        </li-->
 
         <!-- ** About Menu ** -->
         <li>Help
@@ -110,14 +110,6 @@
             <li onclick="showDialog('dialogAbout');">About</li>
           </ul>
         </li>
-
-        <!-- ** Search ** -->
-        <!-- <li>Search
-            <ul>
-                <li onclick="showDialog('dialogSearchString');" onmouseover="return createCheckboxOfString();" >String</li>
-                <li onclick="showDialog('dialogSearchNum');" onmouseover="return createCheckboxOfNumber();">Number</li>
-            </ul>
-        </li> -->
 
       </ul>
     </div>
@@ -140,7 +132,6 @@
               <li onclick="dCrBLOpen()">Blank Panel</li>
               <li onclick="dCrOpen('TLine')">Panel with Time Line</li>
               <li onclick="dCrOpen('Chart')">Panel with Chart</li>
-              <li onclick="dCrOpen('Mask')">Panel with Mask</li>
               <li onclick="dCrSCOpen('panel')">Panel with Calendar</li>
             </ul>
           </li>
@@ -160,7 +151,6 @@
             <ul>
               <li id="tCMNewTlineLayer">Time Line Layer</li>
               <li id="tCMNewChartLayer">Chart Layer</li>
-              <li id="tCMNewMaskLayer">Mask Layer</li>
               <li id="tCMNewBlankLayer">Blank Layer</li>
               <li onclick="dCrSCOpen('layer')">Calendar Scale Layer</li>
               <script type="text/javascript">
@@ -170,10 +160,6 @@
                       document.getElementById("treeContextMenu").treeBranch); });
                 document.getElementById("tCMNewChartLayer").addEventListener("click",
                   function () { dCrOpen("Chart",
-                      document.getElementById("treeContextMenu").treeBranch.hutimeObject,
-                      document.getElementById("treeContextMenu").treeBranch); });
-                document.getElementById("tCMNewMaskLayer").addEventListener("click",
-                  function () { dCrOpen("Mask",
                       document.getElementById("treeContextMenu").treeBranch.hutimeObject,
                       document.getElementById("treeContextMenu").treeBranch); });
                 document.getElementById("tCMNewBlankLayer").addEventListener("click",
@@ -934,9 +920,6 @@
         <div id="dCrTypeTLine" class="dialogSubContainer" style="line-height: 20px; display: none;">
           Time Line
         </div>
-        <div id="dCrTypeMask" class="dialogSubContainer" style="line-height: 20px; display: none;">
-          Mask
-        </div>
         <div id="dCrTypeChart" class="dialogSubContainer" style="display: block;">
           <select id="dCrLayerType" style="width: 120px;">
             <option value="LineChart">Line Chart</option>
@@ -1045,7 +1028,6 @@
             <option value="2.1">Gregorian Calendar</option>
             <option value="1.1">Julian date (real number)</option>
             <option value="1001.1">Japanese Calendar</option>
-            <option value="">N/A</option>
           </select>
         </div>
 
@@ -1055,10 +1037,8 @@
     <!-- Context menu to select role of an item -->
     <div id="dCrItemRoleMenu" class="itemRoleMenu">
       <ul>
-        <li value="afrom">Ambiguous Time (from~)</li>
         <li value="from">Time (from)</li>
         <li value="to">Time (to)</li>
-        <li value="ato">Ambiguous Time (~to)</li>
         <li value="from/to">Time (from/to)</li>
         <li id="dCrdCrItemRoleValue" value="value">Value</li>
         <li value="other">Other</li>
@@ -1348,6 +1328,11 @@
       let parentHeight = parseFloat(document.getElementById("dialogDataList").style.height);
       document.getElementById("dialogDataListContent").style.height =
           (parentHeight - 80).toString() + "px";
+
+      document.getElementById("statusBar").innerText = "たゆん";
+
+
+
   }
 </script>
 <!-- End of Data List Dialog -->
@@ -1753,516 +1738,6 @@
 
     </div>
   </div>
-</div>
-<div id="dialogSearchString" class="dialog"  style="block-size: fit-content; left: 200px; top: 100px;">
-    <div class="dialogTitle">
-      Search Text</span><span class="dialogCloseButton"></span>
-    </div>
-    <div class="dialogBody">
-      <div class="dialogContainer">
-        <div class="dialogSubContainer">
-            <div class="dialogContainerLabel" style="float:left;">Which layer(s):</div>
-                <div class="dialogSubContainerGroup">
-                    <div id="checkboxContainerOfString"></div>
-                </div>
-        </div>
-        <div class="dialogSubContainer" style="margin-top: 6px; margin-bottom: 6px;">
-            <div class="dialogContainerLabel" style="float:left;">Highlight color:</div>
-            <div class="dialogSubContainerGroup">
-                <input type="color" id="searchHighlightColor" value="#ff00ff" style="height: 20px;">
-                <label for="searchHighlightColor"></label>
-            </div>
-        </div>
-        <div class="dialogSubContainer">
-            <div class="dialogContainerLabel" style="float:left;">Search for:</div>
-            <div class="dialogSubContainerGroup">
-                <input type="text" id="searchedStrings">
-                <label for="searchedStrings"></label>
-                <input type="button" value="Search" id="search" onclick="return passInfoForSearchOfStr();">
-                <script type="text/javascript">
-                    // 文字列検索ダイアログにレイヤーのチェックボックスを生成
-                    const createCheckboxOfString = () => {
-                        const checkboxContainer = document.getElementById("checkboxContainerOfString");
-
-                        while (checkboxContainer.firstChild) {
-                            checkboxContainer.removeChild(checkboxContainer.firstChild);
-                        }
-
-                        const searchedLayersNames = (() => {
-                            const searchedLayersNames = {};
-                            const panels = mainPanelCollection.contents.filter(panel => panel.visible);
-                            panels.forEach(panel => {
-                                const layers = panel.contents.filter(layer => layer.visible && layer instanceof HuTime.TLineLayer);
-                                layers.forEach(layer => searchedLayersNames[layer.id] = layer.name);
-                            });
-                            return searchedLayersNames;
-                        })();
-
-                        Object.keys(searchedLayersNames).forEach(id => {
-                            const checkbox = document.createElement("input");
-                            checkbox.type = "checkbox";
-                            checkbox.id = id;
-                            checkbox.value = searchedLayersNames[id];
-                            checkbox.name = "searchedLayer";
-
-                            const label = document.createElement("label");
-                            label.htmlFor = id;
-                            label.appendChild(document.createTextNode(searchedLayersNames[id]));
-
-                            const checkboxItemForSearchStringContainer = document.createElement("div");
-                            checkboxItemForSearchStringContainer.className = "checkboxItemForSearchStringContainer";
-
-                            checkboxContainer.appendChild(checkboxItemForSearchStringContainer);
-                            checkboxItemForSearchStringContainer.appendChild(checkbox);
-                            checkboxItemForSearchStringContainer.appendChild(label);
-                        });
-                    };
-                    // searchに必要な情報を渡す
-                    const passInfoForSearchOfStr = () => {
-                        const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemForSearchStringContainer > input[name=searchedLayer]:checked"));
-                        if (checkboxItems.length === 0)
-                            return false;
-                        const checkedLayersIds = checkboxItems.map(checkboxItem => checkboxItem.id);
-                        let searchedStrings = document.getElementById("searchedStrings").value.trim();
-                        searchedStrings = searchedStrings ? searchedStrings.split(/[\s|　]/) : [null];
-                        const search = new HuTime.Search(searchedStrings, ["co"]);    // labelitemに設定したカラムのみ、部分一致(co)、大文字小文字無視
-                        const searchHighlightColor = document.getElementById("searchHighlightColor").value;
-
-                        const panels = mainPanelCollection.contents.filter(panel => panel.visible);
-                        panels.forEach(panel => {
-                            const layers = panel.contents.map(layer => {
-                            layer.isSearched = false;
-                            if (layer.visible && layer instanceof HuTime.TLineLayer)
-                                return layer;
-                        }).filter(layer => layer);
-                            layers.forEach(layer => layer.isSearched = checkedLayersIds.includes(layer.id));
-                        });
-                        mainPanelCollection.search(search.searchString.bind(search), new HuTime.FigureStyle(searchHighlightColor, searchHighlightColor));
-                    };
-                </script>
-            </div>
-        </div>
-      </div>
-    </div>
-  </div>
-    <div id="dialogSearchNum" class="dialog" style="block-size: fit-content; left: 200px; top: 100px;">
-        <div class="dialogTitle">
-            <span>Search Value</span>
-            <span class="dialogCloseButton"></span>
-        </div>
-        <div class="dialogBody">
-            <div class="dialogContainer">
-                <div class="dialogSubContainer">
-                    <div class="dialogContainerLabel" style="float:left;">Which layer(s):</div>
-                    <div class="dialogSubContainerGroup">
-                        <div id="checkboxContainerOfNumber"></div>
-                    </div>
-                </div>
-                <div class="dialogSubContainer" style="margin-top: 6px; margin-bottom: 6px;">
-                    <div class="dialogContainerLabel" style="float:left;">Highlight color:</div>
-                    <div class="dialogSubContainerGroup">
-                        <input type="color" id="searchHighlightColorOfNumber" value="#ff00ff" style="height: 20px;">
-                        <label for="searchHighlightColor"></label>
-                    </div>
-                </div>
-                <div class="dialogSubContainer">
-                    <div class="dialogContainerLabel" style="float:left;">Search for:</div>
-                    <div class="dialogSubContainerGroup">
-                        <input type="text" id="searchedGte">greater than or equal to<br>
-                        <input type="text" id="searchedLte">less than or equal to<br>
-                        <input type="button" value="Search" onclick="return passInfoForSearchOfNum();">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script type="text/javascript">
-        const createCheckboxOfNumber = () => {
-            const checkboxContainer = document.getElementById("checkboxContainerOfNumber");
-
-            while (checkboxContainer.firstChild) {
-                checkboxContainer.removeChild(checkboxContainer.firstChild);
-            }
-
-            const searchedLayersNames = (() => {
-                const searchedLayersNames = {};
-                const panels = mainPanelCollection.contents.filter(panel => panel.visible);
-                panels.forEach(panel => {
-                    const layers = panel.contents.filter(layer => layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer));
-                    layers.forEach(layer => searchedLayersNames[layer.id] = layer.name);
-                });
-                return searchedLayersNames;
-            })();
-
-            Object.keys(searchedLayersNames).forEach(id => {
-                const checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                checkbox.id = id;
-                checkbox.value = searchedLayersNames[id];
-                checkbox.name = "searchedLayer";
-
-                const label = document.createElement("label");
-                label.htmlFor = id;
-                label.appendChild(document.createTextNode(searchedLayersNames[id]));
-
-                const checkboxItemForSearchNumberContainer = document.createElement("div");
-                checkboxItemForSearchNumberContainer.className = "checkboxItemForSearchNumberContainer";
-
-                checkboxContainer.appendChild(checkboxItemForSearchNumberContainer);
-                checkboxItemForSearchNumberContainer.appendChild(checkbox);
-                checkboxItemForSearchNumberContainer.appendChild(label);
-            });
-        };
-
-        const passInfoForSearchOfNum = () => {
-            const checkboxItems = Object.values(document.querySelectorAll(".checkboxItemForSearchNumberContainer > input[name=searchedLayer]:checked"));
-            if (checkboxItems.length === 0)
-                return false;
-            const checkedLayersIds = checkboxItems.map(checkboxItem => checkboxItem.id);
-            let searchedGte = null;
-            let searchedLte = null;
-            let search = null;  // 検索の関数を格納
-
-            const searchedGteStr = document.getElementById("searchedGte").value.trim();
-            const searchedLteStr = document.getElementById("searchedLte").value.trim();
-            const searchHighlightColor = document.getElementById("searchHighlightColorOfNumber").value;
-
-            // 全て空欄の場合は検索結果をリセット
-            if ((!searchedGteStr || searchedGteStr == null) && (!searchedLteStr || searchedLteStr == null)) {
-                search = new HuTime.Search([null]);
-            }
-
-            // 空欄でない、数値である場合は、数値変換
-            if (searchedGteStr) {
-                if (searchedGteStr.match(/^([0-9][0-9]*|((0|[1-9][0-9])\.[0-9]+))$/)) {
-                    searchedGte = Number.parseFloat(searchedGteStr);
-                // 数値でない場合は、終了
-                } else {
-                    return false;
-                }
-            }
-            if (searchedLteStr) {
-                if (searchedLteStr.match(/^([0-9][0-9]*|((0|[1-9][0-9])\.[0-9]+))$/)) {
-                    searchedLte = Number.parseFloat(searchedLteStr);
-                // 数値でない場合は、終了
-                } else {
-                    return false;
-                }
-            }
-
-            if (searchedGte && searchedLte) {
-                search = new HuTime.Search([searchedGte, searchedLte], ["ge", "le"]);
-            } else if (searchedGte) {
-                search = new HuTime.Search([searchedGte], ["ge"]);
-            } else if (searchedLte) {
-                search = new HuTime.Search([searchedLte], ["le"]);
-            }
-
-            const panels = mainPanelCollection.contents.filter(panel => panel.visible);
-            panels.forEach(panel => {
-                const layers = panel.contents.map(layer => {
-                    layer.isSearched = false;
-                    if (layer.visible && (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer))
-                        return layer;
-                }).filter(layer => layer);
-                layers.forEach(layer => layer.isSearched = checkedLayersIds.includes(layer.id));
-            });
-
-            mainPanelCollection.search(search.searchNumber.bind(search), new HuTime.FigureStyle(searchHighlightColor));
-        };
-    </script>
-
-
-
-
-
-
-
-
-<div id="dialogRecordExtractionByMask" class="dialog"  style="block-size: fit-content; left: 200px; top: 100px;">
-    <div class="dialogTitle">
-      Record Extraction By Mask</span><span class="dialogCloseButton"></span>
-    </div>
-    <div class="dialogBody">
-        <div class="dialogContainer">
-            <div class="dialogSubContainer">
-                <div class="dialogContainerLabel" style="float:left;">Which layer:</div>
-                    <div class="dialogSubContainerGroup">
-                        <div id="checkboxLayerForRecordExtractionByMask">no layers</div>
-                    </div>
-            </div>
-            <div class="dialogSubContainer">
-                <div class="dialogContainerLabel" style="float:left;">Which mask:</div>
-                    <div class="dialogSubContainerGroup">
-                        <div id="checkboxMaskForRecordExtractionByMask">no masks</div>
-                    </div>
-            </div>
-        </div>
-        <div class="dialogContainer">
-            <input id="extExtractButton" type="button" value="Extract" style="width:80px; height: 30px; float: right;" />
-            <input id="extCancelButton" type="button" value="Cancel" style="width:80px; height: 30px; margin-right: 10px; float: right;" />
-            <script type="text/javascript">
-                document.getElementById("extExtractButton").addEventListener("click", extExtract);
-                document.getElementById("extCancelButton").addEventListener("click", function () {
-                    closeDialog("dialogRecordExtractionByMask");
-                });
-
-                /**
-                 * マスク（期間）レイヤによるデータ抽出実行メソッド
-                 * @method
-                 */
-                function extExtract() {
-                    // layerForExt, maskForExt
-                    let elements = document.getElementsByName('layerForExt');
-                    let layerId = '';
-                    for (let i = 0; i < elements.length; i++){
-                        if (elements.item(i).checked){
-                            layerId = elements.item(i).value;
-                        }
-                    }
-                    elements = document.getElementsByName('maskForExt');
-                    let maskId = '';
-                    for (let i = 0; i < elements.length; i++){
-                        if (elements.item(i).checked){
-                            maskId = elements.item(i).value;
-                        }
-                    }
-                    let layer = null;
-                    let mask = null;
-                    const panels =  mainPanelCollection.contents;
-                    for (const panelsKey in panels) {
-                        if (!panels[panelsKey].visible)
-                            continue;
-                        const ls = panels[panelsKey].contents;
-                        for (const layersKey in ls) {
-                            const l = ls[layersKey];
-                            if (!(l.visible) || !(l instanceof HuTime.RecordLayerBase)) {
-                                continue;
-                            }
-                            if (l instanceof HuTime.MaskLayer) {
-                                if (l.id === maskId) {
-                                    mask = l;
-                                }
-                            } else {
-                                if (l.id === layerId) {
-                                    layer = l;
-                                }
-                            }
-                        }
-                    }
-                    // レイヤーのレコードのコピーを作成する
-                    let copiedLayerRecords = [];
-                    const lrecordsets = layer.recordsets;
-                    for (const recordset of lrecordsets) {
-                        for (const record of recordset.records) {
-                            copiedLayerRecords.push(record);
-                        }
-                        // copiedLayerRecords = copiedLayerRecords.concat(recordset.records);
-                    }
-                    let newRecordsets = null;// 抽出したレコードを格納するレコードをセット
-                    let newRecords = [];// 抽出したレコードを格納する配列
-                    const mrecordsets = mask.recordsets;
-                    for (const mrecordset of mrecordsets) {
-                        for (const mrecord of mrecordset.records) {
-                            for (const pos in copiedLayerRecords) {
-                                const lrecord = copiedLayerRecords[pos];
-                                if (newRecords.indexOf(lrecord) === -1) {
-                                    if (newRecordsets === null) {// 抽出したレコードを格納するレコードをセットを初期化する
-                                        const clone = Object.assign(Object.create(Object.getPrototypeOf(lrecordsets[0])), lrecordsets[0]);
-                                        newRecordsets = clone;// レコード以外の情報は元のレコードセットから引き継ぐため、比較対象のレコードセットのコピーを作成して格納する
-                                        newRecordsets.records = [];// レコードは空の配列で初期化する（後でnewRecordsで上書きするのでこの処理か、newRecordsが必要ない。）
-                                    }
-                                    // recordの時間範囲にlrecordがある場合に抽出
-                                    const ms = mrecord.tRange.pBegin;
-                                    const me = mrecord.tRange.pEnd;
-                                    let ls = null;
-                                    let le = null;
-                                    if (layer instanceof HuTime.LineChartLayer || layer instanceof HuTime.BarChartLayer || layer instanceof HuTime.PlotChartLayer) {
-                                        ls = lrecord.tRange.centralValue;
-                                        le = lrecord.tRange.centralValue;
-                                    } else {
-                                        ls = lrecord.tRange.pBegin;
-                                        le = lrecord.tRange.pEnd;
-                                    }
-                                    // console.log(ms + "<=" +  ls + "<=" +  le + "<=" +  me + " == " +   + (ms <= ls && le <= me));
-                                    if (ms <= ls && le <= me) {
-                                        newRecords.push(lrecord);// ここでnewRecordsets.recordsにpushすればnewRecordsは必要ない
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    newRecordsets.records = newRecords;
-                    addNewLayer(newRecordsets, layer, "new layer from extracted by mask");
-                    closeDialog("dialogRecordExtractionByMask");
-                }
-
-                /**
-                 * 既存のレイヤーと新しいレコードセットから新しいレイヤーを作成する
-                 * @method
-                 * @param {HuTime.RecordLayerBase} 既存のレイヤー
-                 * @param {HuTime.RecordsetBase[]} 新しいレコードセット
-                 */
-                function newLayerForm(layer, rs) {
-                    let dataLayer = null;
-                    let layerMarginTop = 0;
-                    if (layer instanceof HuTime.TLineLayer) {
-                        dataLayer = new HuTime.TLineLayer(rs, null, layerMarginTop, null);
-                    } else if (layer instanceof HuTime.LineChartLayer) {
-                        dataLayer = new HuTime.LineChartLayer(rs, null, layerMarginTop, null);
-                    } else if (layer instanceof HuTime.BarChartLayer) {
-                        rs.plotWidthType = 1;
-                            dataLayer = new HuTime.BarChartLayer(rs, null, layerMarginTop, null);
-                    } else if (layer instanceof HuTime.PlotChartLayer) {
-                        dataLayer = new HuTime.PlotChartLayer(rs, null, layerMarginTop, null);
-                    } else if (layer instanceof HuTime.MaskLayer) {
-                        dataLayer = new HuTime.MaskLayer(rs, null, layerMarginTop, null);
-                    }
-                    return dataLayer;
-                }
-
-                /**
-                 * 指定された既存のレイヤー、新しいレコードセット、タイトルから新しいレイヤーを追加する
-                 * @method
-                 * @param {HuTime.RecordLayerBase} 既存のレイヤー
-                 * @param {HuTime.RecordsetBase[]} 新しいレコードセット
-                 * @param {string} タイトル
-                 */
-                function addNewLayer(rs, layer, title) {
-                    // Data Layer
-                    let dataLayer = newLayerForm(layer, rs);
-                    if (dataLayer === null) {
-                        lo.error("layer is null. not supported layer: " + layer);
-                        return;
-                    }
-                    dataLayer.name = title;
-                    dataLayer.useRecodeDetail = true;
-
-                    // Panel
-                    let panel = null;
-                    if (dCrLayerType === "Mask") {
-                        panel = new HuTime.TilePanel(dataLayer.vBreadth);
-                        panel.resizable = false;
-                    } else {
-                        panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
-                    }
-                    panel.name = title;
-                    panel.appendLayer(dataLayer);
-
-                    // 最初のパネルの場合は、時間範囲を取得してから描画
-                    function isInitRedraw () {
-                        // 最初のPanel追加の場合、既存がBlankのみの場合は、Dataの時間範囲でredraw
-                        let result = true;
-                        hutime.panelCollections[0].panels.forEach(panel => {
-                            panel.layers.forEach(layer => {
-                                if (layer.constructor !== HuTime.Layer &&
-                                    layer.constructor !== HuTime.PanelBorder &&
-                                    layer.constructor !== HuTime.CalendarScaleLayer)
-                                    result = false;     // 時間範囲を持ったデータLayerがあるとき
-                            });
-                        });
-                        return result;
-                    }
-                    if (isInitRedraw()) {
-                        rs.onloadend = function () {
-                            let tMin, tMax;
-                            tMin = Number.POSITIVE_INFINITY;
-                            tMax = Number.NEGATIVE_INFINITY;
-                            for (let i = 0; i < rs.records.length; ++i) {
-                                if (rs.records[i].tRange.pBegin < tMin)
-                                    tMin = rs.records[i].tRange.pBegin;
-                                if (rs.records[i].tRange.pEnd > tMax)
-                                    tMax = rs.records[i].tRange.pEnd;
-                            }
-                            hutime.panelCollections[0].appendPanel(panel);
-                            hutime.redraw(tMin, tMax);
-                            rs.onloadend = HuTime.RecordBase.prototype.onloadend;// 元に戻す
-                        };
-                    } else {
-                        hutime.panelCollections[0].appendPanel(panel);
-                        hutime.redraw();
-                    }
-                    addBranch(document.getElementById("treeRoot"), panel);
-                }
-
-                /**
-                 * 選択可能なレイヤーとマスクを集めて一覧にする
-                 * @method
-                 */
-                function aggregateLayerForAnalysisByMask() {
-                    // alert('aggregateLayerForAnalysisByMask');
-                    const execButton = document.getElementById('extExtractButton');
-                    execButton.disabled = false;
-                    // reset checkboxes
-                    const checkboxContainerForLayers = document.getElementById("checkboxLayerForRecordExtractionByMask");
-                    while (checkboxContainerForLayers.firstChild) {
-                        checkboxContainerForLayers.removeChild(checkboxContainerForLayers.firstChild);
-                    }
-                    const checkboxContainerForMasks = document.getElementById("checkboxMaskForRecordExtractionByMask");
-                    while (checkboxContainerForMasks.firstChild) {
-                        checkboxContainerForMasks.removeChild(checkboxContainerForMasks.firstChild);
-                    }
-
-                    // aggregate layers
-                    const layers = {};
-                    const masks = {};
-                    const panels =  mainPanelCollection.contents;
-                    for (const panelsKey in panels) {
-                        if (!panels[panelsKey].visible)
-                            continue;
-                        const ls = panels[panelsKey].contents;
-                        for (const layersKey in ls) {
-                            const l = ls[layersKey];
-                            if (!(l.visible) || !(l instanceof HuTime.RecordLayerBase)) {
-                                continue;
-                            }
-                            if (l instanceof HuTime.MaskLayer) {
-                                masks[l.id] = l.name;
-                            } else {
-                                layers[l.id] = l.name;
-                            }
-                        }
-                    }
-
-                    if (Object.keys(layers).length > 0) {
-                        for (const key in layers) {
-                            makeRadioForMaskExt(checkboxContainerForLayers, "layerForExt", key, layers[key]);
-                        }
-                    } else {
-                        checkboxContainerForLayers.textContent  = "no layers";
-                        execButton.disabled = true;
-                    }
-
-                    // make checkbox(radio button)
-                    if (Object.keys(masks).length > 0) {
-                        for (const key in masks) {
-                            makeRadioForMaskExt(checkboxContainerForMasks, "maskForExt", key, masks[key]);
-                        }
-                    } else {
-                        checkboxContainerForMasks.textContent  = "no masks";
-                        execButton.disabled = true;
-                    }
-                }
-                function makeRadioForMaskExt(elem, name, key, val) {
-                    const checkbox = document.createElement("input");
-                    checkbox.type = "radio";// 複数選択できたほうがよいと思うので最終的にはチェックボックスにする必要あり
-                    checkbox.name = name;
-                    checkbox.value = key;
-
-                    const label = document.createElement("label");
-                    label.htmlFor = key;
-                    label.appendChild(document.createTextNode(val));
-
-                    const checkboxItemContainer = document.createElement("div");
-                    checkboxItemContainer.className = "checkboxItemContainer";
-
-                    elem.appendChild(checkboxItemContainer);
-                    checkboxItemContainer.appendChild(checkbox);
-                    checkboxItemContainer.appendChild(label);
-                }
-            </script>
-          </div>
-    </div>
 </div>
 </body>
 </html>

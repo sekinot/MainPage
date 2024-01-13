@@ -254,6 +254,8 @@ function getObjType (obj, branch) {
 
     if (obj instanceof HuTime.TLineLayer)
         return "tlineLayer";
+    if (obj instanceof HuTime.MaskLayer)
+        return "maskLayer";
     if (obj instanceof HuTime.RecordLayerBase)
         return "chartLayer";    // TLine以外のRecordLayerBase
     if (obj instanceof HuTime.TickScaleLayer)
@@ -300,6 +302,7 @@ function getObjType (obj, branch) {
 
 // ツリーの項目を追加
 function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
+    if (!hutimeObj) return;
     // targetElement: 追加する先のli要素
     // hutimeObj: HuTimeオブジェクト (PanelCollection, Panel, Layer, Recordset)
 
@@ -315,6 +318,8 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
 
         tlineLayer: {
             iconSrc: "img/tlineLayer.png", iconAlt: "TLine Layer", menuType: "TLineLayer"},
+        maskLayer: {
+            iconSrc: "img/tlineLayer.png", iconAlt: "Mask Layer", menuType: "MaskLayer"},
         chartLayer: {
             iconSrc: "img/chartLayer.png", iconAlt: "Chart Layer", menuType: "ChartLayer"},
         scaleLayer: {
@@ -431,7 +436,7 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
         while (parentBranch) {
             if (parentBranch.objType === "Recordset")
                 recordset = parentBranch.hutimeObject;
-            if (parentBranch.objType === "ChartLayer" || parentBranch.objType === "TLineLayer") {
+            if (parentBranch.objType === "ChartLayer" || parentBranch.objType === "TLineLayer" || parentBranch.objType === "MaskLayer") {
                 layer = parentBranch.hutimeObject;
                 break;
             }
@@ -477,9 +482,19 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
             childObj = hutimeObj.recordSettings.dataSettings.slice();
             // 今後、TLineとChartで異なっているt値の項目の設定を統一のこと
             if (hutimeObj instanceof HuTime.ChartRecordset ||
+                hutimeObj instanceof HuTime.MaskRecordset ||
                 hutimeObj instanceof HuTime.TLineRecordset && !hutimeObj.recordSettings.tSetting) {
                 childObj.push(hutimeObj._tBeginDataSetting);
                 childObj.push(hutimeObj._tEndDataSetting);
+            } else if (hutimeObj instanceof HuTime.MaskRecordset) {
+                childObj.push(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNamePBegin, "tBBegin"));
+                childObj.push(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNameRBegin, "tBEnd"));
+                childObj.push(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNameREnd, "tEBegin"));
+                childObj.push(new HuTime.RecordDataSetting(
+                    hutimeObj.recordSettings.tSetting.itemNamePEnd, "tEEnd"));
             }
             else {
                 childObj.push(new HuTime.RecordDataSetting(
@@ -489,6 +504,7 @@ function addBranch (targetElement, hutimeObj, name, check, id, siblingElement) {
             }
             break;
         case "tlineLayer":
+        case "maskLayer":
         case "chartLayer":
             childObj = hutimeObj.recordsets;
             break;
@@ -610,6 +626,7 @@ function getRecordDataItemIcon (item, recordset, layer) {
     canvas.width = 24;
     canvas.title = "Record Data Item";
     switch (layer.constructor.name) {
+        case "MaskLayer":
         case "TLineLayer":
             drawIconPeriod(canvas, recordset.rangeStyle, layer);
             drawIconLabel(canvas, recordset.labelStyle);
@@ -2330,10 +2347,26 @@ function dCrSelectItemRole (ev, role) {    // 項目の役割を選択
             document.getElementById("dCrItemRoleMenu").querySelector("li[value='from/to']").
                 style.display = "none";
             break;
+        case "afrom":
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='afrom']").
+                style.display = "none";
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='from/to']").
+                style.display = "none";
+            break;
+        case "ato":
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='ato']").
+                style.display = "none";
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='from/to']").
+                style.display = "none";
+            break;
         case "from/to":
             document.getElementById("dCrItemRoleMenu").querySelector("li[value='from']").
                 style.display = "none";
             document.getElementById("dCrItemRoleMenu").querySelector("li[value='to']").
+                style.display = "none";
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='afrom']").
+                style.display = "none";
+            document.getElementById("dCrItemRoleMenu").querySelector("li[value='ato']").
                 style.display = "none";
             document.getElementById("dCrItemRoleMenu").querySelector("li[value='from/to']").
                 style.display = "none";
@@ -2449,6 +2482,7 @@ function dCrOpen (type, hutimeObject, treeBranch) {
     dCrLayerType = type;
     document.getElementById("dCrTypeTLine").style.display = type === "TLine" ? "block" : "none";
     document.getElementById("dCrTypeChart").style.display = type === "Chart" ? "block" : "none";
+    document.getElementById("dCrTypeMask").style.display = type === "Mask" ? "block" : "none";
     document.getElementById("dCrTypeBlank").style.display = type === "Blank" ? "block" : "none";
     document.getElementById("dCrSource").style.display = type !== "Blank" ? "block" : "none";
     document.getElementById("dCrItem").style.display = type !== "Blank" ? "block" : "none";
@@ -2491,7 +2525,7 @@ function dCrCreate (ev) {  // Layer生成
     }
 
     // item設定
-    let from, to, label;
+    let from, to, afrom, ato, label;
     let values = [];
     let others = [];
     let itemName;
@@ -2509,6 +2543,12 @@ function dCrCreate (ev) {  // Layer生成
             case "to":
                 to = icons[i].closest("tr").querySelector("td.itemName div").innerText;
                 break;
+            case "afrom":
+                afrom = icons[i].closest("tr").querySelector("td.itemName div").innerText;
+                break;
+            case "ato":
+                ato = icons[i].closest("tr").querySelector("td.itemName div").innerText;
+                break;
             case "value":
                 values.push(icons[i].closest("tr").querySelector("td.itemName div").innerText);
                 itemName = values[0];
@@ -2522,7 +2562,8 @@ function dCrCreate (ev) {  // Layer生成
                 break;
         }
     }
-    if (!from || !to || (dCrLayerType !== "TLine" && values.length === 0) ||
+    if (!from || !to ||
+        ((dCrLayerType === "LineChart" || dCrLayerType === "BarChart" || dCrLayerType === "PlotChart") && values.length === 0) ||
         (dCrLayerType === "TLine" && !label)) {     // item指定のエラー
         document.getElementById("statusBar").innerText = "Error: Required items are not specified.";
         dCrClose();
@@ -2537,14 +2578,20 @@ function dCrCreate (ev) {  // Layer生成
         if (calendarOfSource === "1.1")
             rs = new HuTime.TLineRecordset(source, from, to, label);
         else
-            rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource);
+            // rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource);
+            // TODO: othersの一つ目の要素をグループ分けの元の情報として渡す
+            rs = new HuTime.CalendarTLineRecordset(source, from, to, label, calendarOfSource, null, null, others[0]);
+    else if (dCrLayerType === "Mask")
+        rs = new HuTime.MaskRecordset(source, afrom, from, to, ato, calendarOfSource, null);
     else
         if (calendarOfSource === "1.1")
             rs = new HuTime.ChartRecordset(source, from, to, values[0],
                 new HuTime.FigureStyle(plotColor[0], plotColor[0], 0));
         else
-            rs = new HuTime.CalendarChartRecordset(source, from, to, values[0], calendarOfSource,
-                new HuTime.FigureStyle(plotColor[0], plotColor[0], 0));
+            // rs = new HuTime.CalendarChartRecordset(source, from, to, values[0], calendarOfSource,
+            //     new HuTime.FigureStyle(plotColor[0], plotColor[0], 0));
+            // TODO: othersの一つ目の要素をグループ分けの元の情報として渡す
+            rs = new HuTime.CalendarChartRecordset(source, from, to, values[0], calendarOfSource, new HuTime.FigureStyle(plotColor[0], plotColor[0], 0), null, others[0]);
     rs.name = sourceName;
     for (let i = 1; i < values.length; ++i) {   // values[0]はコンストラクタで指定済み
         rs.recordSettings.appendDataSetting(new HuTime.RecordDataSetting(values[i]));
@@ -2552,7 +2599,8 @@ function dCrCreate (ev) {  // Layer生成
             new HuTime.FigureStyle(plotColor[i % 5], plotColor[i % 5], 0),
             new HuTime.FigureStyle(null, "black", 1), i);
     }
-    for (let i = 0; i < others.length; ++i) {       // Otherの処理
+    // for (let i = 0; i < others.length; ++i) {       // Otherの処理
+    for (let i = 1; i < others.length; ++i) {       // othersの一つ目の要素をグループ分けの元の情報としたのでindexは1から
         rs.recordSettings.appendDataSetting(new HuTime.RecordDataSetting(others[i]));
     }
 
@@ -2581,19 +2629,26 @@ function dCrCreate (ev) {  // Layer生成
         case "PlotChart" :
             dataLayer = new HuTime.PlotChartLayer(rs, null, layerMarginTop, null);
             break;
+        case "Mask" :
+            dataLayer = new HuTime.MaskLayer(rs, null, layerMarginTop, null);
+            break;
         default :
             return;
     }
-    dataLayer.name = sourceName + "_" + itemName
-    dataLayer.addEventListener("plotclick", dRDOpen);
+    dataLayer.name = sourceName + "_" + itemName;
+    dataLayer.addEventListener("plotclick", dRDOpen);//dRDOpenはdialogData.jsに定義されている。
     dataLayer.useRecodeDetail = true;
 
     // 既存のパネルにレイヤを追加する場合
     if (document.getElementById("dialogCreate").hutimeObject) {
+        // TODO: 追加時にTitleに入力された値がレイヤの名前となるよう追加
+        dataLayer.name = title;
         let panel = document.getElementById("dialogCreate").hutimeObject;
         panel.appendLayer(dataLayer);
         addBranch(document.getElementById("dialogCreate").treeBranch, dataLayer,
-            undefined, undefined, undefined,
+            // undefined, undefined, undefined,
+            // TODO: 追加時にTitleに入力された値がツリーに表示されるよう変更
+            title, undefined, undefined,
             document.getElementById("dialogCreate").treeBranch.querySelector("li"));
         panel.redraw();
         dCrClose();
@@ -2601,7 +2656,13 @@ function dCrCreate (ev) {  // Layer生成
     }
 
     // Panel
-    let panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
+    let panel = null;
+    if (dCrLayerType === "Mask") {
+        panel = new HuTime.TilePanel(dataLayer.vBreadth);
+        panel.resizable = false;
+    } else {
+        panel = new HuTime.TilePanel(NewLayerVBreadth + PanelTitleVBreadth);
+    }
     panel.name = title;
     panel.appendLayer(dataLayer);
 
@@ -2635,7 +2696,7 @@ function dCrCreate (ev) {  // Layer生成
             }
             hutime.panelCollections[0].appendPanel(panel);
             hutime.redraw(tMin, tMax);
-            rs.onloadend = HuTime.RecordBase.prototype.onloadend;　// 元に戻す
+            rs.onloadend = HuTime.RecordBase.prototype.onloadend;// 元に戻す
         };
     }
     else {
@@ -3203,9 +3264,12 @@ function dRDOpen (ev) {
     body.appendChild(createDataRow("Begin", getDateValue(
         ev.records[0].record.tRange.pBegin,
         ev.records[0].record.tRange.rBegin)));
+    // body.appendChild(createDataRow("End", getDateValue(
+    //     ev.records[0].record.tRange.pEnd,
+    //     ev.records[0].record.tRange.rEnd)));// TODO: TRangeのcreateFromBeginEnd関数ではEndのほうはr, pの順となっているので入れ替えた（林）
     body.appendChild(createDataRow("End", getDateValue(
-        ev.records[0].record.tRange.pEnd,
-        ev.records[0].record.tRange.rEnd)));
+        ev.records[0].record.tRange.rEnd,
+        ev.records[0].record.tRange.pEnd)));
     function getDateValue(date1, date2) {
     if (Math.abs(date2 - date1) <= 1)
         return jdToISO(date1, 1);
@@ -3244,7 +3308,8 @@ function dRDOpen (ev) {
     dialog.style.left = (ev.clientX + 10).toString() + "px";
     dialog.style.top = (ev.clientY + 10).toString() + "px";
     showDialog("dialogRecordDetail");
-}// *** dialog OLObject
+}
+// *** dialog OLObject
 function dOLOSwitchXT () {
     if (document.getElementById("dOLOUseX").checked) {
         document.getElementById("dOLOXTValueBox").style.display = "none";
