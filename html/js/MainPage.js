@@ -2482,7 +2482,7 @@ function dCrOpen (type, hutimeObject, treeBranch) {
     dCrLayerType = type;
     document.getElementById("dCrTypeTLine").style.display = type === "TLine" ? "block" : "none";
     document.getElementById("dCrTypeChart").style.display = type === "Chart" ? "block" : "none";
-    document.getElementById("dCrTypeMask").style.display = type === "Mask" ? "block" : "none";
+    //document.getElementById("dCrTypeMask").style.display = type === "Mask" ? "block" : "none";
     document.getElementById("dCrTypeBlank").style.display = type === "Blank" ? "block" : "none";
     document.getElementById("dCrSource").style.display = type !== "Blank" ? "block" : "none";
     document.getElementById("dCrItem").style.display = type !== "Blank" ? "block" : "none";
