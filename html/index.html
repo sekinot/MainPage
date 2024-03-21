@@ -85,9 +85,9 @@
           </ul>
         </li>
 
-        <!--li onclick="showDialog('dialogImportLocal')">Export</li-->
+        <li onclick="showDialog('dialogImportLocal')">Export</li>
         <!-- ** Analysis Menu ** -->
-        <!--li title="Analysis Menu">Analysis
+        <li title="Analysis Menu">Analysis
           <ul>
             <li>Search &raquo;
               <ul>
@@ -102,7 +102,9 @@
             </li>
             <li>Mask</li>
           </ul>
-        </li-->
+        </li>
+
+        <li onclick="downloadErrorLog()">ErrorLog</li>
 
         <!-- ** About Menu ** -->
         <li>Help
@@ -113,6 +115,20 @@
 
       </ul>
     </div>
+    <script>
+        function downloadErrorLog() {
+            // const errorLog = HuTime.ErrorInfos.log.reduce((log, errorInfo) => log + errorInfo.toString().replaceAll(", ", ",") + "," + HuTime.ErrorCodes[errorInfo.code].message + "\r\n", "datetime,level_type_code,detail,message\r\n");
+            const errorLog = HuTime.ErrorInfos.log.reduce((log, errorInfo) => log + errorInfo.toString() + "," + HuTime.ErrorCodes[errorInfo.code].message + "\r\n", "");
+            const link = document.createElement("a");
+            /* link.setAttribute("href", encodeURI(`data:text/csv;charset=utf-8,${errorLog}`));
+            link.setAttribute("download", "error_log.csv"); */
+            link.setAttribute("href", encodeURI(`data:text/plain;charset=utf-8,${errorLog}`));
+            link.setAttribute("download", "error_log.txt");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 <!-- End of Menu Bar -->
 
 <!-- **** Main Panel ****-->
